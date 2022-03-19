@@ -1,0 +1,23 @@
+{
+  "Dialouge": 
+  {
+    "Text": "Hi how are you",
+    "Responses": 
+    [
+      {
+        "ResponseText": "I am fine thank you",
+        "Text": "Thats good to hear! Whats up?",
+        "Responses": 
+        [
+          {
+             "ResponseText": "you already asked me that"
+          }
+        ]
+      },
+      {
+        "ResponseText": "shut up"
+      }
+    ]
+  }
+  
+}
