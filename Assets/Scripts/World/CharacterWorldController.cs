@@ -4,46 +4,38 @@ using UnityEngine;
 
 public class CharacterWorldController : MonoBehaviour
 {
-    public float movementSpeed = 1.0f;
-    
-    Rigidbody2D rb;
-    bool isRight = true;
+    PlayerWorldMovement PlayerWorldMovement;
+    [SerializeField] private GameObject inventoryCanvas;
+    private bool openInventory = false;
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        PlayerWorldMovement = GetComponent<PlayerWorldMovement>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Move();
-    }
+        if (Input.GetKeyDown(KeyCode.I) && !openInventory)
+        {
+            openInventory = true;
+            inventoryCanvas.SetActive(true);
 
-    void Move()
+        }
+        else if (Input.GetKeyDown(KeyCode.I) && openInventory)
+        {
+            openInventory = false;
+            inventoryCanvas.SetActive(false);
+        }
+    }
+    public void disablePlayerActions()
     {
-        Vector2 currentPos = rb.position;
-        float horizontalInput = Input.GetAxis("Horizontal");
-      
-
-        Vector2 inputVector = new Vector2(horizontalInput, 0);
-        inputVector = Vector2.ClampMagnitude(inputVector, 1);
-
-        Vector2 movement = inputVector * movementSpeed;
-        Vector2 newPos = currentPos + movement * Time.fixedDeltaTime;
-        rb.MovePosition(newPos);
-
-        if (horizontalInput > 0 && !isRight)
-        {
-            isRight = true;
-            transform.Rotate(0.0f,180.0f,0.0f);
-        }
-        else if(horizontalInput < 0 && isRight)
-        {
-            isRight = false;
-            transform.Rotate(0.0f,180.0f,0.0f);
-        }
-        
-
+        PlayerWorldMovement.enabled = false;
     }
+    public void enablePlayerActions()
+    {
+        PlayerWorldMovement.enabled = true;
+    }
+
+
 }
