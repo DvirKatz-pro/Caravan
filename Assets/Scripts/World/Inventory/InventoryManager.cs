@@ -4,6 +4,17 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
+    [System.Serializable]
+    public class InvnetorySlots
+    {
+        public List<GameObject> slots;
+    }
+    [SerializeField] private List<InvnetorySlots> slots;
+
+    public enum InventoryItem
+    {
+        apple
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -15,8 +26,5 @@ public class InventoryManager : MonoBehaviour
     {
         
     }
-    public void openInventory()
-    {
-        
-    }
+    
 }
