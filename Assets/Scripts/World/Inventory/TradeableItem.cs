@@ -4,15 +4,24 @@ using UnityEngine;
 
 public class TradeableItem : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private string name;
+    [SerializeField] private float basePrice;
+
+    public void setName(string name)
     {
-        
+        this.name = name;
+    }
+    public void setBasePrice(float basePrice)
+    {
+        this.basePrice = basePrice;
     }
 
-    // Update is called once per frame
-    void Update()
+    public string getName()
     {
-        
+        return name;
+    }
+    public float getBasePrice()
+    {
+        return basePrice;
     }
 }

@@ -11,10 +11,7 @@ public class InventoryManager : MonoBehaviour
     }
     [SerializeField] private List<InvnetorySlots> slots;
 
-    public enum InventoryItem
-    {
-        apple
-    }
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -26,5 +23,18 @@ public class InventoryManager : MonoBehaviour
     {
         
     }
-    
+    private void addToInventory(GameObject tradeableItem)
+    {
+        for (int i = 0; i < slots.Count; i++)
+        {
+            for (int j = 0; j < slots[i].slots.Count; j++)
+            {
+                GameObject currentSlot = slots[i].slots[j];
+                if (currentSlot.name.Contains("Empty"))
+                {
+                    slots[i].slots[j] = tradeableItem;
+                }
+            }
+        }
+    }
 }
