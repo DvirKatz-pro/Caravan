@@ -1,6 +1,9 @@
+using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -11,11 +14,13 @@ public class InventoryManager : MonoBehaviour
     }
     [SerializeField] private List<InvnetorySlots> slots;
 
+    [SerializeField] private string spritePath;
+
     
     // Start is called before the first frame update
     void Start()
     {
-        
+        addToInventory("apple");
     }
 
     // Update is called once per frame
@@ -23,18 +28,23 @@ public class InventoryManager : MonoBehaviour
     {
         
     }
-    private void addToInventory(GameObject tradeableItem)
+    private void addToInventory(string tradeableItem)
     {
+        string fullPath = spritePath + tradeableItem;
+        Texture2D texture = Resources.Load(fullPath) as Texture2D;
+        Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
+
         for (int i = 0; i < slots.Count; i++)
         {
             for (int j = 0; j < slots[i].slots.Count; j++)
             {
-                GameObject currentSlot = slots[i].slots[j];
-                if (currentSlot.name.Contains("Empty"))
+                Sprite currentSprite = slots[i].slots[j].GetComponent<Image>().sprite;
+                if (currentSprite.name.Equals("f"))
                 {
-                    slots[i].slots[j] = tradeableItem;
+                   slots[i].slots[j].GetComponent<Image>().sprite = sprite;
                 }
             }
         }
     }
+   
 }

@@ -108,20 +108,6 @@ public class DialogueManager : MonoBehaviour
             
         }
        
-        /*
-        string t = (string)d["Text"];
-        Debug.Log(t);
-        JArray responses = (JArray)d["Responses"];
-        JObject response1 = (JObject)responses[0]["Response"];
-        string response1Text = (string)response1["ResponseText"];
-        Debug.Log(response1Text);
-        string text2 = (string)response1["Text"];
-        Debug.Log(text2);
-        JArray responses2 = (JArray)response1["Responses"];
-        JObject response2Text = (JObject)responses2[0]["Response"];
-        string response3Text = (string)response2Text["ResponseText"];
-        Debug.Log(response3Text);
-        */
 
     }
 

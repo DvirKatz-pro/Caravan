@@ -4637,7 +4637,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2071553616
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4706,6 +4706,7 @@ MonoBehaviour:
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
+  spritePath: Sprites/RPG_inventory_icons/
 --- !u!1 &2136054330
 GameObject:
   m_ObjectHideFlags: 0
