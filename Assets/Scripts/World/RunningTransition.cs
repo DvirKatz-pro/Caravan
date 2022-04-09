@@ -23,11 +23,11 @@ public class RunningTransition : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         if (horizontalInput != 0)
         {
-            anim.SetBool("Running", true);
+            //anim.SetBool("Running", true);
         }
         else
         {
-            anim.SetBool("Running", false);
+            //anim.SetBool("Running", false);
         }
     }
 }
