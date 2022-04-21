@@ -1,3 +1,6 @@
 {
-  "Apple": 10
+  "apple": 
+  {
+    "basePrice": 10
+  } 
 }

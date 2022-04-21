@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Node
   - Enemy
+  - InventorySlot
   layers:
   - Default
   - TransparentFX
