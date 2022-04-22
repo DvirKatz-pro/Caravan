@@ -1,6 +1,8 @@
 {
-  "apple": 
-  {
+  "apple": {
     "basePrice": 10
-  } 
+  },
+  "armor": {
+    "basePrice": 25
+  }
 }

@@ -21,6 +21,7 @@ public class InventoryManager : MonoBehaviour
     void Start()
     {
         addToInventory("apple");
+        addToInventory("armor");
     }
 
     // Update is called once per frame
@@ -51,7 +52,7 @@ public class InventoryManager : MonoBehaviour
         JObject jsonText = JObject.Parse(File.ReadAllText(jsonPath));
         JObject itemAsJson = (JObject)jsonText[name];
 
-        Texture2D texture = Resources.Load<Texture2D>("Sprites/RPG_inventory_icons/apple");
+        Texture2D texture = Resources.Load<Texture2D>("Sprites/RPG_inventory_icons/" + name);
         Sprite sprite = Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f), 100.0f);
         return new TradeableItem(name,float.Parse(itemAsJson["basePrice"].ToString()), sprite);
     }

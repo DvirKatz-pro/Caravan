@@ -48,7 +48,8 @@ public class UISlot : MonoBehaviour, IPointerClickHandler
         }
         else if (this.selectedItem.item != null)
         {
-            this.item = new TradeableItem(this.selectedItem.item);
+            updateItem(selectedItem.item);
+            selectedItem.updateItem(null);
         }
     }
 }
