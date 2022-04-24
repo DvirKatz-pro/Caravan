@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UISlot : MonoBehaviour, IPointerClickHandler
+public class UISlot : MonoBehaviour, IBeginDragHandler,IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
 {
     public TradeableItem item;
     public UISlot selectedItem { get; set; }
@@ -29,7 +29,7 @@ public class UISlot : MonoBehaviour, IPointerClickHandler
         }
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    public void OnBeginDrag(PointerEventData eventData)
     {
         if (this.item != null)
         {
@@ -51,5 +51,20 @@ public class UISlot : MonoBehaviour, IPointerClickHandler
             updateItem(selectedItem.item);
             selectedItem.updateItem(null);
         }
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        Debug.Log("Hello1");
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        Debug.Log("Hello2");
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        Debug.Log("Hello3");
     }
 }
