@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Class incharge of arrow behaviour
+/// </summary>
 public class EnemyControllerRanged : EnemyController
 {
 
@@ -10,27 +13,27 @@ public class EnemyControllerRanged : EnemyController
         base.Start();
     }
 
-    protected override void think()
+    protected override void Think()
     {
        
-        onCooldown = actions.attackCooldown();
+        onCooldown = actions.AttackCooldown();
 
         bool shouldAttack = (!onCooldown && Vector3.Distance(target.position, model.position) <= distanceFromTarget);
         bool shouldWait = (onCooldown && Vector3.Distance(target.position, model.position) <= distanceFromTarget);
 
 
-        if (shouldAttack || actions.getAction() == EnemyActions.Actions.attacking)
+        if (shouldAttack || actions.GetAction() == EnemyActions.Actions.attacking)
         {
-            actions.stop();
-            actions.attack();
+            actions.Stop();
+            actions.Attack();
         }
         else if (shouldWait)
         {
-            actions.stop();
+            actions.Stop();
         }
         else
         {
-            actions.move(target.position);
+            actions.Move(target.position);
         }
 
     }

@@ -2,30 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Class Detailing Where the dialouge tree for this NPC is
+/// </summary>
 public class NPCDialogue : MonoBehaviour
 {
     [SerializeField] private string jsonPath = "NPCText";
     [SerializeField] private DialogueManager manager;
-    bool inDialouge = false;
+    private bool inDialouge = false;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    void OnMouseDown()
+    private void OnMouseDown()
     {
         if (!inDialouge)
         {
             manager.gameObject.SetActive(true);
            
             inDialouge = true;
-            manager.openJson(jsonPath);
+            manager.OpenJson(jsonPath);
         }
 
     }

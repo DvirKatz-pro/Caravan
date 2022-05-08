@@ -4,25 +4,23 @@ using System.Security.Cryptography;
 using Unity.Mathematics;
 using UnityEngine;
 
+/// <summary>
+/// Class Detailing Player movement and rotation
+/// </summary>
 public class CharacterMovement : MonoBehaviour
 {
-    //directions that we can face
-
     public float movementSpeed = 1.0f;
    
     //components we need
-    Rigidbody rb;
-    CharacterAreaController controller;
-    Animator animator;
+    private Rigidbody rb;
+    private CharacterAreaController controller;
+    private Animator animator;
 
     //terrain layer 
     private int floorMask;
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-       
-
-
         rb = GetComponent<Rigidbody>();
         if (rb == null)
         {
@@ -39,64 +37,13 @@ public class CharacterMovement : MonoBehaviour
             Debug.LogError("Player animator not found");
         }
         floorMask = LayerMask.GetMask("Terrain");
-
     }
 
     
 
-    /**
-     * given a direction set the character to face that direction
-     */
-    /*
-    void rotate(Vector2 direction)
-    {
-        Vector2 normalDir = direction.normalized;
-       
+   
 
-        float angle = Vector2.SignedAngle(Vector2.up, direction);
-
-        CharacterAreaController.Directions heading = controller.getDirection(angle);
-
-        controller.setDirection(heading);
-    }
-    /*
-    public void move()
-    {
-        Vector2 currentPos = rb.position;
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
-
-
-        if (verticalInput != 0 && horizontalInput != 0)
-        {
-            //these are the grid cell bounds, that are applied to the vertical input so that the character walks in a straight line with the grid 
-            verticalInput *= 5.45f / 9.3f;
-        }
-
-        //get move vector and move in that direction at the speed we set
-        Vector2 inputVector = new Vector2(horizontalInput, verticalInput);
-        if (inputVector != Vector2.zero)
-        {
-            controller.changeState(CharacterAreaController.State.moveing);
-        }
-        else
-        {
-            controller.changeState(CharacterAreaController.State.idle);
-        }
-        inputVector = Vector2.ClampMagnitude(inputVector, 1);
-
-        Vector2 movement = inputVector * movementSpeed;
-        Vector2 newPos = currentPos + movement * Time.fixedDeltaTime;
-        rb.MovePosition(newPos);
-
-        if (movement.magnitude > 0.01f)
-        {
-            //rotate based on movement vector
-            rotate(movement);
-        }
-    }
-    */
-    public void rotate()
+    public void Rotate()
     {
         //get the mouse point on screen
         Vector3 lookDir = Vector3.zero;
@@ -129,7 +76,7 @@ public class CharacterMovement : MonoBehaviour
         
     }
    
-    public void move()
+    public void Move()
     {
         Vector3 currentPos = transform.position;
         
@@ -156,28 +103,24 @@ public class CharacterMovement : MonoBehaviour
                 movement = (transform.forward * -1) * movementSpeed * Time.fixedDeltaTime;
                
             }
-          
-            
-            
-            
         }
         
         if (movement != Vector3.zero)
         {
             
-            controller.changeState(CharacterAreaController.State.moveing);
+            controller.ChangeState(CharacterAreaController.State.moveing);
             animator.SetBool("Idle", false);
             animator.SetBool("Moving", true);
         }
         //if neither "S" or "W" are hit then idle
         else
         {
-            controller.changeState(CharacterAreaController.State.idle);
+            controller.ChangeState(CharacterAreaController.State.idle);
             animator.SetBool("Idle", true);
             animator.SetBool("Moving", false);
         }
         rb.velocity = movement;
-        rotate();
+        Rotate();
 
     }
 

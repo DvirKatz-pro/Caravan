@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+/// <summary>
+/// Class incharge of Enemy group behaviour
+/// </summary>
 public class EnemyManager : MonoBehaviour
 {
     //list of close range enemies and long range enemies
@@ -15,16 +18,20 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] private float rangedAttackStoppingDistance;
     [SerializeField] private int amountCanAttack;
     private int attackingCount = 0;
-    
-    //register an enemy with the manager
-    public void registar(GameObject enemy)
+
+    /// <summary>
+    /// register an enemy with the manager
+    /// </summary>
+    public void Registar(GameObject enemy)
     {
         
         enemies.Add(enemy);
         
     }
-    //unregister an enemy with manager
-    public void unRegistar(GameObject enemy)
+    /// <summary>
+    /// unregister an enemy with manager
+    /// </summary>
+    public void UnRegistar(GameObject enemy)
     {
         enemies.Remove(enemy);
         if (enemies.Count <= 0)
@@ -38,32 +45,25 @@ public class EnemyManager : MonoBehaviour
         //sort the close ranged enemies based on distance from player
         //closeEnemies.Sort(distanceComparetor);
     }
-
-    public bool permissionToAttack(EnemyActions enemyActions)
+    /// <summary>
+    /// Enemies will ask the manager if they can attack
+    /// </summary>
+    public bool PermissionToAttack(EnemyActions enemyActions)
     {
-        if (attackingCount< amountCanAttack && !enemyActions.attackCooldown())
+        if (attackingCount< amountCanAttack && !enemyActions.AttackCooldown())
         {
             attackingCount++;
             return true;
         }
         return false;
     }
-    public void doneAttacking()
+    /// <summary>
+    /// Enemies will tell the manager when they are attacking
+    /// </summary>
+    public void DoneAttacking()
     {
         attackingCount--;
     }
    
-    int distanceComparetor(GameObject a, GameObject b)
-    {
-        float distamceA = Vector3.Distance(a.transform.position, player.transform.position);
-        float distamceB = Vector3.Distance(b.transform.position, player.transform.position);
-        return distamceA.CompareTo(distamceB);
-    }
-    Vector3 GetRandomTargetPos(float minRadius, float maxRadius)
-    {
-        Vector2 rndPos = Random.insideUnitCircle * (maxRadius - minRadius);
-        rndPos += rndPos.normalized * minRadius;
-        return new Vector3(player.transform.position.x + rndPos.x, player.transform.position.y, player.transform.position.z + rndPos.y);
-    }
   
 }

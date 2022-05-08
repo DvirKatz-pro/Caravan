@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Class incharge of arrow behaviour
+/// </summary>
 public class ArrowCollision : MonoBehaviour
 {
     private float damage = 20;
@@ -10,14 +13,14 @@ public class ArrowCollision : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            other.gameObject.GetComponent<PlayerStatus>().takeDamage(damage);
+            other.gameObject.GetComponent<PlayerStatus>().TakeDamage(damage);
 
             Destroy(this.gameObject);
         }
        
     }
     //set the amount of damage that a player will take
-    public void setDamage(float m_damage)
+    public void SetDamage(float m_damage)
     {
         damage = m_damage;
     }

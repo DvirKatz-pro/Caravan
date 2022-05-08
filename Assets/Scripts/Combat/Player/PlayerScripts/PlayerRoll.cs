@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Class Detailing Player Roll to avoid attacks
+/// </summary>
 public class PlayerRoll : MonoBehaviour
 {
     //Roll attributes
@@ -15,7 +18,7 @@ public class PlayerRoll : MonoBehaviour
     Rigidbody rb;
     Animator anim;
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         controller = GetComponent<CharacterAreaController>();
         if (controller == null)
@@ -40,18 +43,18 @@ public class PlayerRoll : MonoBehaviour
 
     }
 
-    public void roll()
+    public void Roll()
     {
         //if we hit space and are not already rolling, then start rolling
         if (Input.GetKeyDown(KeyCode.Space) && !isRolling)
         {
             isRolling = true;
-            controller.changeState(CharacterAreaController.State.roll);
-            StartCoroutine(StartRoll());
+            controller.ChangeState(CharacterAreaController.State.roll);
+            StartCoroutine(OnRoll());
         }
 
     }
-    IEnumerator StartRoll()
+    private IEnumerator OnRoll()
     {
         rb.velocity = Vector3.zero;
         //animation
@@ -75,7 +78,7 @@ public class PlayerRoll : MonoBehaviour
         currentRollTime = 0;
         anim.SetBool("Idle", true);
         anim.SetBool("Roll", false);
-        controller.changeState(CharacterAreaController.State.idle);
+        controller.ChangeState(CharacterAreaController.State.idle);
         ///yield return new WaitForSeconds(0.2f);
         isRolling = false;
 

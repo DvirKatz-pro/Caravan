@@ -2,15 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Class incharge of handleing the current state of the Enemy
+/// </summary>
 public class EnemyStatus : MonoBehaviour
 {
+    //Needed Gameobjects
+    [SerializeField] protected GameObject colorModel;
+    //Gameplay related values
     [SerializeField] private float health;
+    [SerializeField] protected float colorTimer;
+    //Needed componets
     EnemyActions actions;
 
     bool isDead = false;
-
-    [SerializeField] protected GameObject colorModel;
-    [SerializeField] protected float colorTimer;
     protected float currentColorTimer;
 
     // Start is called before the first frame update
@@ -25,23 +30,28 @@ public class EnemyStatus : MonoBehaviour
     {
         
     }
-    public void takeDamage(float amount)
+    
+    public void TakeDamage(float amount)
     {
         health -= amount;
         if (health <= 0 && !isDead)
         {
             isDead = true;
-            actions.onDeath();
+            actions.OnDeath();
         }
         else
         {
-            actions.stunned();
+            actions.Stunned();
         }
-        StartCoroutine(takeDamageTimer());
+        StartCoroutine(TakeDamageTimer());
 
     }
-    public virtual IEnumerator takeDamageTimer()
+    /// <summary>
+    /// When this enemy takes damage It will flash red for a short amount of time
+    /// </summary>
+    public virtual IEnumerator TakeDamageTimer()
     {
+        
         Color startColor = colorModel.GetComponent<SkinnedMeshRenderer>().material.color;
         Color currentColor = startColor;
         Color endColor = Color.red;
@@ -57,10 +67,6 @@ public class EnemyStatus : MonoBehaviour
             colorModel.GetComponent<SkinnedMeshRenderer>().material.color = currentColor;
             yield return new WaitForEndOfFrame();
         }
-
-
-
-
     }
 
 

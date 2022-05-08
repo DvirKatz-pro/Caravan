@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+/// <summary>
+/// Class detailing tradeable object data
+/// </summary>
 public class TradeableItem
 {
     [SerializeField] private string Name;
@@ -24,27 +27,27 @@ public class TradeableItem
         this.sprite = sprite;
     }
 
-    public void setName(string Name)
+    public void SetName(string Name)
     {
         this.Name = Name;      
     }
-    public string getName()
+    public string GetName()
     {
         return this.Name;
     }
-    public void setBasePrice(float basePrice)
+    public void SetBasePrice(float basePrice)
     {
        this.basePrice=basePrice;
     }
-    public float getBasePrice()
+    public float GetBasePrice()
     {
         return this.basePrice;
     }
-    public void setSprite(Sprite sprite)
+    public void SetSprite(Sprite sprite)
     {
         this.sprite=sprite;
     }
-    public Sprite getSprite()
+    public Sprite GetSprite()
     {
         return this.sprite;
     }

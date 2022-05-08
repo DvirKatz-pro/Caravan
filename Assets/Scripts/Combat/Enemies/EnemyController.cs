@@ -2,20 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Class incharge of Enemy Descsion and action taking
+/// </summary>
 public class EnemyController : MonoBehaviour
 {
-    protected Transform target;
-    protected EnemyManager manager;
-
+    //Needed Objects
     [SerializeField] protected Transform proxy;
     [SerializeField] protected Transform model;
 
-
+    //Gameplay related values
     [SerializeField] protected float distanceFromTarget;
 
-
+    //Needed components
+    protected Transform target;
+    protected EnemyManager manager;
     protected EnemyActions actions;
-
 
     protected bool onCooldown = false;
 
@@ -32,7 +34,7 @@ public class EnemyController : MonoBehaviour
 
         manager = GameObject.Find("Enemy Manager").GetComponent<EnemyManager>();
 
-        manager.registar(this.gameObject);
+        manager.Registar(this.gameObject);
         
     }
     
@@ -40,36 +42,32 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     protected virtual void FixedUpdate()
     {
-        if (actions.getAction() != EnemyActions.Actions.stunned && actions.getAction() != EnemyActions.Actions.dead)
+        if (actions.GetAction() != EnemyActions.Actions.stunned && actions.GetAction() != EnemyActions.Actions.dead)
         {
-            think();
+            Think();
         }
     }
-
-    virtual protected void think()
+    /// <summary>
+    /// Enemy thought process and decsion making
+    /// </summary>
+    virtual protected void Think()
     {
         
-        
-       
         bool shouldAttack = (!onCooldown && Vector3.Distance(target.position, model.position) <= distanceFromTarget);
         bool shouldWait = (onCooldown && Vector3.Distance(target.position, model.position) <= distanceFromTarget);
         if (shouldAttack)
         {
-            actions.attack();
+            actions.Attack();
         }
         else if(shouldWait)
         {
-            actions.stop();
+            actions.Stop();
         }
         else
         {
-            actions.move(target.position);
+            actions.Move(target.position);
         }
         
     }
-
-
-    
-    
    
 }

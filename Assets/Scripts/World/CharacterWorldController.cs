@@ -2,21 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Class Detailing Player Controller in 2D
+/// </summary>
 public class CharacterWorldController : MonoBehaviour
 {
-    PlayerWorldMovement PlayerWorldMovement;
     [SerializeField] private GameObject inventoryCanvas;
+    private PlayerWorldMovement PlayerWorldMovement;
     private bool openInventory = false;
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         PlayerWorldMovement = GetComponent<PlayerWorldMovement>();
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.I) && !openInventory)
+        float horizontalInput = Input.GetAxis("Horizontal");
+        if (horizontalInput != 0) {
+            PlayerWorldMovement.Move(horizontalInput);
+        }
+        else if (Input.GetKeyDown(KeyCode.I) && !openInventory)
         {
             openInventory = true;
             inventoryCanvas.SetActive(true);
@@ -27,6 +34,7 @@ public class CharacterWorldController : MonoBehaviour
             openInventory = false;
             inventoryCanvas.SetActive(false);
         }
+        
     }
     public void disablePlayerActions()
     {

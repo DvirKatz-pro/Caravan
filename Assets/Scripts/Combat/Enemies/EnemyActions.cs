@@ -3,24 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+/// <summary>
+/// Class Detailing available Enemy actions
+/// </summary>
 public class EnemyActions : MonoBehaviour
 {
+    //Needed objects
     [SerializeField] protected Transform proxy;
     [SerializeField] protected Transform model;
-
     [SerializeField] protected ParticleSystem preAttackParticle;
 
-    protected EnemyController controller;
-    protected EnemyStatus status;
-
-    protected Animator animator;
-    protected NavMeshAgent agent;
-    protected NavMeshObstacle obstacle;
-
-    private EnemyManager manager;
-
-    protected Transform player;
-
+    //Gameplay related values
     [SerializeField] protected float attackWarmUpTime;
     [SerializeField] protected float attackDuration;
     [SerializeField] protected float postAttackTime;
@@ -33,8 +26,20 @@ public class EnemyActions : MonoBehaviour
     [SerializeField] protected float stunnedCooldown;
 
     [SerializeField] protected float strafeTime;
-    private float currentStrafeTime;
 
+    //Needed components
+    protected EnemyController controller;
+    protected EnemyStatus status;
+
+    protected Animator animator;
+    protected NavMeshAgent agent;
+    protected NavMeshObstacle obstacle;
+
+    private EnemyManager manager;
+
+    protected Transform player;
+
+    //Track actions
     protected bool attacking = false;
     protected bool isStunned = false;
     protected bool onAttackCooldown = false;
@@ -65,8 +70,9 @@ public class EnemyActions : MonoBehaviour
         manager = GameObject.Find("Enemy Manager").GetComponent<EnemyManager>();
 
         player = GameObject.Find("Player").transform;
-        
+
     }
+
     protected virtual void FixedUpdate()
     {
         model.position = Vector3.Lerp(model.position, proxy.position, Time.deltaTime * 2);
@@ -74,8 +80,8 @@ public class EnemyActions : MonoBehaviour
         proxy.transform.LookAt(player.position);
  
     }
-    
-    public void move(Vector3 position)
+    #region Actions
+    public void Move(Vector3 position)
     {
         currentAction = Actions.moveing;
         if (agent.enabled == false)
@@ -86,15 +92,13 @@ public class EnemyActions : MonoBehaviour
             
             
         }
-        setAnimation("Moving");
+        SetAnimation("Moving");
         agent.SetDestination(position);
-        
-       
         
         
     }
     
-    public void stop()
+    public void Stop()
     {
         if (agent.enabled == true)
         {
@@ -105,124 +109,82 @@ public class EnemyActions : MonoBehaviour
         }
 
     }
-    public void attack()
+    public void Attack()
     {
         if (currentAction != Actions.attacking && currentAction != Actions.stunned && !onAttackCooldown)
         {
             currentAction = Actions.attacking;
             onAttackCooldown = true;
 
-            StartCoroutine(preAttack());
+            StartCoroutine(PreAttack());
         }
     }
-    /*
-    public void strafe()
-    {
-        if (currentAction != Actions.strafing)
-        {
-            setAnimation("Moving");
-            int leftOrRight = Random.Range(0, 2);
-            StartCoroutine(onStrafe(leftOrRight));
-
-        }
-            
-        
-    }
-    */
-    /*
-    IEnumerator onStrafe(int leftOrRight)
-    {
-        
-        while (currentStrafeTime < strafeTime)
-        {
-            setAnimation("Moving");
-
-            if (leftOrRight == 0)
-            {
-                agent.Move(Vector3.left * Time.deltaTime);
-            }
-            else
-            {
-                agent.Move(Vector3.right * Time.deltaTime);
-            }
-            currentStrafeTime += Time.deltaTime;
-            yield return new WaitForEndOfFrame();
-
-        }
-        currentStrafeTime = 0;
-        setAnimation("Idle");
-        yield return new WaitForSeconds(5);
-        currentAction = Actions.idle;
-
-    }
-    */
-    IEnumerator onWait()
-    {
-        yield return new WaitForSeconds(1000);
-    }
-    protected virtual IEnumerator preAttack()
+    /// <summary>
+    /// Actions to be done before the enemy attacks
+    /// </summary>
+    protected virtual IEnumerator PreAttack()
     {
         model.transform.LookAt(player);
         proxy.transform.LookAt(player);
         preAttackParticle.Play();
-        setAnimation("Idle");
+        SetAnimation("Idle");
         yield return new WaitForSeconds(attackWarmUpTime);
-        StartCoroutine(attackEnum());
+        StartCoroutine(OnAttack());
     }
-    protected virtual IEnumerator attackEnum()
+   
+    protected virtual IEnumerator OnAttack()
     {
         preAttackParticle.Stop();
 
-        setAnimation("Basic Attack");
+        SetAnimation("Basic Attack");
 
         yield return new WaitForSeconds(0.75f);
-        dealDamage();
-        stop();
+        DealDamage();
+        Stop();
         yield return new WaitForSeconds(attackDuration - 0.75f);
         
 
         currentAction = Actions.idle;
-        setAnimation("Idle");
+        SetAnimation("Idle");
         yield return new WaitForSeconds(attackCooldownTime);
         onAttackCooldown = false;
 
     }
 
-    public virtual void dealDamage()
+    public virtual void DealDamage()
     {
         Vector3 enemyPlayer = (player.position - model.transform.position);
         float angle = Vector3.Angle(model.transform.forward, enemyPlayer);
-        Debug.Log(angle);
         if (angle <= attackAngle && Vector3.Distance(player.position, model.transform.position) <= attackRange)
         {
-            player.GetComponent<PlayerStatus>().takeDamage(attackDamage);
+            player.GetComponent<PlayerStatus>().TakeDamage(attackDamage);
         }
     }
 
-    public void stunned()
+    public void Stunned()
     {
         if (!isStunned && currentAction != Actions.attacking)
         {
             isStunned = true;
-            setAnimation("Stunned",true);
+            SetAnimation("Stunned",true);
             currentAction = Actions.stunned;
-            StartCoroutine(stunnedAction());
+            StartCoroutine(OnStunned());
         }
     }
 
-    IEnumerator stunnedAction()
+    IEnumerator OnStunned()
     {
         yield return new WaitForSeconds(stunnedDuration);
         currentAction = Actions.idle;
-        setAnimation("Stunned", false);
-        setAnimation("Idle");
+        SetAnimation("Stunned", false);
+        SetAnimation("Idle");
         yield return new WaitForSeconds(stunnedCooldown);
         isStunned = false;
     }
 
-    public void onDeath()
+    public void OnDeath()
     {
-        setAnimation("Death");
+        SetAnimation("Death");
         model.GetComponent<Collider>().enabled = false;
         agent.enabled = false;
         obstacle.enabled = false;
@@ -230,26 +192,28 @@ public class EnemyActions : MonoBehaviour
         controller.enabled = false;
         status.enabled = false;
         this.enabled = false;
-        manager.unRegistar(this.gameObject);
+        manager.UnRegistar(this.gameObject);
     }
-
-    protected void setAnimation(string trigger)
+    #endregion
+    #region Info and general methods
+    protected void SetAnimation(string trigger)
     {
         animator.SetTrigger(trigger);
     }
-    private void setAnimation(string name,bool state)
+    private void SetAnimation(string name,bool state)
     {
         animator.SetBool(name,state);
     }
 
-    public Actions getAction()
+    public Actions GetAction()
     {
         return currentAction;
     }
-    public bool attackCooldown()
+    public bool AttackCooldown()
     {
         return onAttackCooldown;
     }
+    #endregion
 
 
 

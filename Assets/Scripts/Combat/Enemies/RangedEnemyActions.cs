@@ -2,15 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Class Detailing available Ranged Enemy actions
+/// </summary>
 public class RangedEnemyActions : EnemyActions
 {
+    //Needed Gameobjects
     [SerializeField] private GameObject arrow;
-    protected Ray sightRay;
-    [SerializeField] private float arrowSpeed;
     [SerializeField] private Transform arrowPosition;
     [SerializeField] private GameObject secoundryAttackParticle;
-    [SerializeField] private float secoundryAttackDuration;
 
+    //Gameplay related Values
+    [SerializeField] private float secoundryAttackDuration;
+    [SerializeField] private float arrowSpeed;
+
+    protected Ray sightRay;
+    
     protected GameObject arrowInstance;
 
     protected override void FixedUpdate()
@@ -20,12 +27,12 @@ public class RangedEnemyActions : EnemyActions
             base.FixedUpdate();
         }
     }
-    protected override IEnumerator preAttack()
+    protected override IEnumerator PreAttack()
     {
-        
-        setAnimation("Draw");
+        SetAnimation("Draw");
         Vector3 fireDirection;
-        if (player.GetComponent<CharacterAreaController>().getState() == CharacterAreaController.State.moveing)
+        //Try to Loose where the player will be rather than his current position
+        if (player.GetComponent<CharacterAreaController>().GetState() == CharacterAreaController.State.moveing)
         {
             fireDirection = player.forward.normalized * Random.Range(4.5f, 7f) + player.position - model.transform.position;
         }
@@ -38,10 +45,11 @@ public class RangedEnemyActions : EnemyActions
         //float amont = Vector3.SignedAngle(model.transform.forward, rotatedVector, Vector3.up);
         
         //model.Rotate(0, amont, 0);
-        
+
+        //Loose an arrow
         arrowInstance = Instantiate(arrow, arrowPosition);
         arrowInstance.GetComponent<Collider>().enabled = false;
-        arrowInstance.GetComponent<ArrowCollision>().setDamage(attackDamage);
+        arrowInstance.GetComponent<ArrowCollision>().SetDamage(attackDamage);
         Vector3 arrowAngles = arrowInstance.transform.rotation.eulerAngles;
         arrowAngles.y = 180;
         arrowInstance.transform.Rotate(180, 0, 0);
@@ -54,24 +62,25 @@ public class RangedEnemyActions : EnemyActions
         yield return new WaitForSeconds(attackWarmUpTime - 0.5f);
         preAttackParticle.Play();
         yield return new WaitForSeconds(0.5f);
-        StartCoroutine(attackEnum());
+        StartCoroutine(OnAttack());
     }
 
    
 
-    protected override IEnumerator attackEnum()
+    protected override IEnumerator OnAttack()
     {
         preAttackParticle.Stop();
-        setAnimation("Basic Attack");
+        SetAnimation("Basic Attack");
         
 
         RaycastHit hit;
         if (Physics.Raycast(sightRay, out hit, Mathf.Infinity))
         {
+            //We dont want projectiles to hit other enemies but if we are going to we Loose a secoundry attack which will be Loosed "Up" and land on the players position
             if (hit.transform.gameObject.tag == "Enemy")
             {
                 Vector3 firePosition;
-                if (player.GetComponent<CharacterAreaController>().getState() == CharacterAreaController.State.moveing)
+                if (player.GetComponent<CharacterAreaController>().GetState() == CharacterAreaController.State.moveing)
                 {
                     firePosition = player.forward.normalized * Random.Range(4.5f, 7f) + player.position;
                 }
@@ -119,7 +128,7 @@ public class RangedEnemyActions : EnemyActions
         model.Rotate(0, amont, 0);
 
         currentAction = Actions.idle;
-        setAnimation("Idle");
+        SetAnimation("Idle");
         yield return new WaitForSeconds(attackCooldownTime);
         onAttackCooldown = false;
 

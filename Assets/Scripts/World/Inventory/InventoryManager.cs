@@ -5,6 +5,9 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Class That handles all of the inventory slots
+/// </summary>
 public class InventoryManager : MonoBehaviour
 {
     [System.Serializable]
@@ -14,21 +17,22 @@ public class InventoryManager : MonoBehaviour
     }
     [SerializeField] private List<InvnetorySlots> slots;
     [SerializeField] private string jsonPath;
-    [SerializeField] private string spritePath;
-
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        addToInventory("apple");
-        addToInventory("armor");
+        AddToInventory("apple");
+        AddToInventory("armor");
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
     }
-    private void addToInventory(string tradeableItem)
+    /// <summary>
+    /// Add item to inventory at first empty spot
+    /// </summary>
+    private void AddToInventory(string tradeableItem)
     {
         for (int i = 0; i < slots.Count; i++)
         {
@@ -39,14 +43,16 @@ public class InventoryManager : MonoBehaviour
                 if (slot.item == null)
                 {
                     TradeableItem item = getItem(tradeableItem);
-                    slots[i].slots[j].GetComponent<UISlot>().updateItem(item);
+                    slots[i].slots[j].GetComponent<UISlot>().UpdateItem(item);
                     j = slots[i].slots.Count;
                     i = slots.Count;
                 }
             }
         }
     }
-
+    /// <summary>
+    /// Read the item data from json
+    /// </summary>
     private TradeableItem getItem(string name)
     {
         JObject jsonText = JObject.Parse(File.ReadAllText(jsonPath));
@@ -56,6 +62,10 @@ public class InventoryManager : MonoBehaviour
         Sprite sprite = Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f), 100.0f);
         return new TradeableItem(name,float.Parse(itemAsJson["basePrice"].ToString()), sprite);
     }
+
+   
+
+
 
 
 }

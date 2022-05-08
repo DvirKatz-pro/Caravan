@@ -6,21 +6,27 @@ using TMPro;
 using System.Collections.Generic;
 using System.Collections;
 
+/// <summary>
+/// Class that opens dialouge between NPC and player and handles player response
+/// </summary>
 public class DialogueManager : MonoBehaviour
 {
+    //Needed GameObjects
     [SerializeField] private GameObject textObject;
     [SerializeField] private GameObject ResponseButton;
     [SerializeField] private GameObject content;
     [SerializeField] private GameObject player;
     [SerializeField] private Vector3 buttonPosition;
+
+    //Needed Values
     private float buttonHeight;
-    JArray responses;
+    private JArray responses;
     private List<GameObject> buttons;
     private int chosenResponseNum = -1;
   
     
     // Start is called before the first frame update
-    void Awake()
+    private void Awake()
     {
         buttonHeight = ResponseButton.GetComponent<RectTransform>().sizeDelta.y;
         buttons = new List<GameObject>();
@@ -32,13 +38,14 @@ public class DialogueManager : MonoBehaviour
         
     }
 
-    public void onChooseResponse(int responseNum)
+    public void OnChooseResponse(int responseNum)
     {
         chosenResponseNum = responseNum;
-       
     }
-
-    private IEnumerator responseRoutine()
+    /// <summary>
+    /// Wait for player response and handle it once chosen
+    /// </summary>
+    private IEnumerator ResponseRoutine()
     {
         while (chosenResponseNum < 0)
         {
@@ -51,10 +58,13 @@ public class DialogueManager : MonoBehaviour
             Destroy(button);
         }
         buttons = new List<GameObject>();
-        parseDialouge((JObject)responses[tempChosenResponse - 1]);
+        ParseDialouge((JObject)responses[tempChosenResponse - 1]);
         yield break;
     }
-    private void parseDialouge(JObject responseObject)
+    /// <summary>
+    /// Parse a Json object that contains text, responses and Rest of dialouge tree
+    /// </summary>
+    private void ParseDialouge(JObject responseObject)
     {
         if (responseObject["Text"] != null)
         {
@@ -65,6 +75,7 @@ public class DialogueManager : MonoBehaviour
             {
                 for (int i = 0; i < responses.Count; i++)
                 {
+                    //Here we dynamiclly add buttons to UI depending on the amount of responses that exist
                     GameObject button = Instantiate(ResponseButton, content.transform);
                     Vector3 newButtonPos = buttonPosition;
                     newButtonPos.y -= buttonHeight * i;
@@ -76,7 +87,7 @@ public class DialogueManager : MonoBehaviour
                     buttons.Add(button);
                 }
               
-                StartCoroutine(responseRoutine());
+                StartCoroutine(ResponseRoutine());
             }
            
         }
@@ -94,21 +105,15 @@ public class DialogueManager : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void openJson(string jsonPath)
-    {
-       
-
+    public void OpenJson(string jsonPath)
+    {   
         JObject jsonText = JObject.Parse(File.ReadAllText(jsonPath));
         JObject dialouge = (JObject)jsonText["Dialouge"];
-        
         if (dialouge != null)
         {
-
-            parseDialouge(dialouge);
+            ParseDialouge(dialouge);
             
         }
-       
-
     }
 
 }

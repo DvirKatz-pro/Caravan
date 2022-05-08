@@ -2,31 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Class Handles 2D player movement
+/// </summary>
 public class PlayerWorldMovement : MonoBehaviour
 {
 
     public float movementSpeed = 1.0f;
 
-    Rigidbody2D rb;
-    bool isRight = true;
+    private Rigidbody2D rb;
+    private bool isRight = true;
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        move();
-    }
-
-    void move()
+    public void Move(float horizontalInput)
     {
         Vector2 currentPos = rb.position;
-        float horizontalInput = Input.GetAxis("Horizontal");
-
-
         Vector2 inputVector = new Vector2(horizontalInput, 0);
         inputVector = Vector2.ClampMagnitude(inputVector, 1);
 

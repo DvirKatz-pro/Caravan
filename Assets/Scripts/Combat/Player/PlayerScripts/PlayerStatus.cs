@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Class Detailing Player Status
+/// </summary>
 public class PlayerStatus : MonoBehaviour
 {
     //UI elements
@@ -13,7 +16,7 @@ public class PlayerStatus : MonoBehaviour
     [SerializeField] private float health = 100;
     private float currentHealth = 100;
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         currentHealth = health;
     }
@@ -23,19 +26,16 @@ public class PlayerStatus : MonoBehaviour
     {
         
     }
-    /*
-     * take damage given the amount of damage to take
-     */
-    public void takeDamage(float amount)
+    public void TakeDamage(float amount)
     {
         currentHealth -= amount;
         healthBar.fillAmount = currentHealth / health;
         StartCoroutine(DamageScreen());
 
     }
-    /*
-     * make the screen flash red when player is hit
-     */
+    /// <summary>
+    /// make the screen flash red when player is hit
+    /// </summary>
     private IEnumerator DamageScreen()
     {
         hurtImage.color = Color.red;
