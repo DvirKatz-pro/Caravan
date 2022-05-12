@@ -17,7 +17,7 @@ public class UISlot : MonoBehaviour, IPointerClickHandler
     private void Start()
     {
         this.selectedItem = GameObject.Find("SelectedItem").GetComponent<UISlot>();
-        this.inventoryManager = GameObject.Find("Inventory").GetComponent<InventoryManager>();
+        this.inventoryManager = InventoryManager.Instance;
     }
   
     public void UpdateItem(TradeableItem item)

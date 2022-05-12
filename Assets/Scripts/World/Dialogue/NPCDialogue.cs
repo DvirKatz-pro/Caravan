@@ -8,17 +8,14 @@ using UnityEngine;
 public class NPCDialogue : MonoBehaviour
 {
     [SerializeField] private string jsonPath = "NPCText";
-    [SerializeField] private DialogueManager manager;
     private bool inDialouge = false;
 
     private void OnMouseDown()
     {
         if (!inDialouge)
         {
-            manager.gameObject.SetActive(true);
-           
             inDialouge = true;
-            manager.OpenJson(jsonPath);
+            DialogueManager.Instance.OpenJson(jsonPath);
         }
 
     }

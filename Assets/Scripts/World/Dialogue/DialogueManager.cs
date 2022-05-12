@@ -9,13 +9,13 @@ using System.Collections;
 /// <summary>
 /// Class that opens dialouge between NPC and player and handles player response
 /// </summary>
-public class DialogueManager : MonoBehaviour
+public class DialogueManager : SingletonManager<DialogueManager>
 {
     //Needed GameObjects
+    [SerializeField] private GameObject dialogeUI;
     [SerializeField] private GameObject textObject;
     [SerializeField] private GameObject ResponseButton;
     [SerializeField] private GameObject content;
-    [SerializeField] private GameObject player;
     [SerializeField] private Vector3 buttonPosition;
 
     //Needed Values
@@ -99,21 +99,26 @@ public class DialogueManager : MonoBehaviour
     }
     private void OnDisable()
     {
-        player.GetComponent<CharacterWorldController>().enabled = false;
-        player.GetComponent<RunningTransition>().enabled = false;
+        GameObject player = GameManager.Instance.GetPlayer();
+        player.GetComponent<CharacterWorldController>().EnablePlayerActions();
         textObject.GetComponent<TMP_Text>().text = "";
-        gameObject.SetActive(false);
+        dialogeUI.SetActive(false);
     }
 
     public void OpenJson(string jsonPath)
     {   
         JObject jsonText = JObject.Parse(File.ReadAllText(jsonPath));
         JObject dialouge = (JObject)jsonText["Dialouge"];
+        dialogeUI.SetActive(true);
         if (dialouge != null)
         {
+            GameObject player = GameManager.Instance.GetPlayer();
+            player.GetComponent<CharacterWorldController>().DisablePlayerActions();
             ParseDialouge(dialouge);
             
         }
     }
+
+    
 
 }

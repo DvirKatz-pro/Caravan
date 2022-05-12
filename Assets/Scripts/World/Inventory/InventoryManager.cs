@@ -8,17 +8,19 @@ using UnityEngine.UI;
 /// <summary>
 /// Class That handles all of the inventory slots
 /// </summary>
-public class InventoryManager : MonoBehaviour
+public class InventoryManager : SingletonManager<InventoryManager>
 {
     [System.Serializable]
     public class InvnetorySlots
     {
         public List<GameObject> slots;
     }
+
     [SerializeField] private List<InvnetorySlots> slots;
     [SerializeField] private string jsonPath;
     [SerializeField] private GameObject selectedObject;
     [SerializeField] private GameObject slotsContainer;
+    [SerializeField] private GameObject inventoryCanvas;
 
     // Start is called before the first frame update
     private void Start()
@@ -101,6 +103,10 @@ public class InventoryManager : MonoBehaviour
         Texture2D texture = Resources.Load<Texture2D>("Sprites/RPG_inventory_icons/" + name);
         Sprite sprite = Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f), 100.0f);
         return new TradeableItem(name,float.Parse(itemAsJson["basePrice"].ToString()), sprite);
+    }
+    public GameObject GetInventoryCanvas()
+    {
+        return inventoryCanvas;
     }
 
 }

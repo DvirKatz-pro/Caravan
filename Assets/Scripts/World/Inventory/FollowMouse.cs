@@ -8,11 +8,11 @@ using UnityEngine;
 public class FollowMouse : MonoBehaviour
 {
     private GameObject initialSlot;
-    public void setInitialSlot(GameObject initialSlot)
+    public void SetInitialSlot(GameObject initialSlot)
     {
         this.initialSlot = initialSlot;
     }
-    public GameObject getInitialSlot()
+    public GameObject GetInitialSlot()
     {
         return initialSlot;
     }

@@ -36,11 +36,11 @@ public class CharacterWorldController : MonoBehaviour
         }
         
     }
-    public void disablePlayerActions()
+    public void DisablePlayerActions()
     {
         PlayerWorldMovement.enabled = false;
     }
-    public void enablePlayerActions()
+    public void EnablePlayerActions()
     {
         PlayerWorldMovement.enabled = true;
     }
