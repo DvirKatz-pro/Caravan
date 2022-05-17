@@ -26,12 +26,14 @@ public class CharacterWorldController : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.I) && !openInventory)
         {
             openInventory = true;
+            PauseControl.Instance.PauseGame();
             inventoryCanvas.SetActive(true);
 
         }
         else if (Input.GetKeyDown(KeyCode.I) && openInventory)
         {
             openInventory = false;
+            PauseControl.Instance.ResumeGame();
             inventoryCanvas.SetActive(false);
         }
         

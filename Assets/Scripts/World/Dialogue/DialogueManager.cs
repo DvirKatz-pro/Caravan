@@ -99,10 +99,9 @@ public class DialogueManager : SingletonManager<DialogueManager>
     }
     private void OnDisable()
     {
-        GameObject player = GameManager.Instance.GetPlayer();
-        player.GetComponent<CharacterWorldController>().EnablePlayerActions();
         textObject.GetComponent<TMP_Text>().text = "";
         dialogeUI.SetActive(false);
+        PauseControl.Instance.ResumeGame();
     }
 
     public void OpenJson(string jsonPath)
@@ -112,10 +111,8 @@ public class DialogueManager : SingletonManager<DialogueManager>
         dialogeUI.SetActive(true);
         if (dialouge != null)
         {
-            GameObject player = GameManager.Instance.GetPlayer();
-            player.GetComponent<CharacterWorldController>().DisablePlayerActions();
+            PauseControl.Instance.PauseGame();
             ParseDialouge(dialouge);
-            
         }
     }
 

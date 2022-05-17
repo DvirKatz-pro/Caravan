@@ -12,7 +12,7 @@ public class NPCDialogue : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (!inDialouge)
+        if (!inDialouge && !PauseControl.gameIsPaused)
         {
             inDialouge = true;
             DialogueManager.Instance.OpenJson(jsonPath);
