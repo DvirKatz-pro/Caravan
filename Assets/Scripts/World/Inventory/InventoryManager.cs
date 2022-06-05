@@ -108,5 +108,9 @@ public class InventoryManager : SingletonManager<InventoryManager>
     {
         return inventoryCanvas;
     }
+    public List<InvnetorySlots> GetInventorySlots()
+    {
+        return slots;
+    }
 
 }
