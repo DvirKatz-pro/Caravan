@@ -12,7 +12,7 @@ public class UISlot : MonoBehaviour, IPointerClickHandler
     public TradeableItem item;
     public UISlot selectedItem { get; set; }
 
-    private InventoryManager inventoryManager;
+    protected InventoryManager inventoryManager;
 
     private void Start()
     {
@@ -20,7 +20,7 @@ public class UISlot : MonoBehaviour, IPointerClickHandler
         this.inventoryManager = InventoryManager.Instance;
     }
   
-    public void UpdateItem(TradeableItem item)
+    public virtual void UpdateItem(TradeableItem item)
     {
         this.item = item;
         Image itemImage = transform.GetChild(0).GetComponent<Image>();
@@ -36,7 +36,7 @@ public class UISlot : MonoBehaviour, IPointerClickHandler
     }
 
 
-    public void OnPointerClick(PointerEventData eventData)
+    public virtual void OnPointerClick(PointerEventData eventData)
     {
         if (this.item != null)
         {

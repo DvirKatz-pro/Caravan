@@ -21,12 +21,25 @@ public class InventoryManager : SingletonManager<InventoryManager>
     [SerializeField] private GameObject selectedObject;
     [SerializeField] private GameObject slotsContainer;
     [SerializeField] private GameObject inventoryCanvas;
+    [SerializeField] private float startingFunds = 0;
+    private float currentFunds = 0;
+
+    public const string FUNDS_TEXT = "funds: ";
+
+    private void Awake()
+    {
+        currentFunds = startingFunds;
+        AddToInventory("apple");
+        AddToInventory("armor");
+        AddToInventory("apple");
+        AddToInventory("apple");
+        AddToInventory("apple");
+    }
 
     // Start is called before the first frame update
     private void Start()
     {
-        AddToInventory("apple");
-        AddToInventory("armor");
+        
     }
 
     // Update is called once per frame
@@ -52,7 +65,7 @@ public class InventoryManager : SingletonManager<InventoryManager>
     /// <summary>
     /// Add item to inventory at first empty spot given the Tradeable Item name
     /// </summary>
-    private void AddToInventory(string tradeableItem)
+    public void AddToInventory(string tradeableItem)
     {
         for (int i = 0; i < slots.Count; i++)
         {
@@ -74,7 +87,7 @@ public class InventoryManager : SingletonManager<InventoryManager>
     /// <summary>
     /// Add item to inventory at first empty spot given the Tradeable Item class
     /// </summary>
-    private void AddToInventory(TradeableItem tradeableItem)
+    public void AddToInventory(TradeableItem tradeableItem)
     {
         for (int i = 0; i < slots.Count; i++)
         {
@@ -111,6 +124,10 @@ public class InventoryManager : SingletonManager<InventoryManager>
     public List<InvnetorySlots> GetInventorySlots()
     {
         return slots;
+    }
+    public float GetCurrentFunds()
+    {
+        return currentFunds;
     }
 
 }
