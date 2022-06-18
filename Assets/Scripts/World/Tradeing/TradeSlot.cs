@@ -28,7 +28,7 @@ public class TradeSlot : UISlot
             tradeManager.AddToTradeInventory(this.item);
             if (slotType == TradeManager.SlotType.sellSlot)
             {
-                tradeManager.GetSellScreen().removeItem(this.gameObject);
+                Destroy(this.gameObject);
             }
             
             
