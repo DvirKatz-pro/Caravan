@@ -14,6 +14,7 @@ public class TradeManager : SingletonManager<TradeManager>
     [SerializeField] private TradeScreen buyScreen;
     [SerializeField] private TextMeshProUGUI executeTradeText;
     public Vector2 TradeWindowItemSize = Vector2.one;
+    GameObject currentNPC;
 
     private float currentBalance = 0;
 
@@ -26,9 +27,9 @@ public class TradeManager : SingletonManager<TradeManager>
         buySlot
     }
   
-    public void OpenTradeScreen(List<TradeableItem> NPCStock)
+    public void OpenTradeScreen(GameObject npc)
     {
-        
+        this.currentNPC = npc;
 
         this.inventoryManager = InventoryManager.Instance;
 
@@ -50,7 +51,7 @@ public class TradeManager : SingletonManager<TradeManager>
 
         fundsText.text = InventoryManager.FUNDS_TEXT + inventoryManager.GetCurrentFunds();
 
-        foreach (TradeableItem item in NPCStock)
+        foreach (TradeableItem item in this.currentNPC.GetComponent<NPCInventory>().GetNPCStock())
         {
             AddToBuyInventory(item);
         }

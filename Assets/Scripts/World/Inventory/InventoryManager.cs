@@ -27,6 +27,7 @@ public class InventoryManager : SingletonManager<InventoryManager>
     private float currentFunds = 0;
 
     public const string FUNDS_TEXT = "funds: ";
+    public Vector2 INVENTORY_SIZE = new Vector2(5, 6);
 
     private void Awake()
     {

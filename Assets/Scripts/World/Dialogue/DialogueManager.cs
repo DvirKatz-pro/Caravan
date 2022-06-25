@@ -96,7 +96,7 @@ public class DialogueManager : SingletonManager<DialogueManager>
         {
             if (currentNPC.GetComponent<NPCInventory>() != null)
             {
-                TradeManager.Instance.OpenTradeScreen(currentNPC.GetComponent<NPCInventory>().GetNPCStock());
+                TradeManager.Instance.OpenTradeScreen(currentNPC);
             }
             OnDisable();
         }
