@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SellScreen : MonoBehaviour
+public class TradeScreen : MonoBehaviour
 {
-    [SerializeField] private Vector2 startingPos;
     private List<GameObject> items;
     private Vector2 currentPos;
     private Vector2 slotSize;
@@ -19,15 +18,14 @@ public class SellScreen : MonoBehaviour
         {
             slotSize = slot.GetComponent<RectTransform>().sizeDelta;
         }
-        
+
         slot.GetComponent<RectTransform>().anchoredPosition = currentPos;
         items.Add(slot);
     }
-    public void removeItem(GameObject game)
+    public void RemoveItem(GameObject game)
     {
         int itemIndex = -1;
-        Vector2 removedObjectPos = game.GetComponent<RectTransform>().anchoredPosition;
-        for(int i = 0; i < items.Count;i++)
+        for (int i = 0; i < items.Count; i++)
         {
             if (items[i] == game)
             {
@@ -41,7 +39,8 @@ public class SellScreen : MonoBehaviour
         }
         items.RemoveAt(itemIndex);
     }
-
-
-
+    public List<GameObject> GetItems()
+    {
+        return items; 
+    }
 }

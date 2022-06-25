@@ -16,6 +16,10 @@
       },
       {
         "ResponseText": "shut up"
+      },
+      {
+        "ResponseText": "Show me your wares",
+        "Trade": true
       }
     ]
   }

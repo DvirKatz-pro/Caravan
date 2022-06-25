@@ -27,6 +27,7 @@ public class CharacterWorldController : MonoBehaviour
         {
             openInventory = true;
             PauseControl.Instance.PauseGame();
+            InventoryManager.Instance.OpenInventory();
             inventoryCanvas.SetActive(true);
 
         }

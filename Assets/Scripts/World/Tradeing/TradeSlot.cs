@@ -22,25 +22,31 @@ public class TradeSlot : UISlot
     }
 
     public override void OnPointerClick(PointerEventData eventData) {
-        if (gameObject.tag.Equals("InContent"))
+        if (gameObject.tag.Equals("SellScreen") || gameObject.tag.Equals("BuyScreen"))
         {
-           
-            tradeManager.AddToTradeInventory(this.item);
-            if (slotType == TradeManager.SlotType.sellSlot)
+            if (gameObject.tag.Equals("SellScreen"))
             {
-                Destroy(this.gameObject);
+                tradeManager.AddToSellInventory(this.item);
+                tradeManager.GetSellScreen().RemoveItem(this.gameObject);
+                tradeManager.ChangeTradeBalance(-this.item.GetBasePrice());
+            }
+            else
+            {
+                tradeManager.AddToBuyInventory(this.item);
+                tradeManager.GetBuyScreen().RemoveItem(this.gameObject);
+                tradeManager.ChangeTradeBalance(this.item.GetBasePrice());
             }
             
-            
+            Destroy(this.gameObject);
+
         }
         else
         {
             TradeableItem clone = new TradeableItem(this.item);
-            UpdateItem(null);
 
             GameObject slot = Instantiate(this.gameObject, tradeContent.transform);
             slot.GetComponent<UISlot>().UpdateItem(clone);
-            slot.tag = "InContent";
+            
             RectTransform rt = slot.GetComponent<RectTransform>(); 
             rt.sizeDelta = tradeManager.TradeWindowItemSize;
             rt = slot.GetComponent<Transform>().GetChild(0).GetComponent<RectTransform>();
@@ -49,9 +55,17 @@ public class TradeSlot : UISlot
             if (slotType == TradeManager.SlotType.sellSlot)
             {
                 tradeManager.GetSellScreen().AddItem(slot);
+                slot.tag = "SellScreen";
+                tradeManager.ChangeTradeBalance(this.item.GetBasePrice());
+            }
+            else
+            {
+                tradeManager.GetBuyScreen().AddItem(slot);
+                slot.tag = "BuyScreen";
+                tradeManager.ChangeTradeBalance(-this.item.GetBasePrice());
             }
 
-
+            UpdateItem(null);
         }
 
     }

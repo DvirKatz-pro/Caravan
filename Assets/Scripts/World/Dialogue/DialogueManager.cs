@@ -23,6 +23,8 @@ public class DialogueManager : SingletonManager<DialogueManager>
     private JArray responses;
     private List<GameObject> buttons;
     private int chosenResponseNum = -1;
+
+    private GameObject currentNPC; 
   
     
     // Start is called before the first frame update
@@ -83,13 +85,20 @@ public class DialogueManager : SingletonManager<DialogueManager>
                     button.transform.GetChild(0).GetComponent<Text>().text = responses[i]["ResponseText"].ToString();
                     ResponseButton responseButton = button.GetComponent<ResponseButton>();
                     responseButton.responseNum = i + 1;
-                    responseButton.dialogueManager = this;
                     buttons.Add(button);
                 }
-              
+
                 StartCoroutine(ResponseRoutine());
             }
-           
+
+        }
+        else if (responseObject.SelectToken("Trade").Value<bool>())
+        {
+            if (currentNPC.GetComponent<NPCInventory>() != null)
+            {
+                TradeManager.Instance.OpenTradeScreen(currentNPC.GetComponent<NPCInventory>().GetNPCStock());
+            }
+            OnDisable();
         }
         else
         {
@@ -99,13 +108,15 @@ public class DialogueManager : SingletonManager<DialogueManager>
     }
     private void OnDisable()
     {
+        currentNPC.GetComponent<NPCDialogue>().EndDialouge();
         textObject.GetComponent<TMP_Text>().text = "";
         dialogeUI.SetActive(false);
         PauseControl.Instance.ResumeGame();
     }
 
-    public void OpenJson(string jsonPath)
-    {   
+    public void OpenJson(string jsonPath,GameObject npc)
+    {
+        currentNPC = npc;
         JObject jsonText = JObject.Parse(File.ReadAllText(jsonPath));
         JObject dialouge = (JObject)jsonText["Dialouge"];
         dialogeUI.SetActive(true);

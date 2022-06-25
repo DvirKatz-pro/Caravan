@@ -15,8 +15,12 @@ public class NPCDialogue : MonoBehaviour
         if (!inDialouge && !PauseControl.gameIsPaused)
         {
             inDialouge = true;
-            DialogueManager.Instance.OpenJson(jsonPath);
+            DialogueManager.Instance.OpenJson(jsonPath,this.gameObject);
         }
 
+    }
+    public void EndDialouge()
+    {
+        inDialouge = false;
     }
 }

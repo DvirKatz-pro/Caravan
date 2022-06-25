@@ -5,10 +5,10 @@ using UnityEngine;
 public class ResponseButton : MonoBehaviour
 {
     public int responseNum { get; set; }
-    public DialogueManager dialogueManager {get;set;}
+    
 
-    public void onClick()
+    public void OnClick()
     {
-        dialogueManager.OnChooseResponse(responseNum);
+        DialogueManager.Instance.OnChooseResponse(responseNum);
     }
 }

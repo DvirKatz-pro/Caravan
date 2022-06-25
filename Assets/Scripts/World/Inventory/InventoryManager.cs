@@ -2,6 +2,7 @@ using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,6 +23,7 @@ public class InventoryManager : SingletonManager<InventoryManager>
     [SerializeField] private GameObject slotsContainer;
     [SerializeField] private GameObject inventoryCanvas;
     [SerializeField] private float startingFunds = 0;
+    [SerializeField] private TextMeshProUGUI fundsText;
     private float currentFunds = 0;
 
     public const string FUNDS_TEXT = "funds: ";
@@ -61,6 +63,10 @@ public class InventoryManager : SingletonManager<InventoryManager>
                 AddToInventory(clone);
             }
         }
+    }
+    public void OpenInventory()
+    {
+        fundsText.text = InventoryManager.FUNDS_TEXT + currentFunds;
     }
     /// <summary>
     /// Add item to inventory at first empty spot given the Tradeable Item name
@@ -104,11 +110,28 @@ public class InventoryManager : SingletonManager<InventoryManager>
             }
         }
     }
+    public void RemoveFromInventory(TradeableItem tradeableItem)
+    {
+        for (int i = 0; i < slots.Count; i++)
+        {
+            for (int j = 0; j < slots[0].slots.Count; j++)
+            {
+                UISlot slot = slots[i].slots[j].GetComponent<UISlot>();
+
+                if (slot.item == tradeableItem)
+                {
+                    slots[i].slots[j].GetComponent<UISlot>().UpdateItem(null);
+                    j = slots[i].slots.Count;
+                    i = slots.Count;
+                }
+            }
+        }
+    }
 
     /// <summary>
     /// Read the item data from json
     /// </summary>
-    private TradeableItem GetItem(string name)
+    public TradeableItem GetItem(string name)
     {
         JObject jsonText = JObject.Parse(File.ReadAllText(jsonPath));
         JObject itemAsJson = (JObject)jsonText[name];
@@ -128,6 +151,11 @@ public class InventoryManager : SingletonManager<InventoryManager>
     public float GetCurrentFunds()
     {
         return currentFunds;
+    }
+    public void SetCurrentFunds(float currentFunds)
+    {
+        this.currentFunds = currentFunds;
+
     }
 
 }
