@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Class that makes chosen item follow mouse after player click
+/// Class that makes chosen item in the Inventory follow mouse after player click
 /// </summary>
 public class FollowMouse : MonoBehaviour
 {

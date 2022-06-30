@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Singleton class for the easy creation of manager classes 
+/// </summary>
 public class SingletonManager<T> : MonoBehaviour where T: Component
 {
     private static T _instance;

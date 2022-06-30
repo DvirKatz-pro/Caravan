@@ -76,6 +76,7 @@ public class PlayerBasicAttack : MonoBehaviour
             ComboReset();
         }
     }
+    #region Attack and Damage
     public void BasicAttack()
     {
         //if we are trying to attack and we can attack, then we attack
@@ -125,6 +126,29 @@ public class PlayerBasicAttack : MonoBehaviour
         
     }
     // <summary>
+    /// Check if player hit any enemies
+    /// </summary>
+    private void checkDamage()
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, attackRange);
+        foreach (Collider c in hitColliders)
+        {
+            if (c.gameObject.tag.Equals("Enemy"))
+            {
+
+                Vector3 targetDir = c.transform.position - transform.position;
+                targetDir = targetDir.normalized;
+                float angle = Vector3.Dot(targetDir, transform.forward);
+                if (angle > attackHitAngle)
+                {
+                    c.transform.root.gameObject.GetComponent<EnemyStatus>().TakeDamage(attackDamage);
+                }
+            }
+        }
+    }
+    #endregion
+    #region Combo tracking
+    // <summary>
     /// Reset Combo and go back to Idle
     /// </summary>
     private void Reset()
@@ -152,23 +176,5 @@ public class PlayerBasicAttack : MonoBehaviour
             
         }
     }
-
-    private void checkDamage()
-    {
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, attackRange);
-        foreach (Collider c in hitColliders)
-        {
-            if (c.gameObject.tag.Equals("Enemy"))
-            {
-                
-                Vector3 targetDir = c.transform.position - transform.position;
-                targetDir = targetDir.normalized;
-                float angle = Vector3.Dot(targetDir, transform.forward);
-                if (angle > attackHitAngle)
-                {
-                    c.transform.root.gameObject.GetComponent<EnemyStatus>().TakeDamage(attackDamage);
-                }
-            }
-        }
-    }  
+    #endregion
 }

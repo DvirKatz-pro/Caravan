@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Class that contains the list of what the NPC is going to sell
+/// </summary>
 public class NPCInventory : MonoBehaviour
 {
     private List<TradeableItem> NPCStock;
@@ -28,12 +31,15 @@ public class NPCInventory : MonoBehaviour
     {
         return NPCStock;
     }
-
-    // Update is called once per frame
-    void Update()
+    public void AddToInventory(TradeableItem tradeableItem)
     {
-        
+        NPCStock.Add(tradeableItem);
     }
+    public void RemoveFromInventory(TradeableItem tradeableItem)
+    {
+        NPCStock.Remove(tradeableItem);
+    }
+
 
    
 }

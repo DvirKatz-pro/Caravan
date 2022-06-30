@@ -45,7 +45,9 @@ public class EnemyActions : MonoBehaviour
     protected bool onAttackCooldown = false;
 
 
-
+    /// <summary>
+    /// The enums of actions an enemy might take
+    /// </summary>
     public enum Actions
     {
         idle,
@@ -81,6 +83,9 @@ public class EnemyActions : MonoBehaviour
  
     }
     #region Actions
+    /// <summary>
+    /// given a position, the enemy will move to that position
+    /// </summary>
     public void Move(Vector3 position)
     {
         currentAction = Actions.moveing;
@@ -97,7 +102,9 @@ public class EnemyActions : MonoBehaviour
         
         
     }
-    
+    /// <summary>
+    /// The enemy will stop at its current position
+    /// </summary>
     public void Stop()
     {
         if (agent.enabled == true)
@@ -109,6 +116,9 @@ public class EnemyActions : MonoBehaviour
         }
 
     }
+    /// <summary>
+    /// Class detailing the conditions for whitch the enemy can attack
+    /// </summary>
     public void Attack()
     {
         if (currentAction != Actions.attacking && currentAction != Actions.stunned && !onAttackCooldown)
@@ -131,7 +141,9 @@ public class EnemyActions : MonoBehaviour
         yield return new WaitForSeconds(attackWarmUpTime);
         StartCoroutine(OnAttack());
     }
-   
+    /// <summary>
+    /// Actions to be done during the attack itself
+    /// </summary>
     protected virtual IEnumerator OnAttack()
     {
         preAttackParticle.Stop();
@@ -150,7 +162,9 @@ public class EnemyActions : MonoBehaviour
         onAttackCooldown = false;
 
     }
-
+    /// <summary>
+    /// Check if we have hit the player or not
+    /// </summary>
     public virtual void DealDamage()
     {
         Vector3 enemyPlayer = (player.position - model.transform.position);
@@ -160,7 +174,9 @@ public class EnemyActions : MonoBehaviour
             player.GetComponent<PlayerStatus>().TakeDamage(attackDamage);
         }
     }
-
+    /// <summary>
+    /// Check if the enemy can become stunned
+    /// </summary>
     public void Stunned()
     {
         if (!isStunned && currentAction != Actions.attacking)
@@ -171,7 +187,9 @@ public class EnemyActions : MonoBehaviour
             StartCoroutine(OnStunned());
         }
     }
-
+    /// <summary>
+    /// the actions to be taken once the enemy is stunned
+    /// </summary>
     IEnumerator OnStunned()
     {
         yield return new WaitForSeconds(stunnedDuration);
@@ -181,7 +199,9 @@ public class EnemyActions : MonoBehaviour
         yield return new WaitForSeconds(stunnedCooldown);
         isStunned = false;
     }
-
+    /// <summary>
+    /// Disable the enemy upon death
+    /// </summary>
     public void OnDeath()
     {
         SetAnimation("Death");

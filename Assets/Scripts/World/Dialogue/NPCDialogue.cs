@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Class Detailing Where the dialouge tree for this NPC is
+/// Class Detailing Where the dialouge tree for this NPC is and to start dialouge when clicked on
 /// </summary>
 public class NPCDialogue : MonoBehaviour
 {

@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Class Detailing Where clicked items in the trade screen are contained and displayed
+/// </summary>
 public class TradeScreen : MonoBehaviour
 {
     private List<GameObject> items;
@@ -24,20 +27,7 @@ public class TradeScreen : MonoBehaviour
     }
     public void RemoveItem(GameObject game)
     {
-        int itemIndex = -1;
-        for (int i = 0; i < items.Count; i++)
-        {
-            if (items[i] == game)
-            {
-                itemIndex = i;
-                break;
-            }
-        }
-        if (itemIndex < 0)
-        {
-            throw new System.Exception("item: " + game.name + " not found in buy or sell screen");
-        }
-        items.RemoveAt(itemIndex);
+        items.Remove(game);
     }
     public List<GameObject> GetItems()
     {

@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Class That handles all of the inventory slots
+/// Class That handles all of the inventory slots of the player
 /// </summary>
 public class InventoryManager : SingletonManager<InventoryManager>
 {
@@ -27,22 +27,17 @@ public class InventoryManager : SingletonManager<InventoryManager>
     private float currentFunds = 0;
 
     public const string FUNDS_TEXT = "funds: ";
-    public Vector2 INVENTORY_SIZE = new Vector2(5, 6);
+    private float availableSpace = 0; 
 
     private void Awake()
     {
+        availableSpace = slots.Count * slots[0].slots.Count;
         currentFunds = startingFunds;
         AddToInventory("apple");
         AddToInventory("armor");
         AddToInventory("apple");
         AddToInventory("apple");
         AddToInventory("apple");
-    }
-
-    // Start is called before the first frame update
-    private void Start()
-    {
-        
     }
 
     // Update is called once per frame
@@ -65,6 +60,7 @@ public class InventoryManager : SingletonManager<InventoryManager>
             }
         }
     }
+    #region Inventory Actions
     public void OpenInventory()
     {
         fundsText.text = InventoryManager.FUNDS_TEXT + currentFunds;
@@ -84,6 +80,7 @@ public class InventoryManager : SingletonManager<InventoryManager>
                 {
                     TradeableItem item = GetItem(tradeableItem);
                     slots[i].slots[j].GetComponent<UISlot>().UpdateItem(item);
+                    availableSpace--;
                     j = slots[i].slots.Count;
                     i = slots.Count;
                 }
@@ -101,16 +98,19 @@ public class InventoryManager : SingletonManager<InventoryManager>
             for (int j = 0; j < slots[0].slots.Count; j++)
             {
                 UISlot slot = slots[i].slots[j].GetComponent<UISlot>();
-
                 if (slot.item == null)
                 {
                     slots[i].slots[j].GetComponent<UISlot>().UpdateItem(tradeableItem);
-                    j = slots[i].slots.Count;
+                    availableSpace--;
                     i = slots.Count;
+                    j = slots[0].slots.Count;
                 }
             }
         }
     }
+    /// <summary>
+    /// Remove the given item from the inventory if it exists
+    /// </summary>
     public void RemoveFromInventory(TradeableItem tradeableItem)
     {
         for (int i = 0; i < slots.Count; i++)
@@ -122,15 +122,17 @@ public class InventoryManager : SingletonManager<InventoryManager>
                 if (slot.item == tradeableItem)
                 {
                     slots[i].slots[j].GetComponent<UISlot>().UpdateItem(null);
-                    j = slots[i].slots.Count;
+                    availableSpace++;
                     i = slots.Count;
+                    j = slots[0].slots.Count;
                 }
             }
         }
     }
-
+    #endregion
+    #region Get and extract Info
     /// <summary>
-    /// Read the item data from json
+    /// Read the item data from json and assign it to a TradeableItem class
     /// </summary>
     public TradeableItem GetItem(string name)
     {
@@ -158,5 +160,9 @@ public class InventoryManager : SingletonManager<InventoryManager>
         this.currentFunds = currentFunds;
 
     }
-
+    public float GetAvailableSpace()
+    {
+        return availableSpace;
+    }
+    #endregion
 }

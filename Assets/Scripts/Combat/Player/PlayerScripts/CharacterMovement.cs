@@ -39,10 +39,11 @@ public class CharacterMovement : MonoBehaviour
         floorMask = LayerMask.GetMask("Terrain");
     }
 
+
+
+
     
-
-   
-
+    #region Rotate and movement
     public void Rotate()
     {
         //get the mouse point on screen
@@ -123,7 +124,7 @@ public class CharacterMovement : MonoBehaviour
         Rotate();
 
     }
-
+    #endregion
 
 
 

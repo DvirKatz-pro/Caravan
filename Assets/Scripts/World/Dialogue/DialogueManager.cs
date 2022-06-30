@@ -39,7 +39,7 @@ public class DialogueManager : SingletonManager<DialogueManager>
     {
         
     }
-
+    #region Dialogue and response parsing
     public void OnChooseResponse(int responseNum)
     {
         chosenResponseNum = responseNum;
@@ -106,6 +106,7 @@ public class DialogueManager : SingletonManager<DialogueManager>
         }
 
     }
+    #endregion
     private void OnDisable()
     {
         currentNPC.GetComponent<NPCDialogue>().EndDialouge();
@@ -114,6 +115,9 @@ public class DialogueManager : SingletonManager<DialogueManager>
         PauseControl.Instance.ResumeGame();
     }
 
+    /// <summary>
+    /// Open given json of NPC that contains the dialouge tree
+    /// </summary>
     public void OpenJson(string jsonPath,GameObject npc)
     {
         currentNPC = npc;

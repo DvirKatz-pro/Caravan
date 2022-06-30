@@ -8,7 +8,9 @@ using UnityEngine;
 public class ArrowCollision : MonoBehaviour
 {
     private float damage = 20;
-    //if the player is hit by the arrow then the player will take damage
+    /// <summary>
+    /// if the player is hit by the arrow then the player will take damage
+    /// </summary>
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player")
@@ -19,7 +21,9 @@ public class ArrowCollision : MonoBehaviour
         }
        
     }
-    //set the amount of damage that a player will take
+    /// <summary>
+    /// set the amount of damage that a player will take
+    /// </summary>
     public void SetDamage(float m_damage)
     {
         damage = m_damage;

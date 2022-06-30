@@ -27,6 +27,8 @@ public class RangedEnemyActions : EnemyActions
             base.FixedUpdate();
         }
     }
+
+    #region Attack
     protected override IEnumerator PreAttack()
     {
         SetAnimation("Draw");
@@ -133,5 +135,6 @@ public class RangedEnemyActions : EnemyActions
         onAttackCooldown = false;
 
     }
+    #endregion
 
 }

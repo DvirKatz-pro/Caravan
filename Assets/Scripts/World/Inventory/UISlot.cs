@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
-/// Class that reacts to player click on item slot
+/// Class that reacts to player click on item slot in the inventory
 /// </summary>
 public class UISlot : MonoBehaviour, IPointerClickHandler
 {
@@ -19,7 +19,9 @@ public class UISlot : MonoBehaviour, IPointerClickHandler
         this.selectedItem = GameObject.Find("SelectedItem").GetComponent<UISlot>();
         this.inventoryManager = InventoryManager.Instance;
     }
-  
+    /// <summary>
+    /// Given an item set this slot to contain that item
+    /// </summary>
     public virtual void UpdateItem(TradeableItem item)
     {
         this.item = item;
@@ -35,16 +37,20 @@ public class UISlot : MonoBehaviour, IPointerClickHandler
         }
     }
 
-
+    /// <summary>
+    /// update the slot based on the conditions that occuerd when it was clicked
+    /// </summary>
     public virtual void OnPointerClick(PointerEventData eventData)
     {
         if (this.item != null)
         {
+            //if this slot already contains an item and the player has no selected item then this item becomes the selected item
             if (this.selectedItem.item == null)
             {
                 selectedItem.UpdateItem(this.item);
                 UpdateItem(null);
             }
+            //otherwise if the player has a selected item we switch between this item and the selected item
             else
             {
                 TradeableItem clone = new TradeableItem(selectedItem.item);
@@ -52,6 +58,7 @@ public class UISlot : MonoBehaviour, IPointerClickHandler
                 UpdateItem(clone);
             }
         }
+        //if the player already selected an item and this slot is empty then we insert the selected item into this slot
         else
         {
             TradeableItem clone = new TradeableItem(selectedItem.item);
