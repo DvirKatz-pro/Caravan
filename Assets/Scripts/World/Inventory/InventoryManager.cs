@@ -21,16 +21,18 @@ public class InventoryManager : SingletonManager<InventoryManager>
     [SerializeField] private string jsonPath;
     [SerializeField] private GameObject selectedObject;
     [SerializeField] private GameObject slotsContainer;
-    [SerializeField] private GameObject inventoryCanvas;
     [SerializeField] private float startingFunds = 0;
     [SerializeField] private TextMeshProUGUI fundsText;
     private float currentFunds = 0;
 
     public const string FUNDS_TEXT = "funds: ";
-    private float availableSpace = 0; 
+    private float availableSpace = 0;
 
-    private void Awake()
+    EconomyManager economyManager;
+
+    private void Start()
     {
+        economyManager = EconomyManager.Instance;
         availableSpace = slots.Count * slots[0].slots.Count;
         currentFunds = startingFunds;
         AddToInventory("apple");
@@ -78,7 +80,7 @@ public class InventoryManager : SingletonManager<InventoryManager>
                 
                 if (slot.item == null)
                 {
-                    TradeableItem item = GetItem(tradeableItem);
+                    TradeableItem item = economyManager.GetItem(tradeableItem);
                     slots[i].slots[j].GetComponent<UISlot>().UpdateItem(item);
                     availableSpace--;
                     j = slots[i].slots.Count;
@@ -131,22 +133,7 @@ public class InventoryManager : SingletonManager<InventoryManager>
     }
     #endregion
     #region Get and extract Info
-    /// <summary>
-    /// Read the item data from json and assign it to a TradeableItem class
-    /// </summary>
-    public TradeableItem GetItem(string name)
-    {
-        JObject jsonText = JObject.Parse(File.ReadAllText(jsonPath));
-        JObject itemAsJson = (JObject)jsonText[name];
-
-        Texture2D texture = Resources.Load<Texture2D>("Sprites/RPG_inventory_icons/" + name);
-        Sprite sprite = Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f), 100.0f);
-        return new TradeableItem(name,float.Parse(itemAsJson["basePrice"].ToString()), sprite);
-    }
-    public GameObject GetInventoryCanvas()
-    {
-        return inventoryCanvas;
-    }
+   
     public List<InvnetorySlots> GetInventorySlots()
     {
         return slots;

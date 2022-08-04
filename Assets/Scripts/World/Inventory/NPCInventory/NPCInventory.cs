@@ -12,16 +12,16 @@ public class NPCInventory : MonoBehaviour
     void Start()
     {
         NPCStock = new List<TradeableItem>();
-        InventoryManager inventoryManager = InventoryManager.Instance;
-        NPCStock.Add(inventoryManager.GetItem("armor"));
-        NPCStock.Add(inventoryManager.GetItem("armor"));
-        NPCStock.Add(inventoryManager.GetItem("armor"));
-        NPCStock.Add(inventoryManager.GetItem("armor"));
-        NPCStock.Add(inventoryManager.GetItem("apple"));
-        NPCStock.Add(inventoryManager.GetItem("apple"));
-        NPCStock.Add(inventoryManager.GetItem("apple"));
-        NPCStock.Add(inventoryManager.GetItem("apple"));
-        NPCStock.Add(inventoryManager.GetItem("apple"));
+        EconomyManager economyManager = EconomyManager.Instance;
+        NPCStock.Add(economyManager.GetItem("armor"));
+        NPCStock.Add(economyManager.GetItem("armor"));
+        NPCStock.Add(economyManager.GetItem("armor"));
+        NPCStock.Add(economyManager.GetItem("armor"));
+        NPCStock.Add(economyManager.GetItem("apple"));
+        NPCStock.Add(economyManager.GetItem("apple"));
+        NPCStock.Add(economyManager.GetItem("apple"));
+        NPCStock.Add(economyManager.GetItem("apple"));
+        NPCStock.Add(economyManager.GetItem("apple"));
     }
     public void SetNPCStock(List<TradeableItem> NPCStock)
     {
