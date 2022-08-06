@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class KingdomGeneric : MonoBehaviour
 {
+    [SerializeField] private GameObject Commontrader;
+    [SerializeField] private GameObject Blacksmithtrader;
+
     // Start is called before the first frame update
     void Start()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    protected void InitializeCommonStock(GameObject comman)
     {
-        
+
+        int amountOfItems = Random.Range(5, 15);
+
     }
 }
