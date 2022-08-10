@@ -11,6 +11,10 @@ public class EconomyManager: SingletonManager<EconomyManager>
     Dictionary<string, TradeableItem> allItems;
     Dictionary<string, TradeableItem> foodItems;
     Dictionary<string, TradeableItem> armorItems;
+
+    public enum ItemTypes { 
+        food, armor
+    };
     // Start is called before the first frame update
     void Awake()
     {
