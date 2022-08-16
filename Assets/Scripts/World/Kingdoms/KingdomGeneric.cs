@@ -20,14 +20,14 @@ public class KingdomGeneric : MonoBehaviour
             NPCInventoryBreakdown breakdown = trader.GetComponent<NPCInventoryBreakdown>();
             if (breakdown != null)
             {
-                Dictionary<EconomyManager.ItemTypes, float> precentages = breakdown.getInventoryBreakdown();
-                if (precentages.ContainsKey(EconomyManager.ItemTypes.food))
+                Dictionary<TradeItemAttributes.ItemTypes, float> precentages = breakdown.getInventoryBreakdown();
+                if (precentages.ContainsKey(TradeItemAttributes.ItemTypes.food))
                 {
-                    float percent = precentages[EconomyManager.ItemTypes.food];
+                    float percent = precentages[TradeItemAttributes.ItemTypes.food];
                 }
-                else if (precentages.ContainsKey(EconomyManager.ItemTypes.armor))
+                else if (precentages.ContainsKey(TradeItemAttributes.ItemTypes.armor))
                 {
-                    float percent = precentages[EconomyManager.ItemTypes.armor];
+                    float percent = precentages[TradeItemAttributes.ItemTypes.armor];
                 }
             }
         }

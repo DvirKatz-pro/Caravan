@@ -7704,6 +7704,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c69cafe43f15d1c45be589ff533b5785, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1013448130
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1013448132}
+  - component: {fileID: 1013448131}
+  m_Layer: 0
+  m_Name: TradeableItemsManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1013448131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1013448130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd514bcca5a2dbe43be36623fb665072, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jsonPath: Assets\Resources\GameData\TradeableItems.json
+--- !u!4 &1013448132
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1013448130}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.700972, y: 8.787891, z: -0.47971797}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1020208039 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2234729489910119251, guid: 3b94d8b9a28b522468fdf08405027e70,
@@ -15385,7 +15429,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4383a1ed93b873c48874dcd81f92c917, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jsonPath: Assets\Resources\GameData\TradeableItems.json
 --- !u!4 &1943782147
 Transform:
   m_ObjectHideFlags: 0

@@ -32,14 +32,14 @@ public class TradeSlot : UISlot
             {
                 tradeManager.AddToSellInventory(this.item);
                 tradeManager.GetSellScreen().RemoveItem(this.gameObject);
-                tradeManager.ChangeTradeBalance(-this.item.GetBasePrice());
+                tradeManager.ChangeTradeBalance(-this.item.basePrice);
             }
             //otherwise return to the NPC inventory
             else
             {
                 tradeManager.AddToBuyInventory(this.item);
                 tradeManager.GetBuyScreen().RemoveItem(this.gameObject);
-                tradeManager.ChangeTradeBalance(this.item.GetBasePrice());
+                tradeManager.ChangeTradeBalance(this.item.basePrice);
             }
             
             Destroy(this.gameObject);
@@ -61,13 +61,13 @@ public class TradeSlot : UISlot
             {
                 tradeManager.GetSellScreen().AddItem(slot);
                 slot.tag = "SellScreen";
-                tradeManager.ChangeTradeBalance(this.item.GetBasePrice());
+                tradeManager.ChangeTradeBalance(this.item.basePrice);
             }
             else
             {
                 tradeManager.GetBuyScreen().AddItem(slot);
                 slot.tag = "BuyScreen";
-                tradeManager.ChangeTradeBalance(-this.item.GetBasePrice());
+                tradeManager.ChangeTradeBalance(-this.item.basePrice);
             }
 
             UpdateItem(null);

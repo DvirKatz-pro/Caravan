@@ -9,17 +9,17 @@ public class NPCInventoryBreakdown : MonoBehaviour
     [Range(0.01f, 1)]
     [SerializeField] private float armorPercent;
 
-    private Dictionary<EconomyManager.ItemTypes, float> breakdown;
+    private Dictionary<TradeItemAttributes.ItemTypes, float> breakdown;
 
     // Start is called before the first frame update
     void Start()
     {
-        breakdown = new Dictionary<EconomyManager.ItemTypes, float>();
-        breakdown[EconomyManager.ItemTypes.food] = foodPercent;
-        breakdown[EconomyManager.ItemTypes.armor] = armorPercent;
+        breakdown = new Dictionary<TradeItemAttributes.ItemTypes, float>();
+        breakdown[TradeItemAttributes.ItemTypes.food] = foodPercent;
+        breakdown[TradeItemAttributes.ItemTypes.armor] = armorPercent;
     }
 
-    public Dictionary<EconomyManager.ItemTypes, float> getInventoryBreakdown()
+    public Dictionary<TradeItemAttributes.ItemTypes, float> getInventoryBreakdown()
     {
         return breakdown;
     }

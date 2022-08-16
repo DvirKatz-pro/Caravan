@@ -1,10 +1,12 @@
 {
   "apple": {
     "basePrice": 10,
-    "type": "food"
+    "necessary": true,
+    "itemType": "food"
   },
   "armor": {
     "basePrice": 25,
-     "type": "aromr"
+    "necessary": true,
+    "itemType": "armor"
   }
 }

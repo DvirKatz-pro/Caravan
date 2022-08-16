@@ -28,7 +28,7 @@ public class UISlot : MonoBehaviour, IPointerClickHandler
         Image itemImage = transform.GetChild(0).GetComponent<Image>();
         if (this.item != null)
         {
-            itemImage.sprite = item.GetSprite();
+            itemImage.sprite = item.sprite;
             itemImage.color = Color.white;
         }
         else

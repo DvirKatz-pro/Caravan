@@ -28,11 +28,11 @@ public class InventoryManager : SingletonManager<InventoryManager>
     public const string FUNDS_TEXT = "funds: ";
     private float availableSpace = 0;
 
-    EconomyManager economyManager;
+    TradeableItemsManager tradeItemManager;
 
     private void Start()
     {
-        economyManager = EconomyManager.Instance;
+        tradeItemManager = TradeableItemsManager.Instance;
         availableSpace = slots.Count * slots[0].slots.Count;
         currentFunds = startingFunds;
         AddToInventory("apple");
@@ -80,7 +80,7 @@ public class InventoryManager : SingletonManager<InventoryManager>
                 
                 if (slot.item == null)
                 {
-                    TradeableItem item = economyManager.GetItem(tradeableItem);
+                    TradeableItem item = tradeItemManager.GetItem(tradeableItem);
                     slots[i].slots[j].GetComponent<UISlot>().UpdateItem(item);
                     availableSpace--;
                     j = slots[i].slots.Count;
