@@ -40,14 +40,43 @@ public class TradeableItemsManager : SingletonManager<TradeableItemsManager>
     public List<TradeableItem> GetItemsByAttribue(TradeItemAttributes.ItemTypes type, TradeItemAttributes.ItemQueryAttributes attribute, int amount)
     {
         List<TradeableItem> itemResult = new List<TradeableItem>();
+        Dictionary<string, TradeableItem> dictionaryToQuery = new Dictionary<string, TradeableItem>();
+        dictionaryToQuery = FillterDictionaryByType(dictionaryToQuery, type);
 
+        switch (attribute)
+        {
+            case TradeItemAttributes.ItemQueryAttributes.neccesity:
+                foreach (KeyValuePair<string, TradeableItem> entry in dictionaryToQuery)
+                {
+                    if (entry.Value.necessary)
+                    {
+                        itemResult.Add(entry.Value);
+                    }
+                }
+                break;
+           
+
+        }
+        return itemResult;
+    }
+    private Dictionary<string,TradeableItem> FillterDictionaryByType(Dictionary<string, TradeableItem> dictionaryToQuery,TradeItemAttributes.ItemTypes type)
+    {
         switch (type)
         {
             case TradeItemAttributes.ItemTypes.all:
-                    
+                dictionaryToQuery = allItems;
+                break;
+            case TradeItemAttributes.ItemTypes.food:
+                dictionaryToQuery = foodItems;
+                break;
+            case TradeItemAttributes.ItemTypes.armor:
+                dictionaryToQuery = armorItems;
+                break;
+            default:
+                dictionaryToQuery = allItems;
                 break;
         }
-        return itemResult;
+        return dictionaryToQuery;
     }
 
     /// <summary>
