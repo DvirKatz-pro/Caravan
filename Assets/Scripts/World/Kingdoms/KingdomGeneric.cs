@@ -14,7 +14,7 @@ public class KingdomGeneric : MonoBehaviour
 
     protected void InitializeStock()
     {
-        int amountOfItems = Random.Range(5, 15);
+        int amountOfItems = Random.Range(10, 25);
         foreach (GameObject trader in traders)
         {
             NPCInventoryBreakdown breakdown = trader.GetComponent<NPCInventoryBreakdown>();
@@ -24,8 +24,9 @@ public class KingdomGeneric : MonoBehaviour
                 if (precentages.ContainsKey(TradeItemAttributes.ItemTypes.food))
                 {
                     float percent = precentages[TradeItemAttributes.ItemTypes.food];
+                    int amountOfFood = (int)(percent * amountOfItems);
                 }
-                else if (precentages.ContainsKey(TradeItemAttributes.ItemTypes.armor))
+                if (precentages.ContainsKey(TradeItemAttributes.ItemTypes.armor))
                 {
                     float percent = precentages[TradeItemAttributes.ItemTypes.armor];
                 }

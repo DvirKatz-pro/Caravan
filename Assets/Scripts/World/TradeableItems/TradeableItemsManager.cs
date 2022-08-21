@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 public class TradeableItemsManager : SingletonManager<TradeableItemsManager>
@@ -33,51 +34,32 @@ public class TradeableItemsManager : SingletonManager<TradeableItemsManager>
     {
         return allItems.ContainsKey(itemName) ? allItems[itemName] : null;
     }
-    public List<TradeableItem> GetItemsByAttribue(TradeItemAttributes.ItemQueryAttributes attribute, int amount)
-    {
-        return GetItemsByAttribue(TradeItemAttributes.ItemTypes.all, attribute, amount);
-    }
-    public List<TradeableItem> GetItemsByAttribue(TradeItemAttributes.ItemTypes type, TradeItemAttributes.ItemQueryAttributes attribute, int amount)
+
+    public List<TradeableItem> GetItemsByRarity(List<TradeableItem> listToQuery,TradeItemAttributes.Rarity rarity)
     {
         List<TradeableItem> itemResult = new List<TradeableItem>();
-        Dictionary<string, TradeableItem> dictionaryToQuery = new Dictionary<string, TradeableItem>();
-        dictionaryToQuery = FillterDictionaryByType(dictionaryToQuery, type);
 
-        switch (attribute)
+
+        foreach (TradeableItem item in listToQuery)
         {
-            case TradeItemAttributes.ItemQueryAttributes.neccesity:
-                foreach (KeyValuePair<string, TradeableItem> entry in dictionaryToQuery)
-                {
-                    if (entry.Value.necessary)
-                    {
-                        itemResult.Add(entry.Value);
-                    }
-                }
-                break;
-           
-
+            if (item.itemRarity == rarity)
+            {
+                itemResult.Add(item);
+            }
         }
+
         return itemResult;
     }
-    private Dictionary<string,TradeableItem> FillterDictionaryByType(Dictionary<string, TradeableItem> dictionaryToQuery,TradeItemAttributes.ItemTypes type)
+
+    public List<TradeableItem> GetItemsSortedByRarity(List<TradeableItem> listToQuery)
     {
-        switch (type)
-        {
-            case TradeItemAttributes.ItemTypes.all:
-                dictionaryToQuery = allItems;
-                break;
-            case TradeItemAttributes.ItemTypes.food:
-                dictionaryToQuery = foodItems;
-                break;
-            case TradeItemAttributes.ItemTypes.armor:
-                dictionaryToQuery = armorItems;
-                break;
-            default:
-                dictionaryToQuery = allItems;
-                break;
-        }
-        return dictionaryToQuery;
+        return listToQuery.OrderBy(x => (int)(x.itemRarity)).ToList();
     }
+    public List<TradeableItem> GetItemsSortedByPrice(List<TradeableItem> listToQuery)
+    {
+        return listToQuery.OrderBy(x => (int)(x.basePrice)).ToList();
+    }
+
 
     /// <summary>
     /// Read the item data from json and assign it to a TradeableItem class and add it to the appropriate dictionary
@@ -99,9 +81,15 @@ public class TradeableItemsManager : SingletonManager<TradeableItemsManager>
             {
                 throw new Exception("Item type not found for " + property.Name);
             }
-            bool necessary = itemAsJson["necessary"].Value<bool>();
+            string rarityAsString = itemAsJson["rarity"].ToString();
+            TradeItemAttributes.Rarity rarity;
+            isParseSuccessful = Enum.TryParse(typeAsString, out rarity);
+            if (!isParseSuccessful)
+            {
+                throw new Exception("Item rarity not found for " + property.Name);
+            }
 
-            TradeableItem item = new TradeableItem(property.Name, float.Parse(itemAsJson["basePrice"].ToString()), necessary, type, sprite);
+            TradeableItem item = new TradeableItem(property.Name, float.Parse(itemAsJson["basePrice"].ToString()), type, rarity, sprite);
 
             allItems.Add(property.Name, item);
          

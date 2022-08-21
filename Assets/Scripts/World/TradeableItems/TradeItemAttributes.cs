@@ -10,14 +10,10 @@ public class TradeItemAttributes : MonoBehaviour
         food,
         armor
     };
-    public enum ItemQueryAttributes
-    {
-        price,
-        neccesity,
-        rarity
-    }
+    
     public enum Rarity
     {
+        mustHave,
         common,
         rare,
         epic,

@@ -1,12 +1,12 @@
 {
   "apple": {
     "basePrice": 10,
-    "necessary": true,
+    "rarity": "necessary",
     "itemType": "food"
   },
   "armor": {
     "basePrice": 25,
-    "necessary": true,
+    "rarity": "common",
     "itemType": "armor"
   }
 }
