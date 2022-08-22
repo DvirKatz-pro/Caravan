@@ -13,7 +13,7 @@ public class TradeItemAttributes : MonoBehaviour
     
     public enum Rarity
     {
-        mustHave,
+        necessary,
         common,
         rare,
         epic,

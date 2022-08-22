@@ -11,17 +11,7 @@ public class NPCInventory : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        NPCStock = new List<TradeableItem>();
-        TradeableItemsManager itemManager = TradeableItemsManager.Instance;
-        NPCStock.Add(itemManager.GetItem("armor"));
-        NPCStock.Add(itemManager.GetItem("armor"));
-        NPCStock.Add(itemManager.GetItem("armor"));
-        NPCStock.Add(itemManager.GetItem("armor"));
-        NPCStock.Add(itemManager.GetItem("apple"));
-        NPCStock.Add(itemManager.GetItem("apple"));
-        NPCStock.Add(itemManager.GetItem("apple"));
-        NPCStock.Add(itemManager.GetItem("apple"));
-        NPCStock.Add(itemManager.GetItem("apple"));
+       
     }
     public void SetNPCStock(List<TradeableItem> NPCStock)
     {

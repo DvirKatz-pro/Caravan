@@ -12,7 +12,7 @@ public class NPCInventoryBreakdown : MonoBehaviour
     private Dictionary<TradeItemAttributes.ItemTypes, float> breakdown;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         breakdown = new Dictionary<TradeItemAttributes.ItemTypes, float>();
         breakdown[TradeItemAttributes.ItemTypes.food] = foodPercent;

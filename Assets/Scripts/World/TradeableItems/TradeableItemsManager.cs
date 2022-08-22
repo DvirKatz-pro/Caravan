@@ -30,6 +30,31 @@ public class TradeableItemsManager : SingletonManager<TradeableItemsManager>
     {
 
     }
+    public Dictionary<string, TradeableItem> GetAllItems()
+    {
+        return allItems;
+    }
+    public Dictionary<string, TradeableItem> GetFoodItems()
+    {
+        return foodItems;
+    }
+    public Dictionary<string, TradeableItem> GetArmorItems()
+    {
+        return armorItems;
+    }
+    public List<TradeableItem> GetAllItemsAsList()
+    {
+        return allItems.Values.ToList();
+    }
+    public List<TradeableItem> GetFoodItemsAsList()
+    {
+        return foodItems.Values.ToList();
+    }
+    public List<TradeableItem> GetArmorItemsAsList()
+    {
+        return armorItems.Values.ToList();
+    }
+
     public TradeableItem GetItem(string itemName)
     {
         return allItems.ContainsKey(itemName) ? allItems[itemName] : null;
@@ -83,7 +108,7 @@ public class TradeableItemsManager : SingletonManager<TradeableItemsManager>
             }
             string rarityAsString = itemAsJson["rarity"].ToString();
             TradeItemAttributes.Rarity rarity;
-            isParseSuccessful = Enum.TryParse(typeAsString, out rarity);
+            isParseSuccessful = Enum.TryParse(rarityAsString, out rarity);
             if (!isParseSuccessful)
             {
                 throw new Exception("Item rarity not found for " + property.Name);
