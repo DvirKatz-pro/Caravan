@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// Class to handle managment of a kingdom entity including its NPCs and status
+/// </summary>
 public class KingdomGeneric : MonoBehaviour
 {
     [SerializeField] private List<GameObject> traders;
@@ -12,18 +15,22 @@ public class KingdomGeneric : MonoBehaviour
     {
         InitializeStock();
     }
-
+    /// <summary>
+    /// Create an NPC inventory containing different frquency and types of items
+    /// </summary>
     protected void InitializeStock()
     {
         List<TradeableItem> npcStock = new List<TradeableItem>();
         TradeableItemsManager tradeableItemsManager = TradeableItemsManager.Instance;
         int amountOfItems = Random.Range(25, 40);
+        //how many "gameplay neccesary" items should be inside this inventory
         int amountOfNecessaryItems = Random.Range(1, 3);
         foreach (GameObject trader in traders)
         {
             NPCInventoryBreakdown breakdown = trader.GetComponent<NPCInventoryBreakdown>();
             if (breakdown != null)
             {
+                //calculate how many items of a certain type should be added to this inventory
                 Dictionary<TradeItemAttributes.ItemTypes, float> precentages = breakdown.getInventoryBreakdown();
                 if (precentages.ContainsKey(TradeItemAttributes.ItemTypes.food))
                 {
