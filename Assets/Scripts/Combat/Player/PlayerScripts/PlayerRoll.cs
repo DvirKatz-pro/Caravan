@@ -15,26 +15,14 @@ public class PlayerRoll : MonoBehaviour
 
     //needed references
     CharacterAreaController controller;
-    Rigidbody rb;
+    private CharacterController charController;
     Animator anim;
     // Start is called before the first frame update
     private void Start()
     {
         controller = GetComponent<CharacterAreaController>();
-        if (controller == null)
-        {
-            Debug.LogError("Character controller is null");
-        }
-        rb = GetComponent<Rigidbody>();
-        if (rb == null)
-        {
-            Debug.LogError("Character controller is null");
-        }
+        charController = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
-        if (anim == null)
-        {
-            Debug.LogError("Animation Controller is null");
-        }
     }
 
     // Update is called once per frame
@@ -56,7 +44,7 @@ public class PlayerRoll : MonoBehaviour
     }
     private IEnumerator OnRoll()
     {
-        rb.velocity = Vector3.zero;
+        charController.Move(Vector3.zero);
         //animation
         anim.SetBool("Idle", false);
         anim.SetBool("Roll", true);
@@ -69,12 +57,12 @@ public class PlayerRoll : MonoBehaviour
             //decrease speed every frame for a more natural roll
             float forcePercentage = 1 - (currentRollTime / rollTime);
             Vector3 force = forword * (rollSpeed * forcePercentage) *  Time.deltaTime;
-            rb.AddForce(force, ForceMode.Impulse);
+            charController.Move(force);
             currentRollTime += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
         //stop rolling and reset state
-        rb.velocity = Vector3.zero;
+        charController.Move(Vector3.zero);
         currentRollTime = 0;
         anim.SetBool("Idle", true);
         anim.SetBool("Roll", false);

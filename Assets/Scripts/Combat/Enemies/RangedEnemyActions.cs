@@ -20,11 +20,11 @@ public class RangedEnemyActions : EnemyActions
     
     protected GameObject arrowInstance;
 
-    protected override void FixedUpdate()
+    protected override void Update()
     {
         if (currentAction != Actions.attacking)
         {
-            base.FixedUpdate();
+            base.Update();
         }
     }
 

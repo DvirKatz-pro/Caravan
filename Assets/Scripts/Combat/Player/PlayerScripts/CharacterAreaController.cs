@@ -26,20 +26,8 @@ public class CharacterAreaController : MonoBehaviour
     private void Start()
     {
         movement = GetComponent<CharacterMovement>();
-        if (movement == null)
-        {
-            Debug.LogError("CharacterMovement not found");
-        }
         basicAttack = GetComponent<PlayerBasicAttack>();
-        if (basicAttack == null)
-        {
-            Debug.LogError("CharacterMovement not found");
-        }
         roll = GetComponent<PlayerRoll>();
-        if (roll == null)
-        {
-            Debug.LogError("CharacterMovement not found");
-        }
 
     }
 

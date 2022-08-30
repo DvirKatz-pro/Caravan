@@ -12,7 +12,7 @@ public class CharacterMovement : MonoBehaviour
     public float movementSpeed = 1.0f;
    
     //components we need
-    private Rigidbody rb;
+    private CharacterController charController;
     private CharacterAreaController controller;
     private Animator animator;
 
@@ -21,21 +21,9 @@ public class CharacterMovement : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        rb = GetComponent<Rigidbody>();
-        if (rb == null)
-        {
-            Debug.LogError("RigidBody is null");
-        }
+        charController = GetComponent<CharacterController>();
         controller = GetComponent<CharacterAreaController>();
-        if (controller == null)
-        {
-            Debug.LogError("Player combat controller is null");
-        }
         animator = GetComponent<Animator>();
-        if (animator == null)
-        {
-            Debug.LogError("Player animator not found");
-        }
         floorMask = LayerMask.GetMask("Terrain");
     }
 
@@ -120,7 +108,7 @@ public class CharacterMovement : MonoBehaviour
             animator.SetBool("Idle", true);
             animator.SetBool("Moving", false);
         }
-        rb.velocity = movement;
+        charController.Move(movement);
         Rotate();
 
     }

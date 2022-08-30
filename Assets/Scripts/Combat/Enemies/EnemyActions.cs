@@ -14,6 +14,7 @@ public class EnemyActions : MonoBehaviour
     [SerializeField] protected ParticleSystem preAttackParticle;
 
     //Gameplay related values
+    [SerializeField] protected float movementSpeed;
     [SerializeField] protected float attackWarmUpTime;
     [SerializeField] protected float attackDuration;
     [SerializeField] protected float postAttackTime;
@@ -75,9 +76,10 @@ public class EnemyActions : MonoBehaviour
 
     }
 
-    protected virtual void FixedUpdate()
+    protected virtual void Update()
     {
-        model.position = Vector3.Lerp(model.position, proxy.position, Time.deltaTime * 2);
+        Vector3 movement = proxy.position - model.position;
+        model.GetComponent<CharacterController>().Move(movement.normalized * Time.deltaTime * movementSpeed);
         model.rotation = proxy.rotation;
         proxy.transform.LookAt(player.position);
  
@@ -88,6 +90,7 @@ public class EnemyActions : MonoBehaviour
     /// </summary>
     public void Move(Vector3 position)
     {
+        
         currentAction = Actions.moveing;
         if (agent.enabled == false)
         {
@@ -99,6 +102,7 @@ public class EnemyActions : MonoBehaviour
         }
         SetAnimation("Moving");
         agent.SetDestination(position);
+        
         
         
     }
