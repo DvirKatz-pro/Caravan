@@ -5918,6 +5918,7 @@ MonoBehaviour:
   proxy: {fileID: 3054885286247701665}
   model: {fileID: 3054885285286720137}
   preAttackParticle: {fileID: 3054885284465449540}
+  movementSpeed: 5
   attackWarmUpTime: 1
   attackDuration: 5
   postAttackTime: 3
@@ -5929,11 +5930,11 @@ MonoBehaviour:
   stunnedCooldown: 5
   strafeTime: 0
   arrow: {fileID: 1959729250425484, guid: 5187dfa4d8f19524e8bbf7c6894b7de7, type: 3}
-  arrowSpeed: 75
   arrowPosition: {fileID: 3054885286032092203}
   secoundryAttackParticle: {fileID: 6436738110625591944, guid: 27c2eadbcd3594e48bbea0b0bf819642,
     type: 3}
   secoundryAttackDuration: 2
+  arrowSpeed: 7000
 --- !u!114 &8344587821886054101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5941,13 +5942,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3054885286128962576}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e94be5023d204b8439051c470c5cf89a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  colorModel: {fileID: 0}
   health: 100
-  colorModel: {fileID: 6907429936080118422}
   colorTimer: 2
 --- !u!1 &3054885286247701666
 GameObject:
@@ -8940,8 +8941,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3054885285286720137}
   - component: {fileID: 7338903570733429972}
-  - component: {fileID: 6164048218570703456}
   - component: {fileID: 1374413821929647988}
+  - component: {fileID: 294302242}
   m_Layer: 0
   m_Name: RangedEnemy Variant
   m_TagString: Enemy
@@ -8988,20 +8989,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!136 &6164048218570703456
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8401156026709647387}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 1
-  m_Height: 3.66
-  m_Direction: 1
-  m_Center: {x: 0, y: 1, z: 0}
 --- !u!195 &1374413821929647988
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -9024,6 +9011,24 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!143 &294302242
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8401156026709647387}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &8557012393167800245
 GameObject:
   m_ObjectHideFlags: 0

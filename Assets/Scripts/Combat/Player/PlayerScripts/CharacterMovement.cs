@@ -32,7 +32,8 @@ public class CharacterMovement : MonoBehaviour
 
     
     #region Rotate and movement
-    public void Rotate()
+
+    public void RotateToMouse()
     {
         //get the mouse point on screen
         Vector3 lookDir = Vector3.zero;
@@ -67,6 +68,7 @@ public class CharacterMovement : MonoBehaviour
    
     public void Move()
     {
+        /*
         Vector3 currentPos = transform.position;
         
         //find the mouse pointer and move to that location
@@ -93,23 +95,26 @@ public class CharacterMovement : MonoBehaviour
                
             }
         }
-        
+        */
+        Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        //Rotate our movement vector by 45 degrees because our camera is at a 45 degree angle (isomentric)
+        movement = Quaternion.AngleAxis(45, Vector3.up) * movement;
+        charController.Move(movement * Time.deltaTime * movementSpeed);
         if (movement != Vector3.zero)
         {
-            
+            gameObject.transform.forward = movement;
             controller.ChangeState(CharacterAreaController.State.moveing);
             animator.SetBool("Idle", false);
             animator.SetBool("Moving", true);
         }
-        //if neither "S" or "W" are hit then idle
+        //if no movement then idle
         else
         {
             controller.ChangeState(CharacterAreaController.State.idle);
             animator.SetBool("Idle", true);
             animator.SetBool("Moving", false);
         }
-        charController.Move(movement);
-        Rotate();
+        //Rotate();
 
     }
     #endregion

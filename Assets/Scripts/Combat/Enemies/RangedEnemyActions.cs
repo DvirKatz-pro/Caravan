@@ -48,7 +48,7 @@ public class RangedEnemyActions : EnemyActions
         
         //model.Rotate(0, amont, 0);
 
-        //Loose an arrow
+        //create an arrow
         arrowInstance = Instantiate(arrow, arrowPosition);
         arrowInstance.GetComponent<Collider>().enabled = false;
         arrowInstance.GetComponent<ArrowCollision>().SetDamage(attackDamage);
@@ -58,8 +58,8 @@ public class RangedEnemyActions : EnemyActions
 
         sightRay.origin = new Vector3(model.transform.position.x, model.transform.position.y + 0.5f, model.transform.position.z);
         //set the Ray direction
-        sightRay.direction = fireDirection.normalized * 50;
-
+        sightRay.direction = fireDirection * 50;
+       
 
         yield return new WaitForSeconds(attackWarmUpTime - 0.5f);
         preAttackParticle.Play();
@@ -78,6 +78,7 @@ public class RangedEnemyActions : EnemyActions
         RaycastHit hit;
         if (Physics.Raycast(sightRay, out hit, Mathf.Infinity))
         {
+            Vector3 force = Vector3.zero;
             //We dont want projectiles to hit other enemies but if we are going to we Loose a secoundry attack which will be Loosed "Up" and land on the players position
             if (hit.transform.gameObject.tag == "Enemy")
             {
@@ -95,25 +96,27 @@ public class RangedEnemyActions : EnemyActions
                 GameObject particleInstance = Instantiate(secoundryAttackParticle, firePosition, Quaternion.identity);
                 particleInstance.GetComponent<ParticleSystem>().Play();
                 firePosition.y += 10;
-                Vector3 force = Vector3.up * arrowSpeed;
-                arrowInstance.GetComponent<Rigidbody>().AddForce(force, ForceMode.Impulse);
+                force = Vector3.up;
+                arrowInstance.GetComponent<Rigidbody>().AddForce(force * Time.deltaTime * arrowSpeed, ForceMode.Impulse);
                 yield return new WaitForSeconds(secoundryAttackDuration);
                 Destroy(arrowInstance);
                 
                 GameObject newArrowInstance = Instantiate(arrow, firePosition, Quaternion.LookRotation(firePosition));
 
-                force = Vector3.down * arrowSpeed;
-                newArrowInstance.GetComponent<Rigidbody>().AddForce(force, ForceMode.Impulse);
+                force = Vector3.down;
+                newArrowInstance.GetComponent<Rigidbody>().AddForce(force * Time.deltaTime * arrowSpeed, ForceMode.Impulse);
                 particleInstance.GetComponent<ParticleSystem>().Stop();
                 Destroy(particleInstance);
             }
             //otherwise we fire normally
             else
             {
-                Vector3 force = sightRay.direction.normalized * arrowSpeed;
+                force = sightRay.direction;
+           
                 arrowInstance.transform.SetParent(null, true);
                 //loose arrow at player
-                arrowInstance.GetComponent<Rigidbody>().AddForce(force, ForceMode.Impulse);
+                
+                arrowInstance.GetComponent<Rigidbody>().AddForce(force * Time.deltaTime * arrowSpeed, ForceMode.Impulse);
                 arrowInstance.GetComponent<Collider>().enabled = true;
 
                 yield return new WaitForSeconds(attackDuration);

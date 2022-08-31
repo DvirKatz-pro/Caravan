@@ -90,7 +90,7 @@ public class PlayerBasicAttack : MonoBehaviour
             controller.ChangeState(CharacterAreaController.State.basicAttack);
             //up our combo
             combo++;
-            movement.Rotate();
+            movement.RotateToMouse();
             anim.SetInteger("Combo", combo);
            //attackParticle.Play();
             checkDamage();
