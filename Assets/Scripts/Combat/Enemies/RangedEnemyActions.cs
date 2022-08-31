@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 
 /// <summary>
 /// Class Detailing available Ranged Enemy actions
@@ -23,7 +24,7 @@ public class RangedEnemyActions : EnemyActions
     {
         if (currentAction != Actions.attacking)
         {
-            //base.Update();
+           base.Update();
         }
         
     }
@@ -39,8 +40,9 @@ public class RangedEnemyActions : EnemyActions
         {
             fireDirection = player.forward.normalized * Random.Range(4.5f, 7f) + player.position - model.transform.position;
         }
- 
+
         //create an arrow
+        controller.DisableCarving();
         arrowInstance = Instantiate(arrow, arrowPosition);
         arrowInstance.GetComponent<ArrowCollision>().SetDamage(attackDamage);
         Vector3 arrowAngles = arrowInstance.transform.rotation.eulerAngles;
@@ -64,6 +66,7 @@ public class RangedEnemyActions : EnemyActions
    
     protected override IEnumerator OnAttack()
     {
+        
         preAttackParticle.Stop();
         
         SetAnimation("Basic Attack");
@@ -90,13 +93,14 @@ public class RangedEnemyActions : EnemyActions
                 firePosition.y += 10;
                 force = Vector3.up;
                 arrowInstance.GetComponent<Rigidbody>().AddForce(force * Time.deltaTime * arrowSpeed, ForceMode.Impulse);
+                controller.EnableCarving();
                 yield return new WaitForSeconds(secoundryAttackDuration);
                 Destroy(arrowInstance);
                 
                 GameObject newArrowInstance = Instantiate(arrow, firePosition, Quaternion.LookRotation(firePosition));
-
                 force = Vector3.down;
                 newArrowInstance.GetComponent<Rigidbody>().AddForce(force * Time.deltaTime * arrowSpeed, ForceMode.Impulse);
+                controller.EnableCarving();
                 particleInstance.GetComponent<ParticleSystem>().Stop();
                 Destroy(particleInstance);
             }
@@ -107,8 +111,8 @@ public class RangedEnemyActions : EnemyActions
                 force = sightRay.direction;
                 arrowInstance.transform.SetParent(null, true);
                 //loose arrow at player
-
                 arrowInstance.GetComponent<Rigidbody>().AddForce(force * Time.deltaTime * arrowSpeed, ForceMode.Impulse);
+                controller.EnableCarving();
                 yield return new WaitForSeconds(attackDuration);
             }
            
@@ -117,7 +121,7 @@ public class RangedEnemyActions : EnemyActions
         }
 
         model.transform.forward = Quaternion.AngleAxis(-45, Vector3.up) * sightRay.direction;
-
+        
         currentAction = Actions.idle;
         SetAnimation("Idle");
         yield return new WaitForSeconds(attackCooldownTime);
@@ -125,5 +129,5 @@ public class RangedEnemyActions : EnemyActions
     }
     
     #endregion
-
+    
 }

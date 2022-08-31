@@ -887,6 +887,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+--- !u!4 &904257463 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 821373777242331099, guid: a951fb805c72e91489228d552c1f8997,
+    type: 3}
+  m_PrefabInstance: {fileID: 3054885284483124631}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &963028360
 GameObject:
   m_ObjectHideFlags: 0
@@ -1580,6 +1586,21 @@ PrefabInstance:
         type: 3}
       propertyPath: arrowSpeed
       value: 7000
+      objectReference: {fileID: 0}
+    - target: {fileID: 3054885286128962591, guid: a951fb805c72e91489228d552c1f8997,
+        type: 3}
+      propertyPath: leftHandPosition
+      value: 
+      objectReference: {fileID: 904257463}
+    - target: {fileID: 3054885286247701664, guid: a951fb805c72e91489228d552c1f8997,
+        type: 3}
+      propertyPath: m_Carve
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3054885286247701664, guid: a951fb805c72e91489228d552c1f8997,
+        type: 3}
+      propertyPath: m_CarveOnlyStationary
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8344587821886054101, guid: a951fb805c72e91489228d552c1f8997,
         type: 3}

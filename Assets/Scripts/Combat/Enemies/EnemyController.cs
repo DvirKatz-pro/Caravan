@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 /// <summary>
 /// Class incharge of Enemy Descsion and action taking
@@ -70,5 +71,19 @@ public class EnemyController : MonoBehaviour
         }
         
     }
-   
+    /// <summary>
+    /// disable navMesh carving - used to solve arrow shooting position bug
+    /// </summary>
+    public void DisableCarving()
+    {
+        proxy.GetComponent<NavMeshObstacle>().carving = false;
+    }
+    /// <summary>
+    /// enable navMesh carving - used to solve arrow shooting position bug
+    /// </summary>
+    public void EnableCarving()
+    {
+        proxy.GetComponent<NavMeshObstacle>().carving = true;
+    }
+
 }
