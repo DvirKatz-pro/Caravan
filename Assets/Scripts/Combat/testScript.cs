@@ -5,28 +5,56 @@ using UnityEngine;
 public class testScript : MonoBehaviour
 {
     [SerializeField] private GameObject player;
-    [SerializeField] private float movementSpeed;
+    [SerializeField] Animator animator;
+    [SerializeField] private GameObject arrow;
+    protected GameObject arrowInstance;
+    [SerializeField] private Transform arrowPosition;
+    bool done = false;
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame
     void Update()
     {
-        var cc = GetComponent<CharacterController>();
-        var offset = player.transform.position - transform.position;
-        //Get the difference.
-        if (offset.magnitude > .1f)
+        if (!done)
         {
-            //If we're further away than .1 unit, move towards the target.
-            //The minimum allowable tolerance varies with the speed of the object and the framerate. 
-            // 2 * tolerance must be >= moveSpeed / framerate or the object will jump right over the stop.
-            offset = offset.normalized * movementSpeed;
-            //normalize it and account for movement speed.
-            cc.Move(offset * Time.deltaTime);
-            //actually move the character.
+            done = true;
+            StartCoroutine(PreAttack());
         }
+        
+
+
     }
+    protected IEnumerator PreAttack()
+    {
+        Vector3 fireDirection = player.transform.position - transform.position;
+        animator.SetTrigger("Draw");
+
+        arrowInstance = Instantiate(arrow, arrowPosition);
+        Vector3 arrowAngles = arrowInstance.transform.rotation.eulerAngles;
+        arrowAngles.y = 180;
+        arrowInstance.transform.Rotate(180, 0, 0);
+
+
+        transform.forward = Quaternion.AngleAxis(45, Vector3.up) * fireDirection;
+        yield return new WaitForSeconds(1 - 0.5f);
+
+        yield return new WaitForSeconds(0.5f);
+        StartCoroutine(OnAttack());
+    }
+    protected IEnumerator OnAttack()
+    {
+        animator.SetTrigger("Basic Attack");
+        Vector3 force = player.transform.position - transform.position;
+        arrowInstance.transform.SetParent(null, true);
+        //loose arrow at player
+
+        arrowInstance.GetComponent<Rigidbody>().AddForce(force * Time.deltaTime * 75, ForceMode.Impulse);
+        // arrowInstance.GetComponent<Collider>().enabled = true;
+        yield return new WaitForSeconds(1);
+        done = false;
+    }
+    
 }

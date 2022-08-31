@@ -35,6 +35,7 @@ public class CharacterAreaController : MonoBehaviour
     private void Update()
     {
         //ability do stuff based on current state
+        
         switch (currentState)
         {
             case State.idle:
@@ -55,6 +56,8 @@ public class CharacterAreaController : MonoBehaviour
             default:
                 break;
         }
+        
+        
     }
 
     public void ChangeState(State state)

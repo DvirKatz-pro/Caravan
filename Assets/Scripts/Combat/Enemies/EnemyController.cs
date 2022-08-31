@@ -57,6 +57,7 @@ public class EnemyController : MonoBehaviour
         bool shouldWait = (onCooldown && Vector3.Distance(target.position, model.position) <= distanceFromTarget);
         if (shouldAttack)
         {
+            actions.Stop();
             actions.Attack();
         }
         else if(shouldWait)

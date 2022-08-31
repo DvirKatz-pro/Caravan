@@ -22,19 +22,20 @@ public class EnemyControllerRanged : EnemyController
         bool shouldWait = (onCooldown && Vector3.Distance(target.position, model.position) <= distanceFromTarget);
 
 
-        if (shouldAttack || actions.GetAction() == EnemyActions.Actions.attacking)
+        if (shouldAttack)
         {
             actions.Stop();
             actions.Attack();
         }
         else if (shouldWait)
         {
-            actions.Stop();
+            //actions.Stop();
         }
         else
         {
             actions.Move(target.position);
         }
+       
 
     }
 }

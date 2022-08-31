@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -24,56 +23,50 @@ public class RangedEnemyActions : EnemyActions
     {
         if (currentAction != Actions.attacking)
         {
-            base.Update();
+            //base.Update();
         }
+        
     }
 
     #region Attack
+    
     protected override IEnumerator PreAttack()
     {
+        Vector3 fireDirection = player.position - model.transform.position;
         SetAnimation("Draw");
-        Vector3 fireDirection;
         //Try to Loose where the player will be rather than his current position
         if (player.GetComponent<CharacterAreaController>().GetState() == CharacterAreaController.State.moveing)
         {
             fireDirection = player.forward.normalized * Random.Range(4.5f, 7f) + player.position - model.transform.position;
         }
-        else
-        {
-            fireDirection = player.position - model.transform.position;
-        }
-        model.transform.forward = fireDirection.normalized;
-        //Vector3 rotatedVector = Quaternion.AngleAxis(45, Vector3.up) * fireDirection.normalized;
-        //float amont = Vector3.SignedAngle(model.transform.forward, rotatedVector, Vector3.up);
-        
-        //model.Rotate(0, amont, 0);
-
+ 
         //create an arrow
         arrowInstance = Instantiate(arrow, arrowPosition);
-        arrowInstance.GetComponent<Collider>().enabled = false;
         arrowInstance.GetComponent<ArrowCollision>().SetDamage(attackDamage);
         Vector3 arrowAngles = arrowInstance.transform.rotation.eulerAngles;
         arrowAngles.y = 180;
         arrowInstance.transform.Rotate(180, 0, 0);
 
+        model.transform.forward = Quaternion.AngleAxis(45, Vector3.up) * fireDirection;
+
         sightRay.origin = new Vector3(model.transform.position.x, model.transform.position.y + 0.5f, model.transform.position.z);
         //set the Ray direction
         sightRay.direction = fireDirection * 50;
-       
 
-        yield return new WaitForSeconds(attackWarmUpTime - 0.5f);
+
+        yield return new WaitForSeconds(1 - 0.5f);
         preAttackParticle.Play();
+        
         yield return new WaitForSeconds(0.5f);
         StartCoroutine(OnAttack());
     }
-
+    
    
-
     protected override IEnumerator OnAttack()
     {
         preAttackParticle.Stop();
-        SetAnimation("Basic Attack");
         
+        SetAnimation("Basic Attack");
 
         RaycastHit hit;
         if (Physics.Raycast(sightRay, out hit, Mathf.Infinity))
@@ -92,7 +85,6 @@ public class RangedEnemyActions : EnemyActions
                     firePosition = player.transform.position;
                 }
 
-                firePosition.y += 0.1f;
                 GameObject particleInstance = Instantiate(secoundryAttackParticle, firePosition, Quaternion.identity);
                 particleInstance.GetComponent<ParticleSystem>().Play();
                 firePosition.y += 10;
@@ -111,33 +103,27 @@ public class RangedEnemyActions : EnemyActions
             //otherwise we fire normally
             else
             {
+                
                 force = sightRay.direction;
-           
                 arrowInstance.transform.SetParent(null, true);
                 //loose arrow at player
-                
-                arrowInstance.GetComponent<Rigidbody>().AddForce(force * Time.deltaTime * arrowSpeed, ForceMode.Impulse);
-                arrowInstance.GetComponent<Collider>().enabled = true;
 
+                arrowInstance.GetComponent<Rigidbody>().AddForce(force * Time.deltaTime * arrowSpeed, ForceMode.Impulse);
                 yield return new WaitForSeconds(attackDuration);
             }
            
 
 
         }
-        
-        Vector3 enemyPlayer = player.position - model.transform.position;
-        Vector3 rotatedVector = Quaternion.AngleAxis(45, Vector3.up) * enemyPlayer.normalized;
-        float amont = Vector3.SignedAngle(model.transform.forward, rotatedVector, Vector3.up);
 
-        model.Rotate(0, amont, 0);
+        model.transform.forward = Quaternion.AngleAxis(-45, Vector3.up) * sightRay.direction;
 
         currentAction = Actions.idle;
         SetAnimation("Idle");
         yield return new WaitForSeconds(attackCooldownTime);
         onAttackCooldown = false;
-
     }
+    
     #endregion
 
 }
