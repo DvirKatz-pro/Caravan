@@ -29,7 +29,7 @@ public class EnemyControllerRanged : EnemyController
         }
         else if (shouldWait)
         {
-            //actions.Stop();
+            actions.Stop();
         }
         else
         {
