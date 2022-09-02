@@ -5610,7 +5610,7 @@ MonoBehaviour:
   proxy: {fileID: 6922769944110296599}
   model: {fileID: 6922769942206917525}
   preAttackParticle: {fileID: 6922769942678295455}
-  movementSpeed: 4
+  movementSpeed: 7
   attackWarmUpTime: 0.8
   attackDuration: 2
   postAttackTime: 0.5

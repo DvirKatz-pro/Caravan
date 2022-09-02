@@ -72,14 +72,14 @@ public class EnemyController : MonoBehaviour
         
     }
     /// <summary>
-    /// disable navMesh carving - used to solve arrow shooting position bug
+    /// disable navMesh carving - used to solve arrow shooting position bug as carving would push arrows out of pos
     /// </summary>
     public void DisableCarving()
     {
         proxy.GetComponent<NavMeshObstacle>().carving = false;
     }
     /// <summary>
-    /// enable navMesh carving - used to solve arrow shooting position bug
+    /// enable navMesh carving - used to solve arrow shooting position bug as carving would push arrows out of pos
     /// </summary>
     public void EnableCarving()
     {
