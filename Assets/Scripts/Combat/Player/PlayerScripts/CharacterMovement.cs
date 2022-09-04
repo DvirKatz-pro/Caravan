@@ -96,7 +96,7 @@ public class CharacterMovement : MonoBehaviour
             }
         }
         */
-        Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        Vector3 movement = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
         //Rotate our movement vector by 45 degrees because our camera is at a 45 degree angle (isomentric)
         movement = Quaternion.AngleAxis(45, Vector3.up) * movement;
         charController.Move(movement * Time.deltaTime * movementSpeed);

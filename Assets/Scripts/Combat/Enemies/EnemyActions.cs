@@ -16,6 +16,7 @@ public class EnemyActions : MonoBehaviour
     //Gameplay related values
     [SerializeField] protected float movementSpeed;
     [SerializeField] protected float attackWarmUpTime;
+    [SerializeField] protected float attackTravelDistance;
     [SerializeField] protected float attackDuration;
     [SerializeField] protected float postAttackTime;
     [SerializeField] protected float attackDamage;
@@ -79,6 +80,7 @@ public class EnemyActions : MonoBehaviour
     protected virtual void Update()
     {
         Vector3 movement = proxy.position - model.position;
+        //because the navmesh agent and model are seperate objects, the model has to move accourding to the agent
         model.GetComponent<CharacterController>().Move(movement.normalized * Time.deltaTime * movementSpeed);
         model.rotation = proxy.rotation;
         proxy.transform.LookAt(player.position);
@@ -97,14 +99,25 @@ public class EnemyActions : MonoBehaviour
             obstacle.enabled = false;
             agent.enabled = true;
             agent.gameObject.transform.position = model.position + model.transform.forward;
-            
-            
         }
         SetAnimation("Moving");
         agent.SetDestination(position);
         
         
         
+    }
+    /// <summary>
+    /// given a position, the enemy will move to that position. The currentAction will not change and animation will not play
+    /// </summary>
+    public void MoveRaw(Vector3 position)
+    {
+        if (agent.enabled == false)
+        {
+            obstacle.enabled = false;
+            agent.enabled = true;
+            agent.gameObject.transform.position = model.position + model.transform.forward;
+        }
+        agent.SetDestination(position);
     }
     /// <summary>
     /// The enemy will stop at its current position
@@ -153,7 +166,8 @@ public class EnemyActions : MonoBehaviour
         preAttackParticle.Stop();
 
         SetAnimation("Basic Attack");
-
+        Vector3 attackTravelPos = model.transform.position + model.transform.forward * attackTravelDistance;
+        MoveRaw(attackTravelPos);
         yield return new WaitForSeconds(0.75f);
         DealDamage();
         Stop();
