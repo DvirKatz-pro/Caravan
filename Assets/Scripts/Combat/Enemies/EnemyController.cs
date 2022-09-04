@@ -43,7 +43,7 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     protected virtual void FixedUpdate()
     {
-        if (actions.GetAction() != EnemyActions.Actions.stunned && actions.GetAction() != EnemyActions.Actions.dead)
+        if (actions.GetAction() == EnemyActions.Actions.idle || actions.GetAction() == EnemyActions.Actions.moveing)
         {
             Think();
         }
@@ -67,7 +67,7 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
-            actions.Move(target.position);
+           actions.Move(target.position);
         }
         
     }

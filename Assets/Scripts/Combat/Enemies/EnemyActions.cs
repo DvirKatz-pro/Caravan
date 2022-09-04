@@ -97,8 +97,8 @@ public class EnemyActions : MonoBehaviour
         if (agent.enabled == false)
         {
             obstacle.enabled = false;
+            proxy.position = model.position + model.transform.forward;
             agent.enabled = true;
-            agent.gameObject.transform.position = model.position + model.transform.forward;
         }
         SetAnimation("Moving");
         agent.SetDestination(position);
@@ -114,8 +114,8 @@ public class EnemyActions : MonoBehaviour
         if (agent.enabled == false)
         {
             obstacle.enabled = false;
-            agent.enabled = true;
             agent.gameObject.transform.position = model.position + model.transform.forward;
+            agent.enabled = true;
         }
         agent.SetDestination(position);
     }
@@ -164,8 +164,8 @@ public class EnemyActions : MonoBehaviour
     protected virtual IEnumerator OnAttack()
     {
         preAttackParticle.Stop();
-
-        SetAnimation("Basic Attack");
+        SetAnimation("Idle");
+        //SetAnimation("Basic Attack");
         Vector3 attackTravelPos = model.transform.position + model.transform.forward * attackTravelDistance;
         MoveRaw(attackTravelPos);
         yield return new WaitForSeconds(0.75f);
@@ -175,7 +175,7 @@ public class EnemyActions : MonoBehaviour
         
 
         currentAction = Actions.idle;
-        SetAnimation("Idle");
+        //SetAnimation("Idle");
         yield return new WaitForSeconds(attackCooldownTime);
         onAttackCooldown = false;
 
