@@ -27,6 +27,8 @@ public class PlayerBasicAttack : MonoBehaviour
     [SerializeField] private float attackDamage;
     [SerializeField] private float attackRange;
     [SerializeField] private float attackHitAngle;
+    [SerializeField] protected float attackKnockbackDistance;
+    [SerializeField] protected float attackKnockbackDuration;
 
     [SerializeField] private GameObject sword;
 
@@ -75,6 +77,7 @@ public class PlayerBasicAttack : MonoBehaviour
         {
             ComboReset();
         }
+        Debug.DrawRay(transform.position, transform.forward * 5,Color.red);
     }
     #region Attack and Damage
     public void BasicAttack()
@@ -142,6 +145,7 @@ public class PlayerBasicAttack : MonoBehaviour
                 if (angle > attackHitAngle)
                 {
                     c.transform.root.gameObject.GetComponent<EnemyStatus>().TakeDamage(attackDamage);
+                    StartCoroutine(c.transform.root.gameObject.GetComponent<EnemyActions>().KnokbackEnemy(transform.forward, attackKnockbackDistance, attackKnockbackDuration));
                 }
             }
         }

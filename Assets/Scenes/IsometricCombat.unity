@@ -1427,6 +1427,11 @@ PrefabInstance:
       propertyPath: hurtImage
       value: 
       objectReference: {fileID: 354129341}
+    - target: {fileID: 2383203015923825399, guid: 223bf25cf356ca043b4fc3cb1fc04e9c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4503331726222379189, guid: 223bf25cf356ca043b4fc3cb1fc04e9c,
         type: 3}
       propertyPath: m_RootOrder
@@ -1489,6 +1494,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6270693203086591303, guid: 223bf25cf356ca043b4fc3cb1fc04e9c,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6270693203086591303, guid: 223bf25cf356ca043b4fc3cb1fc04e9c,
+        type: 3}
       propertyPath: rollSpeed
       value: 20
       objectReference: {fileID: 0}
@@ -1497,6 +1507,16 @@ PrefabInstance:
       propertyPath: sword
       value: 
       objectReference: {fileID: 1512435062}
+    - target: {fileID: 7997038945310352165, guid: 223bf25cf356ca043b4fc3cb1fc04e9c,
+        type: 3}
+      propertyPath: attackKnockbackDistance
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7997038945310352165, guid: 223bf25cf356ca043b4fc3cb1fc04e9c,
+        type: 3}
+      propertyPath: attackKnockbackDuration
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8527596725169957674, guid: 223bf25cf356ca043b4fc3cb1fc04e9c,
         type: 3}
       propertyPath: movementSpeed

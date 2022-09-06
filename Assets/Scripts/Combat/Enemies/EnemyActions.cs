@@ -139,6 +139,26 @@ public class EnemyActions : MonoBehaviour
         SetAnimation("Moving", false);
 
     }
+    
+    public IEnumerator KnokbackEnemy(Vector3 knockbackDirection, float distance, float knockbackDuration)
+    {
+        Vector3 startValue = model.position;
+        Vector3 endValue = model.position + knockbackDirection * distance;
+        Debug.DrawLine(startValue, endValue,Color.green);
+        float timeElapsed = 0;
+        Vector3 valueToLerp;
+        while (timeElapsed < knockbackDuration)
+        {
+            valueToLerp = Vector3.Lerp(startValue, endValue, timeElapsed / knockbackDuration);
+            MoveRaw(valueToLerp);
+            timeElapsed += Time.deltaTime;
+            Debug.DrawLine(startValue, endValue, Color.green);
+            yield return null;
+        }
+        valueToLerp = endValue;
+        MoveRaw(valueToLerp);
+    }
+
     /// <summary>
     /// Class detailing the conditions for whitch the enemy can attack
     /// </summary>
@@ -205,6 +225,7 @@ public class EnemyActions : MonoBehaviour
         if (!isStunned && currentAction != Actions.attacking)
         {
             isStunned = true;
+            SetAnimation("Moving", false);
             SetAnimation("Stunned",true);
             currentAction = Actions.stunned;
             StartCoroutine(OnStunned());
