@@ -18,7 +18,7 @@ public class EnemyActions : MonoBehaviour
     [SerializeField] protected float attackWarmUpTime;
     [SerializeField] protected float attackTravelDistance;
     [SerializeField] protected float attackKnockbackDistance;
-    [SerializeField] protected float attackKnockbackSpeed;
+    [SerializeField] protected float attackKnockbackDuration;
     [SerializeField] protected float attackDuration;
     [SerializeField] protected float postAttackTime;
     [SerializeField] protected float attackDamage;
@@ -173,10 +173,9 @@ public class EnemyActions : MonoBehaviour
         SetAnimation("Basic Attack");
         Vector3 attackTravelPos = model.transform.position + model.transform.forward * attackTravelDistance;
         MoveRaw(attackTravelPos);
-        yield return new WaitForSeconds(0.75f);
         DealDamage();
         Stop();
-        yield return new WaitForSeconds(attackDuration - 0.75f);
+        yield return new WaitForSeconds(attackDuration);
         
 
         currentAction = Actions.idle;
@@ -195,7 +194,7 @@ public class EnemyActions : MonoBehaviour
         if (angle <= attackAngle && Vector3.Distance(player.position, model.transform.position) <= attackRange)
         {
             player.GetComponent<PlayerStatus>().TakeDamage(attackDamage);
-            player.GetComponent<CharacterMovement>().MoveToPos(transform.forward * attackKnockbackDistance, attackKnockbackSpeed);
+            StartCoroutine(player.GetComponent<CharacterMovement>().KnokbackPlayer(transform.forward.normalized, attackKnockbackDistance,attackKnockbackDuration));
         }
     }
     /// <summary>

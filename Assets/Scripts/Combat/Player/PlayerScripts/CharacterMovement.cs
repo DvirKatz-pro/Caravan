@@ -117,9 +117,21 @@ public class CharacterMovement : MonoBehaviour
         //Rotate();
 
     }
-    public void MoveToPos(Vector3 movement, float speed)
+    public IEnumerator KnokbackPlayer(Vector3 knockbackDirection, float distance,float knockbackDuration)
     {
-        charController.Move(movement * Time.deltaTime * speed);
+        Vector3 startValue = transform.position;
+        Vector3 endValue = transform.position + knockbackDirection * distance;
+        float timeElapsed = 0;
+        Vector3 valueToLerp;
+        while (timeElapsed < knockbackDuration)
+        {
+            valueToLerp = Vector3.Lerp(startValue, endValue, timeElapsed / knockbackDuration);
+            charController.Move(valueToLerp - transform.position);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+        valueToLerp = endValue;
+        charController.Move(valueToLerp - transform.position);
     }
     #endregion
 
