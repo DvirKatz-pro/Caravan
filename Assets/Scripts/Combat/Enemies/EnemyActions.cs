@@ -17,6 +17,8 @@ public class EnemyActions : MonoBehaviour
     [SerializeField] protected float movementSpeed;
     [SerializeField] protected float attackWarmUpTime;
     [SerializeField] protected float attackTravelDistance;
+    [SerializeField] protected float attackKnockbackDistance;
+    [SerializeField] protected float attackKnockbackSpeed;
     [SerializeField] protected float attackDuration;
     [SerializeField] protected float postAttackTime;
     [SerializeField] protected float attackDamage;
@@ -77,13 +79,16 @@ public class EnemyActions : MonoBehaviour
 
     }
 
-    protected virtual void Update()
+    protected virtual void FixedUpdate()
     {
-        Vector3 movement = proxy.position - model.position;
-        //because the navmesh agent and model are seperate objects, the model has to move accourding to the agent
-        model.GetComponent<CharacterController>().Move(movement.normalized * Time.deltaTime * movementSpeed);
-        model.rotation = proxy.rotation;
-        proxy.transform.LookAt(player.position);
+        if (Vector3.Distance(proxy.position, model.position) >= 0.5f)
+        {
+            Vector3 movement = proxy.position - model.position;
+            //because the navmesh agent and model are seperate objects, the model has to move accourding to the agent
+            model.GetComponent<CharacterController>().Move(movement.normalized * Time.deltaTime * movementSpeed);
+            model.rotation = proxy.rotation;
+            proxy.transform.LookAt(player.position);
+        }
  
     }
     #region Actions
@@ -100,7 +105,7 @@ public class EnemyActions : MonoBehaviour
             proxy.position = model.position + model.transform.forward;
             agent.enabled = true;
         }
-        SetAnimation("Moving");
+        SetAnimation("Moving",true);
         agent.SetDestination(position);
         
         
@@ -131,6 +136,7 @@ public class EnemyActions : MonoBehaviour
             agent.enabled = false;
             obstacle.enabled = true;
         }
+        SetAnimation("Moving", false);
 
     }
     /// <summary>
@@ -164,8 +170,7 @@ public class EnemyActions : MonoBehaviour
     protected virtual IEnumerator OnAttack()
     {
         preAttackParticle.Stop();
-        SetAnimation("Idle");
-        //SetAnimation("Basic Attack");
+        SetAnimation("Basic Attack");
         Vector3 attackTravelPos = model.transform.position + model.transform.forward * attackTravelDistance;
         MoveRaw(attackTravelPos);
         yield return new WaitForSeconds(0.75f);
@@ -175,7 +180,7 @@ public class EnemyActions : MonoBehaviour
         
 
         currentAction = Actions.idle;
-        //SetAnimation("Idle");
+        SetAnimation("Idle");
         yield return new WaitForSeconds(attackCooldownTime);
         onAttackCooldown = false;
 
@@ -190,6 +195,7 @@ public class EnemyActions : MonoBehaviour
         if (angle <= attackAngle && Vector3.Distance(player.position, model.transform.position) <= attackRange)
         {
             player.GetComponent<PlayerStatus>().TakeDamage(attackDamage);
+            player.GetComponent<CharacterMovement>().MoveToPos(transform.forward * attackKnockbackDistance, attackKnockbackSpeed);
         }
     }
     /// <summary>
@@ -213,7 +219,6 @@ public class EnemyActions : MonoBehaviour
         yield return new WaitForSeconds(stunnedDuration);
         currentAction = Actions.idle;
         SetAnimation("Stunned", false);
-        SetAnimation("Idle");
         yield return new WaitForSeconds(stunnedCooldown);
         isStunned = false;
     }
@@ -222,7 +227,7 @@ public class EnemyActions : MonoBehaviour
     /// </summary>
     public void OnDeath()
     {
-        SetAnimation("Death");
+        SetAnimation("Death",true);
         model.GetComponent<Collider>().enabled = false;
         agent.enabled = false;
         obstacle.enabled = false;

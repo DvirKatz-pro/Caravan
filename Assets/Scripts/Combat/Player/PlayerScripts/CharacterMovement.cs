@@ -117,6 +117,10 @@ public class CharacterMovement : MonoBehaviour
         //Rotate();
 
     }
+    public void MoveToPos(Vector3 movement, float speed)
+    {
+        charController.Move(movement * Time.deltaTime * speed);
+    }
     #endregion
 
 
