@@ -145,7 +145,7 @@ public class PlayerBasicAttack : MonoBehaviour
                 if (angle > attackHitAngle)
                 {
                     c.transform.root.gameObject.GetComponent<EnemyStatus>().TakeDamage(attackDamage);
-                    StartCoroutine(c.transform.root.gameObject.GetComponent<EnemyActions>().KnokbackEnemy(transform.forward, attackKnockbackDistance, attackKnockbackDuration));
+                    StartCoroutine(c.transform.root.gameObject.GetComponent<EnemyActions>().MoveOverTime(transform.forward, attackKnockbackDistance, attackKnockbackDuration));
                 }
             }
         }

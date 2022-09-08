@@ -30,9 +30,10 @@ public class PlayerStatus : MonoBehaviour
     {
         currentHealth -= amount;
         healthBar.fillAmount = currentHealth / health;
-        StartCoroutine(DamageScreen());
+        //StartCoroutine(DamageScreen());
 
     }
+    /*
     /// <summary>
     /// make the screen flash red when player is hit
     /// </summary>
@@ -46,4 +47,5 @@ public class PlayerStatus : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
     }
+    */
 }

@@ -17,8 +17,10 @@ public class EnemyActions : MonoBehaviour
     [SerializeField] protected float movementSpeed;
     [SerializeField] protected float attackWarmUpTime;
     [SerializeField] protected float attackTravelDistance;
+    [SerializeField] protected float attackTravelDuration;
     [SerializeField] protected float attackKnockbackDistance;
     [SerializeField] protected float attackKnockbackDuration;
+    [SerializeField] protected float attackKnockbackSpeed;
     [SerializeField] protected float attackDuration;
     [SerializeField] protected float postAttackTime;
     [SerializeField] protected float attackDamage;
@@ -81,7 +83,7 @@ public class EnemyActions : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
-        if (Vector3.Distance(proxy.position, model.position) >= 0.5f)
+        if (Vector3.Distance(proxy.position, model.position) >= 0.5f && currentAction == Actions.moveing)
         {
             Vector3 movement = proxy.position - model.position;
             //because the navmesh agent and model are seperate objects, the model has to move accourding to the agent
@@ -124,6 +126,15 @@ public class EnemyActions : MonoBehaviour
         }
         agent.SetDestination(position);
     }
+
+    public void MoveModel(Vector3 movement)
+    {
+        model.GetComponent<CharacterController>().Move(movement);
+    }
+    public void MoveModel(Vector3 movement,float speed)
+    {
+        model.GetComponent<CharacterController>().Move(movement * Time.deltaTime * speed);
+    }
     /// <summary>
     /// The enemy will stop at its current position
     /// </summary>
@@ -140,23 +151,23 @@ public class EnemyActions : MonoBehaviour
 
     }
     
-    public IEnumerator KnokbackEnemy(Vector3 knockbackDirection, float distance, float knockbackDuration)
+    public IEnumerator MoveOverTime(Vector3 moveDirection, float distance, float moveDuration)
     {
         Vector3 startValue = model.position;
-        Vector3 endValue = model.position + knockbackDirection * distance;
+        Vector3 endValue = model.position + moveDirection * distance;
         Debug.DrawLine(startValue, endValue,Color.green);
         float timeElapsed = 0;
         Vector3 valueToLerp;
-        while (timeElapsed < knockbackDuration)
+        while (timeElapsed < moveDuration)
         {
-            valueToLerp = Vector3.Lerp(startValue, endValue, timeElapsed / knockbackDuration);
-            MoveRaw(valueToLerp);
+            valueToLerp = Vector3.Lerp(startValue, endValue, timeElapsed / moveDuration);
+            MoveModel(valueToLerp - model.transform.position);
             timeElapsed += Time.deltaTime;
             Debug.DrawLine(startValue, endValue, Color.green);
             yield return null;
         }
         valueToLerp = endValue;
-        MoveRaw(valueToLerp);
+        MoveRaw(valueToLerp - model.transform.position);
     }
 
     /// <summary>
@@ -192,8 +203,9 @@ public class EnemyActions : MonoBehaviour
         preAttackParticle.Stop();
         SetAnimation("Basic Attack");
         Vector3 attackTravelPos = model.transform.position + model.transform.forward * attackTravelDistance;
-        MoveRaw(attackTravelPos);
+        
         DealDamage();
+        StartCoroutine(MoveOverTime(model.transform.forward, attackTravelDistance, attackTravelDuration));
         Stop();
         yield return new WaitForSeconds(attackDuration);
         
@@ -214,7 +226,7 @@ public class EnemyActions : MonoBehaviour
         if (angle <= attackAngle && Vector3.Distance(player.position, model.transform.position) <= attackRange)
         {
             player.GetComponent<PlayerStatus>().TakeDamage(attackDamage);
-            StartCoroutine(player.GetComponent<CharacterMovement>().KnokbackPlayer(transform.forward.normalized, attackKnockbackDistance,attackKnockbackDuration));
+            StartCoroutine(player.GetComponent<CharacterMovement>().MoveOverTime(transform.forward.normalized, attackKnockbackDistance,attackKnockbackDuration));
         }
     }
     /// <summary>
