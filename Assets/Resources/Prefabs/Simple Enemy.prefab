@@ -5611,9 +5611,13 @@ MonoBehaviour:
   model: {fileID: 6922769942206917525}
   preAttackParticle: {fileID: 6922769942678295455}
   movementSpeed: 4
-  attackWarmUpTime: 1
-  attackTravelDistance: 2
-  attackDuration: 2.75
+  attackWarmUpTime: 0.3
+  attackTravelDistance: 1.5
+  attackTravelDuration: 0.2
+  attackKnockbackDistance: 0.5
+  attackKnockbackDuration: 0.2
+  attackKnockbackSpeed: 400
+  attackDuration: 0.5
   postAttackTime: 0.5
   attackDamage: 15
   attackCooldownTime: 4
