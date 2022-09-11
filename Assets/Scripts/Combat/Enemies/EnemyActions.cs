@@ -109,7 +109,7 @@ public class EnemyActions : MonoBehaviour
         if (agent.enabled == false)
         {
             obstacle.enabled = false;
-            proxy.position = model.position + model.transform.forward;
+            proxy.position = model.position;
             agent.enabled = true;
         }
         elapsed += Time.deltaTime;
@@ -138,7 +138,7 @@ public class EnemyActions : MonoBehaviour
         if (agent.enabled == false)
         {
             obstacle.enabled = false;
-            agent.gameObject.transform.position = model.position + model.transform.forward;
+            agent.gameObject.transform.position = model.position;
             agent.enabled = true;
         }
         agent.SetDestination(position);
