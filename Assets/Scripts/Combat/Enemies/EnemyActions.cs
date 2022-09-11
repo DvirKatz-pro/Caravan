@@ -40,6 +40,7 @@ public class EnemyActions : MonoBehaviour
     protected Animator animator;
     protected NavMeshAgent agent;
     protected NavMeshObstacle obstacle;
+    private NavMeshPath path;
 
     private EnemyManager manager;
 
@@ -49,6 +50,7 @@ public class EnemyActions : MonoBehaviour
     protected bool attacking = false;
     protected bool isStunned = false;
     protected bool onAttackCooldown = false;
+    private float elapsed = 0.0f;
 
 
     /// <summary>
@@ -79,6 +81,9 @@ public class EnemyActions : MonoBehaviour
 
         player = GameObject.Find("Player").transform;
 
+        path = new NavMeshPath();
+        elapsed = 0.0f;
+
     }
 
     protected virtual void FixedUpdate()
@@ -107,11 +112,23 @@ public class EnemyActions : MonoBehaviour
             proxy.position = model.position + model.transform.forward;
             agent.enabled = true;
         }
-        SetAnimation("Moving",true);
-        agent.SetDestination(position);
+        elapsed += Time.deltaTime;
+        if (elapsed > 1.0f)
+        {
+            elapsed -= 1.0f;
+            bool pathFound = NavMesh.CalculatePath(transform.position, position, NavMesh.AllAreas, path);
+            if (pathFound)
+            {
+                agent.SetPath(path);
+                SetAnimation("Moving", true);
+            }
+            else
+            {
+                Stop();
+            }
+        }
         
-        
-        
+  
     }
     /// <summary>
     /// given a position, the enemy will move to that position. The currentAction will not change and animation will not play
@@ -142,6 +159,7 @@ public class EnemyActions : MonoBehaviour
     {
         if (agent.enabled == true)
         {
+            proxy.position = model.position;
             agent.velocity = Vector3.zero;
             agent.isStopped = true;
             agent.enabled = false;
