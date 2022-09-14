@@ -16,17 +16,16 @@ public class EnemyManager : MonoBehaviour
     //nav mesh settings
     [SerializeField] private float attackStoppingDistance;
     [SerializeField] private float rangedAttackStoppingDistance;
-    [SerializeField] private int amountCanAttack;
-    private int attackingCount = 0;
+    [SerializeField] private int amountAroundPlayer;
 
+    private List<Vector3> positionsAroundPlayer;
+    private Dictionary<GameObject, Vector3> takenPositionsAroundPlayer;
     /// <summary>
     /// register an enemy with the manager
     /// </summary>
     public void Registar(GameObject enemy)
     {
-        
         enemies.Add(enemy);
-        
     }
     /// <summary>
     /// unregister an enemy with manager
@@ -39,12 +38,17 @@ public class EnemyManager : MonoBehaviour
             Debug.Log("Combat Done");
         }
     }
+    private void Start()
+    {
+       
+    }
 
     private void Update()
     {
-        //sort the close ranged enemies based on distance from player
-        //closeEnemies.Sort(distanceComparetor);
+        
     }
+    
+    /*
     /// <summary>
     /// Enemies will ask the manager if they can attack
     /// </summary>
@@ -64,6 +68,7 @@ public class EnemyManager : MonoBehaviour
     {
         attackingCount--;
     }
+    */
    
   
 }

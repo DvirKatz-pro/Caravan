@@ -104,7 +104,6 @@ public class EnemyActions : MonoBehaviour
         if (agent.enabled == false)
         {
             obstacle.enabled = false;
-            proxy.position = model.position + model.transform.forward;
             agent.enabled = true;
         }
         SetAnimation("Moving",true);
@@ -121,7 +120,6 @@ public class EnemyActions : MonoBehaviour
         if (agent.enabled == false)
         {
             obstacle.enabled = false;
-            agent.gameObject.transform.position = model.position + model.transform.forward;
             agent.enabled = true;
         }
         agent.SetDestination(position);
@@ -162,12 +160,14 @@ public class EnemyActions : MonoBehaviour
         {
             valueToLerp = Vector3.Lerp(startValue, endValue, timeElapsed / moveDuration);
             MoveModel(valueToLerp - model.transform.position);
+            proxy.position = model.transform.position;
             timeElapsed += Time.deltaTime;
             Debug.DrawLine(startValue, endValue, Color.green);
             yield return null;
         }
         valueToLerp = endValue;
         MoveRaw(valueToLerp - model.transform.position);
+        proxy.position = model.transform.position;
     }
 
     /// <summary>
