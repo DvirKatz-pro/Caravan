@@ -420,7 +420,7 @@ MonoBehaviour:
   player: {fileID: 262320337}
   attackStoppingDistance: 0.5
   rangedAttackStoppingDistance: 20
-  amountCanAttack: 2
+  amountAroundPlayer: 0
 --- !u!4 &255267951
 Transform:
   m_ObjectHideFlags: 0
