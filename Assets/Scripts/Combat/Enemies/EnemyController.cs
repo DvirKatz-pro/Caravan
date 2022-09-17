@@ -24,6 +24,8 @@ public class EnemyController : MonoBehaviour
 
     protected Vector3 avoidVec = Vector3.zero;
 
+    private Vector3 movePosition;
+
     
    
     // Start is called before the first frame update
@@ -67,7 +69,7 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
-           actions.Move(target.position);
+           actions.Move(manager.CoordinateEnemy(this.gameObject));
         }
         
     }

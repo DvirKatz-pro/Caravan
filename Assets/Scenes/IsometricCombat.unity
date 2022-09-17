@@ -418,9 +418,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 262320337}
-  attackStoppingDistance: 0.5
-  rangedAttackStoppingDistance: 20
-  amountAroundPlayer: 0
+  amountShouldAttackPlayer: 2
+  enemyRallyCircleRadius: 8
+  playerAvoidanceCircleRadius: 1
 --- !u!4 &255267951
 Transform:
   m_ObjectHideFlags: 0
