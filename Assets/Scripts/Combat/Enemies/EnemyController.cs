@@ -14,7 +14,7 @@ public class EnemyController : MonoBehaviour
 
     //Gameplay related values
     [SerializeField] protected float distanceFromTarget;
-    [SerializeField] protected float timeBetweenCoordination;
+    [SerializeField] protected Vector2 timeToRallyMinMax;
 
     //Needed components
     protected Transform target;
@@ -25,8 +25,10 @@ public class EnemyController : MonoBehaviour
 
     protected Vector3 avoidVec = Vector3.zero;
 
-    private Vector3 coordinationPosition;
-    private float currentCoordinationWaitTime;
+    private float rallyWaitTime;
+    private float currentRallyWaitTime;
+
+    private bool isRallying = false;
     
    
     // Start is called before the first frame update
@@ -58,38 +60,12 @@ public class EnemyController : MonoBehaviour
     {
         
         bool shouldAttack = (!onCooldown && Vector3.Distance(target.position, model.position) <= distanceFromTarget);
-        bool shouldWait = (onCooldown && Vector3.Distance(target.position, model.position) <= distanceFromTarget);
         if (shouldAttack)
         {
             actions.Stop();
             actions.Attack();
         }
-        else if(shouldWait)
-        {
-            actions.Stop();
-        }
-        else
-        {
-            if (coordinationPosition == target.position)
-            {
-                actions.Move(target.position);
-            }
-            if (coordinationPosition != Vector3.zero && currentCoordinationWaitTime > 0)
-            {
-                actions.Move(coordinationPosition);
-                currentCoordinationWaitTime -= Time.deltaTime;
-            }
-            else if (Vector3.Distance(target.position, model.position) < 0.5f && currentCoordinationWaitTime > 0)
-            {
-                actions.Stop();
-                currentCoordinationWaitTime -= Time.deltaTime;
-            }
-            else
-            {
-                coordinationPosition = manager.CoordinateEnemy(this.gameObject);
-                currentCoordinationWaitTime = timeBetweenCoordination;
-            }
-        }
+      
         
     }
     /// <summary>
@@ -105,6 +81,29 @@ public class EnemyController : MonoBehaviour
     public void EnableCarving()
     {
         proxy.GetComponent<NavMeshObstacle>().carving = true;
+    }
+    public void MoveToRally()
+    {
+        if (!isRallying)
+        {
+            isRallying = true;
+            rallyWaitTime = Random.Range(timeToRallyMinMax.x, timeToRallyMinMax.y);
+
+            StartCoroutine(OnMoveToRally())
+        }
+    }
+
+    private IEnumerator OnMoveToRally(Vector3 rallyPosition)
+    {
+
+        actions.Move(rallyPosition);
+        currentCoordinationWaitTime += Time.deltaTime;
+        if (currentCoordinationWaitTime >= timeBetweenCoordination)
+        {
+            isRallying = false;
+            currentCoordinationWaitTime = 0;
+        }
+
     }
 
 }

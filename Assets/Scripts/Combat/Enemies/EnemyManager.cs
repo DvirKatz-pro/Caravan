@@ -17,8 +17,6 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] private float enemyRallyCircleRadius;
     [SerializeField] private float playerAvoidanceCircleRadius;
 
-    private List<Vector3> positionsAroundPlayer;
-    private Dictionary<GameObject, Vector3> takenPositionsAroundPlayer;
     /// <summary>
     /// register an enemy with the manager
     /// </summary>
@@ -47,7 +45,7 @@ public class EnemyManager : MonoBehaviour
         
     }
 
-    public Vector3 CoordinateEnemy(GameObject enemy)
+    public Vector3 CoordinateEnemyies()
     {
         enemies.Sort(delegate (GameObject firstEnemy, GameObject secondEnemy)
         {
@@ -55,41 +53,23 @@ public class EnemyManager : MonoBehaviour
             .CompareTo(
               Vector2.Distance(player.transform.position, secondEnemy.transform.position));
         });
-        int enemyIndex = -1;
+       
         for (int i = 0; i < enemies.Count; i++)
         {
-            if (enemies[i] == enemy)
+            EnemyActions enemyActions = enemies[i].GetComponent<EnemyActions>();
+            if (i < amountShouldAttackPlayer && (enemyActions.GetAction() == EnemyActions.Actions.idle || enemyActions.GetAction() == EnemyActions.Actions.moveing))
             {
-                enemyIndex = i;
-                break;
+                enemyActions.Move(player.transform.position);
+            }
+            else if (i >= amountShouldAttackPlayer && (enemyActions.GetAction() == EnemyActions.Actions.idle || enemyActions.GetAction() == EnemyActions.Actions.moveing))
+            {
+                
             }
         }
 
-        if (enemyIndex < amountShouldAttackPlayer)
-        {
-            return player.transform.position;
-        }
-        Vector3 averagePointOfCharacters = getAveragePointOfCharacters();
-
-        Vector3 rallyPosition = averagePointOfCharacters + (Vector3)(Random.insideUnitCircle * enemyRallyCircleRadius);
-        if (IsPointInsideCircle(averagePointOfCharacters,enemyRallyCircleRadius, rallyPosition) 
-            && IsPointInsideCircle(player.transform.position, playerAvoidanceCircleRadius, rallyPosition))
-        {
-            rallyPosition = MovePointOutsidePlayerAvoidanceCircle(averagePointOfCharacters,player.transform.position,playerAvoidanceCircleRadius,rallyPosition);
-        }
-        return rallyPosition;
+       
     }
-    public Vector3 getAveragePointOfCharacters()
-    {
-        Vector3 averagePos = player.transform.position;
-
-        foreach (GameObject g in enemies)
-        {
-            averagePos += g.transform.position;
-        }
-        averagePos = averagePos / (enemies.Count + 1);
-        return averagePos;
-    }
+    
 
     public bool IsPointInsideCircle(Vector3 circleCenter, float circleRadius, Vector3 position)
     {
@@ -100,17 +80,7 @@ public class EnemyManager : MonoBehaviour
         return true;
     }
 
-    private Vector3 MovePointOutsidePlayerAvoidanceCircle(Vector3 averagePointOfCharacters,Vector3 playerPosition,float playerAvoidanceCircleRadius, Vector3 rallyPosition)
-    {
-        while (IsPointInsideCircle(playerPosition, playerAvoidanceCircleRadius, rallyPosition))
-        {
-            Vector3 circleCenterToRally = averagePointOfCharacters - rallyPosition;
-            float vectorMagnitute = circleCenterToRally.magnitude * 0.75f;
-            rallyPosition = circleCenterToRally.normalized * vectorMagnitute;
-            rallyPosition += averagePointOfCharacters;
-        }
-        return rallyPosition;
-    }
+   
     
     /*
     /// <summary>

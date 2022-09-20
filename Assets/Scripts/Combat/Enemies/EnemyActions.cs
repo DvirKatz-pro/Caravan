@@ -124,7 +124,11 @@ public class EnemyActions : MonoBehaviour
             }
             else
             {
-                Stop();
+                NavMeshHit myNavHit;
+                if (NavMesh.SamplePosition(transform.position, out myNavHit, 100, -1))
+                {
+                    NavMesh.CalculatePath(transform.position, myNavHit.position, NavMesh.AllAreas, path); 
+                }
             }
         }
         
