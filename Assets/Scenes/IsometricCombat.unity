@@ -419,7 +419,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 262320337}
   amountShouldAttackPlayer: 2
-  enemyRallyCircleRadius: 8
+  enemyRallyCircleRadius: 4
   playerAvoidanceCircleRadius: 1
 --- !u!4 &255267951
 Transform:

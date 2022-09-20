@@ -14,6 +14,7 @@ public class EnemyController : MonoBehaviour
 
     //Gameplay related values
     [SerializeField] protected float distanceFromTarget;
+    [SerializeField] protected float timeBetweenCoordination;
 
     //Needed components
     protected Transform target;
@@ -24,8 +25,8 @@ public class EnemyController : MonoBehaviour
 
     protected Vector3 avoidVec = Vector3.zero;
 
-    private Vector3 movePosition;
-
+    private Vector3 coordinationPosition;
+    private float currentCoordinationWaitTime;
     
    
     // Start is called before the first frame update
@@ -69,7 +70,25 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
-           actions.Move(manager.CoordinateEnemy(this.gameObject));
+            if (coordinationPosition == target.position)
+            {
+                actions.Move(target.position);
+            }
+            if (coordinationPosition != Vector3.zero && currentCoordinationWaitTime > 0)
+            {
+                actions.Move(coordinationPosition);
+                currentCoordinationWaitTime -= Time.deltaTime;
+            }
+            else if (Vector3.Distance(target.position, model.position) < 0.5f && currentCoordinationWaitTime > 0)
+            {
+                actions.Stop();
+                currentCoordinationWaitTime -= Time.deltaTime;
+            }
+            else
+            {
+                coordinationPosition = manager.CoordinateEnemy(this.gameObject);
+                currentCoordinationWaitTime = timeBetweenCoordination;
+            }
         }
         
     }

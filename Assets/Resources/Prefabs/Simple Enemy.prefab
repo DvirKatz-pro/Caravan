@@ -5595,6 +5595,7 @@ MonoBehaviour:
   proxy: {fileID: 6922769944110296599}
   model: {fileID: 6922769942206917525}
   distanceFromTarget: 2
+  timeBetweenCoordination: 5
 --- !u!114 &6922769943878416324
 MonoBehaviour:
   m_ObjectHideFlags: 0

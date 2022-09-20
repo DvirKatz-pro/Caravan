@@ -70,8 +70,9 @@ public class EnemyManager : MonoBehaviour
             return player.transform.position;
         }
         Vector3 averagePointOfCharacters = getAveragePointOfCharacters();
-        Vector3 rallyPosition = averagePointOfCharacters + Random.insideUnitSphere * enemyRallyCircleRadius;
-        if (IsPointInsideCircle(averagePointOfCharacters, enemyRallyCircleRadius, rallyPosition) 
+
+        Vector3 rallyPosition = averagePointOfCharacters + (Vector3)(Random.insideUnitCircle * enemyRallyCircleRadius);
+        if (IsPointInsideCircle(averagePointOfCharacters,enemyRallyCircleRadius, rallyPosition) 
             && IsPointInsideCircle(player.transform.position, playerAvoidanceCircleRadius, rallyPosition))
         {
             rallyPosition = MovePointOutsidePlayerAvoidanceCircle(averagePointOfCharacters,player.transform.position,playerAvoidanceCircleRadius,rallyPosition);
