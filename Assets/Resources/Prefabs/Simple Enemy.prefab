@@ -5595,7 +5595,7 @@ MonoBehaviour:
   proxy: {fileID: 6922769944110296599}
   model: {fileID: 6922769942206917525}
   distanceFromTarget: 2
-  timeBetweenCoordination: 5
+  timeToRallyMinMax: {x: 5, y: 15}
 --- !u!114 &6922769943878416324
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5615,11 +5615,11 @@ MonoBehaviour:
   attackWarmUpTime: 0.3
   attackTravelDistance: 1.5
   attackTravelDuration: 0.2
-  attackKnockbackDistance: 0.5
+  attackKnockbackDistance: 0.8
   attackKnockbackDuration: 0.2
   attackKnockbackSpeed: 400
   attackDuration: 0.5
-  postAttackTime: 0.5
+  postAttackTime: 1.25
   attackDamage: 15
   attackCooldownTime: 4
   attackAngle: 55

@@ -29,6 +29,7 @@ public class EnemyController : MonoBehaviour
     private float currentRallyWaitTime;
 
     private bool isRallying = false;
+    public Vector3 RallyPos { get; set; }
     
    
     // Start is called before the first frame update
@@ -65,6 +66,13 @@ public class EnemyController : MonoBehaviour
             actions.Stop();
             actions.Attack();
         }
+        else
+        {
+            if (!isRallying)
+            {
+                MoveToRally(RallyPos);
+            }
+        }
       
         
     }
@@ -82,27 +90,25 @@ public class EnemyController : MonoBehaviour
     {
         proxy.GetComponent<NavMeshObstacle>().carving = true;
     }
-    public void MoveToRally()
+    public void MoveToRally(Vector3 rallyPos)
     {
-        if (!isRallying)
-        {
+        
             isRallying = true;
             rallyWaitTime = Random.Range(timeToRallyMinMax.x, timeToRallyMinMax.y);
 
-            StartCoroutine(OnMoveToRally())
-        }
+            StartCoroutine(OnMoveToRally(rallyPos));
     }
 
     private IEnumerator OnMoveToRally(Vector3 rallyPosition)
     {
-
-        actions.Move(rallyPosition);
-        currentCoordinationWaitTime += Time.deltaTime;
-        if (currentCoordinationWaitTime >= timeBetweenCoordination)
+        while (currentRallyWaitTime < rallyWaitTime)
         {
-            isRallying = false;
-            currentCoordinationWaitTime = 0;
+            actions.Move(rallyPosition);
+            currentRallyWaitTime += Time.deltaTime;
+            yield return null;
         }
+        isRallying = false;
+        currentRallyWaitTime = 0;
 
     }
 

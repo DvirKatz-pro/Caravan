@@ -42,10 +42,10 @@ public class EnemyManager : MonoBehaviour
 
     private void Update()
     {
-        
+        CoordinateEnemyies();
     }
 
-    public Vector3 CoordinateEnemyies()
+    public void CoordinateEnemyies()
     {
         enemies.Sort(delegate (GameObject firstEnemy, GameObject secondEnemy)
         {
@@ -63,7 +63,17 @@ public class EnemyManager : MonoBehaviour
             }
             else if (i >= amountShouldAttackPlayer && (enemyActions.GetAction() == EnemyActions.Actions.idle || enemyActions.GetAction() == EnemyActions.Actions.moveing))
             {
-                
+                float torusMidPointRadius = (enemyRallyCircleRadius - playerAvoidanceCircleRadius) * 0.5f;
+                float circleCenterToTorusCenterRadius = playerAvoidanceCircleRadius + torusMidPointRadius;
+                Vector3 randPointTorus = GetRandomPositionInTorus(circleCenterToTorusCenterRadius, torusMidPointRadius);
+                if (Vector3.Distance(enemies[i].transform.position, player.transform.position) > Vector3.Distance(enemies[i].transform.position, randPointTorus))
+                {
+                    enemyActions.Stop();
+                }
+                else
+                {
+                    enemies[i].GetComponent<EnemyController>().RallyPos = randPointTorus;
+                }
             }
         }
 
@@ -80,8 +90,22 @@ public class EnemyManager : MonoBehaviour
         return true;
     }
 
-   
-    
+    Vector3 GetRandomPositionInTorus(float circleCenterToTorusCenterRadius, float torusMidPointRadius)
+    {
+        float rndAngle = Random.value * (2 * Mathf.PI);
+
+        // determine position
+        float randX = Mathf.Sin(rndAngle);
+        float randZ = Mathf.Cos(rndAngle);
+
+        Vector3 torusCenterPos = new Vector3(randX, 0, randZ);
+        torusCenterPos *= circleCenterToTorusCenterRadius;
+
+        Vector3 randomPointInTorus = torusCenterPos + Random.insideUnitSphere * torusMidPointRadius + player.transform.position;
+
+        return (randomPointInTorus);
+    }
+
     /*
     /// <summary>
     /// Enemies will ask the manager if they can attack
@@ -103,6 +127,6 @@ public class EnemyManager : MonoBehaviour
         attackingCount--;
     }
     */
-   
-  
+
+
 }
