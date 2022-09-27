@@ -5559,7 +5559,7 @@ GameObject:
   - component: {fileID: -462463914343852894}
   m_Layer: 0
   m_Name: Simple Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5596,6 +5596,7 @@ MonoBehaviour:
   model: {fileID: 6922769942206917525}
   distanceFromTarget: 2
   timeToRallyMinMax: {x: 5, y: 15}
+  canBeKnockedBack: 1
 --- !u!114 &6922769943878416324
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5613,9 +5614,9 @@ MonoBehaviour:
   preAttackParticle: {fileID: 6922769942678295455}
   movementSpeed: 4
   attackWarmUpTime: 0.3
-  attackTravelDistance: 1.5
+  attackTravelDistance: 1
   attackTravelDuration: 0.2
-  attackKnockbackDistance: 0.8
+  attackKnockbackDistance: 2
   attackKnockbackDuration: 0.2
   attackKnockbackSpeed: 400
   attackDuration: 0.5
@@ -5626,6 +5627,7 @@ MonoBehaviour:
   attackRange: 3
   stunnedDuration: 3
   stunnedCooldown: 7
+  MaxRallyDistanceFromPlayer: 0
   strafeTime: 3
 --- !u!114 &-462463914343852894
 MonoBehaviour:
@@ -5832,7 +5834,7 @@ NavMeshObstacle:
   m_Extents: {x: 0.2, y: 1, z: 0.2}
   m_MoveThreshold: 0.1
   m_Carve: 1
-  m_CarveOnlyStationary: 1
+  m_CarveOnlyStationary: 0
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.1
 --- !u!1 &6922769944140625700

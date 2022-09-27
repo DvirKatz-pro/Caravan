@@ -120,7 +120,7 @@ public class CharacterMovement : MonoBehaviour
     public IEnumerator MoveOverTime(Vector3 movementDirection, float distance,float movementDuration)
     {
         Vector3 startValue = transform.position;
-        Vector3 endValue = transform.position + movementDirection * distance;
+        Vector3 endValue = transform.position + movementDirection.normalized * distance;
         float timeElapsed = 0;
         Vector3 valueToLerp;
         while (timeElapsed < movementDuration)

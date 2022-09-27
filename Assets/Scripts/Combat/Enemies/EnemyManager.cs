@@ -57,24 +57,25 @@ public class EnemyManager : MonoBehaviour
         for (int i = 0; i < enemies.Count; i++)
         {
             EnemyActions enemyActions = enemies[i].GetComponent<EnemyActions>();
-            if (i < amountShouldAttackPlayer && (enemyActions.GetAction() == EnemyActions.Actions.idle || enemyActions.GetAction() == EnemyActions.Actions.moveing))
+            EnemyController enemyController = enemies[i].GetComponent<EnemyController>();
+            if (i < amountShouldAttackPlayer && enemyActions.GetAttackCooldown() && enemyActions.GetAction() == EnemyActions.Actions.attacking)
             {
-                enemyActions.Move(player.transform.position);
+                enemyController.permissionToAttack = true;
             }
-            else if (i >= amountShouldAttackPlayer && (enemyActions.GetAction() == EnemyActions.Actions.idle || enemyActions.GetAction() == EnemyActions.Actions.moveing))
+            else if (i < amountShouldAttackPlayer && !enemyActions.GetAttackCooldown() && (enemyActions.GetAction() == EnemyActions.Actions.idle || enemyActions.GetAction() == EnemyActions.Actions.moveing))
             {
+                enemyController.permissionToAttack = true;
+            }
+            else
+            {
+                enemyController.permissionToAttack = false;
                 float torusMidPointRadius = (enemyRallyCircleRadius - playerAvoidanceCircleRadius) * 0.5f;
                 float circleCenterToTorusCenterRadius = playerAvoidanceCircleRadius + torusMidPointRadius;
                 Vector3 randPointTorus = GetRandomPositionInTorus(circleCenterToTorusCenterRadius, torusMidPointRadius);
-                if (Vector3.Distance(enemies[i].transform.position, player.transform.position) > Vector3.Distance(enemies[i].transform.position, randPointTorus))
-                {
-                    enemyActions.Stop();
-                }
-                else
-                {
-                    enemies[i].GetComponent<EnemyController>().RallyPos = randPointTorus;
-                }
+
+                enemies[i].GetComponent<EnemyController>().RallyPos = randPointTorus;
             }
+           
         }
 
        
@@ -102,7 +103,7 @@ public class EnemyManager : MonoBehaviour
         torusCenterPos *= circleCenterToTorusCenterRadius;
 
         Vector3 randomPointInTorus = torusCenterPos + Random.insideUnitSphere * torusMidPointRadius + player.transform.position;
-
+        randomPointInTorus.y = 0;
         return (randomPointInTorus);
     }
 

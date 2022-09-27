@@ -7,9 +7,13 @@ using UnityEngine;
 /// </summary>
 public class PlayerRoll : MonoBehaviour
 {
+
     //Roll attributes
     [SerializeField] private float rollSpeed = 5;
     [SerializeField] private float rollTime;
+    [SerializeField] private float rollknockbackDistance;
+    [SerializeField] private float rollKnockbackDuration;
+
     private float currentRollTime = 0;
     private bool isRolling = false;
 
@@ -17,6 +21,18 @@ public class PlayerRoll : MonoBehaviour
     CharacterAreaController controller;
     private CharacterController charController;
     Animator anim;
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.gameObject.tag.Equals("Enemy") && controller.GetState() == CharacterAreaController.State.roll)
+        {
+            Vector3 playerEnemy = transform.position - hit.transform.position;
+            GameObject simpleEnemy = hit.transform.parent.gameObject;
+            StartCoroutine(simpleEnemy.GetComponent<EnemyActions>().MoveOverTime(playerEnemy*-1, rollknockbackDistance, rollKnockbackDuration));
+        }
+    }
+
+
     // Start is called before the first frame update
     private void Start()
     {

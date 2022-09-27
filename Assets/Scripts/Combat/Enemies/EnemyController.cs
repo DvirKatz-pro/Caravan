@@ -15,20 +15,18 @@ public class EnemyController : MonoBehaviour
     //Gameplay related values
     [SerializeField] protected float distanceFromTarget;
     [SerializeField] protected Vector2 timeToRallyMinMax;
+    [SerializeField] protected bool canBeKnockedBack;
 
     //Needed components
     protected Transform target;
     protected EnemyManager manager;
     protected EnemyActions actions;
 
-    protected bool onCooldown = false;
+    public bool onCooldown { get; set; }
+
+    public bool permissionToAttack { get; set; }
 
     protected Vector3 avoidVec = Vector3.zero;
-
-    private float rallyWaitTime;
-    private float currentRallyWaitTime;
-
-    private bool isRallying = false;
     public Vector3 RallyPos { get; set; }
     
    
@@ -42,6 +40,8 @@ public class EnemyController : MonoBehaviour
         manager = GameObject.Find("Enemy Manager").GetComponent<EnemyManager>();
 
         manager.Registar(this.gameObject);
+
+        onCooldown = false;
         
     }
     
@@ -59,8 +59,8 @@ public class EnemyController : MonoBehaviour
     /// </summary>
     virtual protected void Think()
     {
-        
-        bool shouldAttack = (!onCooldown && Vector3.Distance(target.position, model.position) <= distanceFromTarget);
+
+        bool shouldAttack = (!actions.GetAttackCooldown() && Vector3.Distance(target.position, model.position) <= distanceFromTarget);
         if (shouldAttack)
         {
             actions.Stop();
@@ -68,13 +68,23 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
-            if (!isRallying)
+            if (permissionToAttack)
             {
-                MoveToRally(RallyPos);
+                actions.Move(target.position);
             }
+            else if (!actions.IsRallying() && RallyPos != Vector3.zero)
+            {
+                float rallyWaitTime = Random.Range(timeToRallyMinMax.x, timeToRallyMinMax.y);
+                actions.MoveToRally(RallyPos, rallyWaitTime);
+            }
+            
         }
       
         
+    }
+    public bool GetCanBeKnockedBack()
+    {
+        return canBeKnockedBack;
     }
     /// <summary>
     /// disable navMesh carving - used to solve arrow shooting position bug as carving would push arrows out of pos
@@ -89,27 +99,6 @@ public class EnemyController : MonoBehaviour
     public void EnableCarving()
     {
         proxy.GetComponent<NavMeshObstacle>().carving = true;
-    }
-    public void MoveToRally(Vector3 rallyPos)
-    {
-        
-            isRallying = true;
-            rallyWaitTime = Random.Range(timeToRallyMinMax.x, timeToRallyMinMax.y);
-
-            StartCoroutine(OnMoveToRally(rallyPos));
-    }
-
-    private IEnumerator OnMoveToRally(Vector3 rallyPosition)
-    {
-        while (currentRallyWaitTime < rallyWaitTime)
-        {
-            actions.Move(rallyPosition);
-            currentRallyWaitTime += Time.deltaTime;
-            yield return null;
-        }
-        isRallying = false;
-        currentRallyWaitTime = 0;
-
     }
 
 }

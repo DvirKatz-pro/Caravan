@@ -31,6 +31,7 @@ public class EnemyActions : MonoBehaviour
     [SerializeField] protected float stunnedDuration;
     [SerializeField] protected float stunnedCooldown;
 
+    [SerializeField] protected float MaxRallyDistanceFromPlayer;
     [SerializeField] protected float strafeTime;
 
     //Needed components
@@ -50,6 +51,7 @@ public class EnemyActions : MonoBehaviour
     protected bool attacking = false;
     protected bool isStunned = false;
     protected bool onAttackCooldown = false;
+    protected bool isRallying = false;
     private float elapsed = 0.0f;
 
 
@@ -96,7 +98,6 @@ public class EnemyActions : MonoBehaviour
             model.rotation = proxy.rotation;
             proxy.transform.LookAt(player.position);
         }
- 
     }
     #region Actions
     /// <summary>
@@ -104,18 +105,17 @@ public class EnemyActions : MonoBehaviour
     /// </summary>
     public void Move(Vector3 position)
     {
-        
         currentAction = Actions.moveing;
-        if (agent.enabled == false)
-        {
-            obstacle.enabled = false;
-            proxy.position = model.position;
-            agent.enabled = true;
-        }
         elapsed += Time.deltaTime;
         if (elapsed > 1.0f)
         {
             elapsed -= 1.0f;
+            if (agent.enabled == false)
+            {
+                obstacle.enabled = false;
+                proxy.position = model.position;
+                agent.enabled = true;
+            }
             bool pathFound = NavMesh.CalculatePath(transform.position, position, NavMesh.AllAreas, path);
             if (pathFound)
             {
@@ -170,13 +170,14 @@ public class EnemyActions : MonoBehaviour
             obstacle.enabled = true;
         }
         SetAnimation("Moving", false);
+        SetAnimation("Idle");
 
     }
     
     public IEnumerator MoveOverTime(Vector3 moveDirection, float distance, float moveDuration)
     {
         Vector3 startValue = model.position;
-        Vector3 endValue = model.position + moveDirection * distance;
+        Vector3 endValue = model.position + moveDirection.normalized * distance;
         Debug.DrawLine(startValue, endValue,Color.green);
         float timeElapsed = 0;
         Vector3 valueToLerp;
@@ -190,8 +191,36 @@ public class EnemyActions : MonoBehaviour
             yield return null;
         }
         valueToLerp = endValue;
-        MoveRaw(valueToLerp - model.transform.position);
+        MoveModel(valueToLerp - model.transform.position);
         proxy.position = model.transform.position;
+    }
+
+    public void MoveToRally(Vector3 rallyPos,float rallyWaitTime)
+    {
+        isRallying = true;
+        StartCoroutine(OnMoveToRally(rallyPos,rallyWaitTime));
+    }
+    private IEnumerator OnMoveToRally(Vector3 rallyPos,float rallyWaitTime)
+    {
+        while (rallyWaitTime > 0)
+        {
+            if (Vector3.Distance(proxy.position, player.position) > MaxRallyDistanceFromPlayer)
+            {
+                rallyWaitTime = 0;
+            }
+            if (Vector3.Distance(proxy.position, rallyPos) > 1.5f)
+            {
+                Move(rallyPos);
+            }
+            else
+            {
+                rallyPos = proxy.position;
+                Stop();
+            }
+            rallyWaitTime -= Time.deltaTime;
+            yield return null;
+        }
+        isRallying=false;
     }
 
     /// <summary>
@@ -250,7 +279,7 @@ public class EnemyActions : MonoBehaviour
         if (angle <= attackAngle && Vector3.Distance(player.position, model.transform.position) <= attackRange)
         {
             player.GetComponent<PlayerStatus>().TakeDamage(attackDamage);
-            StartCoroutine(player.GetComponent<CharacterMovement>().MoveOverTime(transform.forward.normalized, attackKnockbackDistance,attackKnockbackDuration));
+            StartCoroutine(player.GetComponent<CharacterMovement>().MoveOverTime(model.transform.forward, attackKnockbackDistance,attackKnockbackDuration));
         }
     }
     /// <summary>
@@ -308,9 +337,13 @@ public class EnemyActions : MonoBehaviour
     {
         return currentAction;
     }
-    public bool AttackCooldown()
+    public bool GetAttackCooldown()
     {
         return onAttackCooldown;
+    }
+    public bool IsRallying()
+    {
+        return isRallying;
     }
     #endregion
 
