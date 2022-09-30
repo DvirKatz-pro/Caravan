@@ -26,11 +26,14 @@ public class CharacterMovement : MonoBehaviour
         animator = GetComponent<Animator>();
         floorMask = LayerMask.GetMask("Terrain");
     }
+    private void Update()
+    {
+        transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+    }
 
 
 
 
-    
     #region Rotate and movement
 
     public void RotateToMouse()
