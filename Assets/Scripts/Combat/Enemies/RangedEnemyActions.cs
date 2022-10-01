@@ -20,25 +20,17 @@ public class RangedEnemyActions : EnemyActions
     
     protected GameObject arrowInstance;
 
-    protected override void FixedUpdate()
-    {
-        if (currentAction != Actions.attacking && currentAction != Actions.idle)
-        {
-           base.FixedUpdate();
-        }
-        
-    }
 
     #region Attack
     
     protected override IEnumerator PreAttack()
     {
-        Vector3 fireDirection = player.position - model.transform.position;
+        Vector3 fireDirection = player.position - transform.position;
         SetAnimation("Draw");
         //Try to Loose where the player will be rather than his current position
         if (player.GetComponent<CharacterAreaController>().GetState() == CharacterAreaController.State.moveing)
         {
-            fireDirection = player.forward.normalized * Random.Range(4.5f, 7f) + player.position - model.transform.position;
+            fireDirection = player.forward.normalized * Random.Range(4.5f, 7f) + player.position - transform.position;
         }
 
         //create an arrow
@@ -48,9 +40,9 @@ public class RangedEnemyActions : EnemyActions
         arrowAngles.y = 180;
         arrowInstance.transform.Rotate(180, 0, 0);
 
-        model.transform.forward = Quaternion.AngleAxis(45, Vector3.up) * fireDirection;
+        transform.forward = Quaternion.AngleAxis(45, Vector3.up) * fireDirection;
 
-        sightRay.origin = new Vector3(model.transform.position.x, model.transform.position.y + 0.5f, model.transform.position.z);
+        sightRay.origin = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
         //set the Ray direction
         sightRay.direction = fireDirection * 50;
 
@@ -117,7 +109,7 @@ public class RangedEnemyActions : EnemyActions
 
         }
 
-        model.transform.forward = Quaternion.AngleAxis(-45, Vector3.up) * sightRay.direction;
+        transform.forward = Quaternion.AngleAxis(-45, Vector3.up) * sightRay.direction;
         
         currentAction = Actions.idle;
         SetAnimation("Idle");

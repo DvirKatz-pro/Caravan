@@ -8,10 +8,6 @@ using UnityEngine.AI;
 /// </summary>
 public class EnemyController : MonoBehaviour
 {
-    //Needed Objects
-    [SerializeField] protected Transform proxy;
-    [SerializeField] protected Transform model;
-
     //Gameplay related values
     [SerializeField] protected float distanceFromTarget;
     [SerializeField] protected Vector2 timeToRallyMinMax;
@@ -60,7 +56,7 @@ public class EnemyController : MonoBehaviour
     virtual protected void Think()
     {
 
-        bool shouldAttack = (!actions.GetAttackCooldown() && Vector3.Distance(target.position, model.position) <= distanceFromTarget);
+        bool shouldAttack = (!actions.GetAttackCooldown() && Vector3.Distance(target.position, transform.position) <= distanceFromTarget);
         if (shouldAttack)
         {
             actions.Stop();
@@ -91,14 +87,14 @@ public class EnemyController : MonoBehaviour
     /// </summary>
     public void DisableCarving()
     {
-        proxy.GetComponent<NavMeshObstacle>().carving = false;
+        GetComponent<NavMeshObstacle>().carving = false;
     }
     /// <summary>
     /// enable navMesh carving - used to solve arrow shooting position bug as carving would push arrows out of pos
     /// </summary>
     public void EnableCarving()
     {
-        proxy.GetComponent<NavMeshObstacle>().carving = true;
+        GetComponent<NavMeshObstacle>().carving = true;
     }
 
 }

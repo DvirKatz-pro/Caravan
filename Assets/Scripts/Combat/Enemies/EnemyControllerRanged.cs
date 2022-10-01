@@ -18,8 +18,8 @@ public class EnemyControllerRanged : EnemyController
        
         onCooldown = actions.GetAttackCooldown();
 
-        bool shouldAttack = (!onCooldown && Vector3.Distance(target.position, model.position) <= distanceFromTarget);
-        bool shouldWait = (onCooldown && Vector3.Distance(target.position, model.position) <= distanceFromTarget);
+        bool shouldAttack = (!onCooldown && Vector3.Distance(target.position, transform.position) <= distanceFromTarget);
+        bool shouldWait = (onCooldown && Vector3.Distance(target.position, transform.position) <= distanceFromTarget);
 
 
         if (shouldAttack)

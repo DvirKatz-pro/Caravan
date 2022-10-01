@@ -5576,7 +5576,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6922769942206917525}
-  - {fileID: 6922769944110296599}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5592,7 +5591,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cf75883edca8c04d959e3f827c7952d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  proxy: {fileID: 6922769944110296599}
+  proxy: {fileID: 0}
   model: {fileID: 6922769942206917525}
   distanceFromTarget: 2
   timeToRallyMinMax: {x: 5, y: 15}
@@ -5609,7 +5608,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecf880d499d5b8b489be0e4ee2cd48e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  proxy: {fileID: 6922769944110296599}
+  proxy: {fileID: 0}
   model: {fileID: 6922769942206917525}
   preAttackParticle: {fileID: 6922769942678295455}
   movementSpeed: 4
@@ -5767,76 +5766,6 @@ Transform:
   m_Father: {fileID: 6922769942597232688}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &6922769944110296598
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6922769944110296599}
-  - component: {fileID: 6922769944110296593}
-  - component: {fileID: 6922769944110296592}
-  m_Layer: 0
-  m_Name: Pathfinding Proxy
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6922769944110296599
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6922769944110296598}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 6922769943878416346}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!195 &6922769944110296593
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6922769944110296598}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 4
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 1.5
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
---- !u!208 &6922769944110296592
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6922769944110296598}
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Shape: 0
-  m_Extents: {x: 2, y: 1, z: 2}
-  m_MoveThreshold: 0
-  m_Carve: 1
-  m_CarveOnlyStationary: 0
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0
 --- !u!1 &6922769944140625700
 GameObject:
   m_ObjectHideFlags: 0

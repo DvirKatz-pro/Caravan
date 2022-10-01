@@ -21,6 +21,7 @@ public class CharacterAreaController : MonoBehaviour
     private CharacterMovement movement;
     private PlayerBasicAttack basicAttack;
     private PlayerRoll roll;
+    public bool canBeHit { get; set; }
     
     // Start is called before the first frame update
     private void Start()
@@ -69,6 +70,6 @@ public class CharacterAreaController : MonoBehaviour
     {
         return currentState;
     }
-   
+    
 
 }

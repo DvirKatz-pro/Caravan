@@ -9,8 +9,6 @@ using UnityEngine.AI;
 public class EnemyActions : MonoBehaviour
 {
     //Needed objects
-    [SerializeField] protected Transform proxy;
-    [SerializeField] protected Transform model;
     [SerializeField] protected ParticleSystem preAttackParticle;
 
     //Gameplay related values
@@ -37,6 +35,7 @@ public class EnemyActions : MonoBehaviour
     //Needed components
     protected EnemyController controller;
     protected EnemyStatus status;
+    private Rigidbody rb;
 
     protected Animator animator;
     protected NavMeshAgent agent;
@@ -74,12 +73,13 @@ public class EnemyActions : MonoBehaviour
     protected virtual void Start()
     {
 
-        agent = proxy.GetComponent<NavMeshAgent>();
-        obstacle = proxy.GetComponent<NavMeshObstacle>();
-        animator = model.GetComponent<Animator>();
+        agent = GetComponent<NavMeshAgent>();
+        obstacle = GetComponent<NavMeshObstacle>();
+        animator = GetComponent<Animator>();
         controller = GetComponent<EnemyController>();
         status = GetComponent<EnemyStatus>();
         manager = GameObject.Find("Enemy Manager").GetComponent<EnemyManager>();
+        rb = GetComponent<Rigidbody>();
 
         player = GameObject.Find("Player").transform;
 
@@ -88,17 +88,6 @@ public class EnemyActions : MonoBehaviour
 
     }
 
-    protected virtual void FixedUpdate()
-    {
-        if (Vector3.Distance(proxy.position, model.position) >= 0.5f && currentAction == Actions.moveing)
-        {
-            Vector3 movement = proxy.position - model.position;
-            //because the navmesh agent and model are seperate objects, the model has to move accourding to the agent
-            model.GetComponent<CharacterController>().Move(movement.normalized * Time.deltaTime * movementSpeed);
-            model.rotation = proxy.rotation;
-            proxy.transform.LookAt(player.position);
-        }
-    }
     #region Actions
     /// <summary>
     /// given a position, the enemy will move to that position
@@ -109,30 +98,22 @@ public class EnemyActions : MonoBehaviour
         elapsed += Time.deltaTime;
         if (elapsed > 1.0f)
         {
-            elapsed -= 1.0f;
-            if (agent.enabled == false)
+            obstacle.enabled = false;
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(position, out hit, 100, NavMesh.AllAreas))
             {
-                obstacle.enabled = false;
-                proxy.position = model.position;
-                agent.enabled = true;
+                StartCoroutine(MoveAgent(hit.position));
             }
-            bool pathFound = NavMesh.CalculatePath(transform.position, position, NavMesh.AllAreas, path);
-            if (pathFound)
-            {
-                agent.SetPath(path);
-                SetAnimation("Moving", true);
-            }
-            else
-            {
-                NavMeshHit myNavHit;
-                if (NavMesh.SamplePosition(transform.position, out myNavHit, 100, -1))
-                {
-                    NavMesh.CalculatePath(transform.position, myNavHit.position, NavMesh.AllAreas, path); 
-                }
-            }
+            
         }
-        
-  
+    }
+    private IEnumerator MoveAgent(Vector3 position)
+    {
+        yield return null;
+        elapsed -= 1.0f;
+        agent.enabled = true;
+        SetAnimation("Moving", true);
+        agent.SetDestination(position);
     }
     /// <summary>
     /// given a position, the enemy will move to that position. The currentAction will not change and animation will not play
@@ -142,7 +123,6 @@ public class EnemyActions : MonoBehaviour
         if (agent.enabled == false)
         {
             obstacle.enabled = false;
-            agent.gameObject.transform.position = model.position;
             agent.enabled = true;
         }
         agent.SetDestination(position);
@@ -150,11 +130,11 @@ public class EnemyActions : MonoBehaviour
 
     public void MoveModel(Vector3 movement)
     {
-        model.GetComponent<CharacterController>().Move(movement);
+        MoveModel(movement, 1);
     }
     public void MoveModel(Vector3 movement,float speed)
     {
-        model.GetComponent<CharacterController>().Move(movement * Time.deltaTime * speed);
+        rb.velocity = (movement * Time.deltaTime * speed);
     }
     /// <summary>
     /// The enemy will stop at its current position
@@ -163,7 +143,6 @@ public class EnemyActions : MonoBehaviour
     {
         if (agent.enabled == true)
         {
-            proxy.position = model.position;
             agent.velocity = Vector3.zero;
             agent.isStopped = true;
             agent.enabled = false;
@@ -171,28 +150,25 @@ public class EnemyActions : MonoBehaviour
         }
         SetAnimation("Moving", false);
         SetAnimation("Idle");
-
     }
     
     public IEnumerator MoveOverTime(Vector3 moveDirection, float distance, float moveDuration)
     {
-        Vector3 startValue = model.position;
-        Vector3 endValue = model.position + moveDirection.normalized * distance;
+        Vector3 startValue = transform.position;
+        Vector3 endValue = transform.position + moveDirection.normalized * distance;
         Debug.DrawLine(startValue, endValue,Color.green);
         float timeElapsed = 0;
         Vector3 valueToLerp;
         while (timeElapsed < moveDuration)
         {
             valueToLerp = Vector3.Lerp(startValue, endValue, timeElapsed / moveDuration);
-            MoveModel(valueToLerp - model.transform.position);
-            proxy.position = model.transform.position;
+            //MoveModel(valueToLerp - transform.position);
             timeElapsed += Time.deltaTime;
             Debug.DrawLine(startValue, endValue, Color.green);
             yield return null;
         }
         valueToLerp = endValue;
-        MoveModel(valueToLerp - model.transform.position);
-        proxy.position = model.transform.position;
+       // MoveModel(valueToLerp - transform.position);
     }
 
     public void MoveToRally(Vector3 rallyPos,float rallyWaitTime)
@@ -204,17 +180,17 @@ public class EnemyActions : MonoBehaviour
     {
         while (rallyWaitTime > 0)
         {
-            if (Vector3.Distance(proxy.position, player.position) > MaxRallyDistanceFromPlayer)
+            if (Vector3.Distance(transform.position, player.position) > MaxRallyDistanceFromPlayer)
             {
                 rallyWaitTime = 0;
             }
-            if (Vector3.Distance(proxy.position, rallyPos) > 1.5f)
+            if (Vector3.Distance(transform.position, rallyPos) > 0.5f)
             {
                 Move(rallyPos);
             }
             else
             {
-                rallyPos = proxy.position;
+                rallyPos = transform.position;
                 Stop();
             }
             rallyWaitTime -= Time.deltaTime;
@@ -241,8 +217,7 @@ public class EnemyActions : MonoBehaviour
     /// </summary>
     protected virtual IEnumerator PreAttack()
     {
-        model.transform.LookAt(player);
-        proxy.transform.LookAt(player);
+        transform.LookAt(player);
         preAttackParticle.Play();
         SetAnimation("Idle");
         yield return new WaitForSeconds(attackWarmUpTime);
@@ -255,12 +230,11 @@ public class EnemyActions : MonoBehaviour
     {
         preAttackParticle.Stop();
         SetAnimation("Basic Attack");
-        Vector3 attackTravelPos = model.transform.position + model.transform.forward * attackTravelDistance;
-        
+        StartCoroutine(MoveOverTime(transform.forward, attackTravelDistance, attackTravelDuration));
+        yield return new WaitForSeconds(0.5f);
         DealDamage();
-        StartCoroutine(MoveOverTime(model.transform.forward, attackTravelDistance, attackTravelDuration));
         Stop();
-        yield return new WaitForSeconds(attackDuration);
+        yield return new WaitForSeconds(attackDuration - 0.5f);
         
 
         currentAction = Actions.idle;
@@ -274,12 +248,12 @@ public class EnemyActions : MonoBehaviour
     /// </summary>
     public virtual void DealDamage()
     {
-        Vector3 enemyPlayer = (player.position - model.transform.position);
-        float angle = Vector3.Angle(model.transform.forward, enemyPlayer);
-        if (angle <= attackAngle && Vector3.Distance(player.position, model.transform.position) <= attackRange)
+        Vector3 enemyPlayer = (player.position - transform.position);
+        float angle = Vector3.Angle(transform.forward, enemyPlayer);
+        if (angle <= attackAngle && Vector3.Distance(player.position, transform.position) <= attackRange)
         {
             player.GetComponent<PlayerStatus>().TakeDamage(attackDamage);
-            StartCoroutine(player.GetComponent<CharacterMovement>().MoveOverTime(model.transform.forward, attackKnockbackDistance,attackKnockbackDuration));
+            StartCoroutine(player.GetComponent<CharacterMovement>().MoveOverTime(transform.forward, attackKnockbackDistance,attackKnockbackDuration));
         }
     }
     /// <summary>
@@ -313,7 +287,7 @@ public class EnemyActions : MonoBehaviour
     public void OnDeath()
     {
         SetAnimation("Death",true);
-        model.GetComponent<Collider>().enabled = false;
+        GetComponent<Collider>().enabled = false;
         agent.enabled = false;
         obstacle.enabled = false;
         currentAction = Actions.dead;

@@ -13,6 +13,8 @@ public class PlayerRoll : MonoBehaviour
     [SerializeField] private float rollTime;
     [SerializeField] private float rollknockbackDistance;
     [SerializeField] private float rollKnockbackDuration;
+    [SerializeField] private float invincibilityFramesAmount;
+    private float invincibilityFramesCount;
 
     private float currentRollTime = 0;
     private bool isRolling = false;
@@ -39,6 +41,7 @@ public class PlayerRoll : MonoBehaviour
         controller = GetComponent<CharacterAreaController>();
         charController = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
+        invincibilityFramesCount = invincibilityFramesAmount;
     }
 
     // Update is called once per frame
@@ -70,6 +73,15 @@ public class PlayerRoll : MonoBehaviour
         //move forword for a certain amount of time based on rollTime var
         while (currentRollTime < rollTime)
         {
+            invincibilityFramesCount -= Time.deltaTime;
+            if (invincibilityFramesCount >= 0)
+            {
+                controller.canBeHit = false;
+            }
+            else
+            {
+                controller.canBeHit = true;
+            }
             //decrease speed every frame for a more natural roll
             float forcePercentage = 1 - (currentRollTime / rollTime);
             Vector3 force = forword * (rollSpeed * forcePercentage) *  Time.deltaTime;
@@ -78,11 +90,13 @@ public class PlayerRoll : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         //stop rolling and reset state
+        invincibilityFramesCount = invincibilityFramesAmount;
         charController.Move(Vector3.zero);
         currentRollTime = 0;
         anim.SetBool("Idle", true);
         anim.SetBool("Roll", false);
         controller.ChangeState(CharacterAreaController.State.idle);
+
         ///yield return new WaitForSeconds(0.2f);
         isRolling = false;
 
