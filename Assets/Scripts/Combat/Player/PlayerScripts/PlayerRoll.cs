@@ -26,12 +26,29 @@ public class PlayerRoll : MonoBehaviour
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        if (hit.gameObject.tag.Equals("Enemy") && controller.GetState() == CharacterAreaController.State.roll)
+        Rigidbody body = hit.collider.attachedRigidbody;
+
+        // no rigidbody
+        if (body == null || body.isKinematic)
         {
-            Vector3 playerEnemy = transform.position - hit.transform.position;
-            GameObject simpleEnemy = hit.transform.parent.gameObject;
-            StartCoroutine(simpleEnemy.GetComponent<EnemyActions>().MoveOverTime(playerEnemy*-1, rollknockbackDistance, rollKnockbackDuration));
+            return;
         }
+
+        // We dont want to push objects below us
+        if (hit.moveDirection.y < -0.3)
+        {
+            return;
+        }
+
+        // Calculate push direction from move direction,
+        // we only push objects to the sides never up and down
+        Vector3 pushDir = new Vector3(hit.moveDirection.x, 0, hit.moveDirection.z);
+
+        // If you know how fast your character is trying to move,
+        // then you can also multiply the push velocity by that.
+
+        // Apply the push
+        body.velocity = pushDir * 2;
     }
 
 
