@@ -36,11 +36,8 @@ public class RangedEnemyActions : EnemyActions
         //create an arrow
         arrowInstance = Instantiate(arrow, arrowPosition);
         arrowInstance.GetComponent<ArrowCollision>().SetDamage(attackDamage);
-        Vector3 arrowAngles = arrowInstance.transform.rotation.eulerAngles;
-        arrowAngles.y = 180;
-        arrowInstance.transform.Rotate(180, 0, 0);
 
-        transform.forward = Quaternion.AngleAxis(45, Vector3.up) * fireDirection;
+        transform.forward = transform.right;
 
         sightRay.origin = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
         //set the Ray direction
@@ -101,15 +98,14 @@ public class RangedEnemyActions : EnemyActions
                 force = sightRay.direction;
                 arrowInstance.transform.SetParent(null, true);
                 //loose arrow at player
+                arrowInstance.GetComponent<Rigidbody>().isKinematic = false;
                 arrowInstance.GetComponent<Rigidbody>().AddForce(force * Time.deltaTime * arrowSpeed, ForceMode.Impulse);
                 yield return new WaitForSeconds(attackDuration);
             }
-           
+            transform.forward = transform.right * -1;
 
 
         }
-
-        transform.forward = Quaternion.AngleAxis(-45, Vector3.up) * sightRay.direction;
         
         currentAction = Actions.idle;
         SetAnimation("Idle");

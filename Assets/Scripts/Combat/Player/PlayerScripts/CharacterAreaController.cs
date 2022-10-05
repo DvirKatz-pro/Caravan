@@ -22,7 +22,28 @@ public class CharacterAreaController : MonoBehaviour
     private PlayerBasicAttack basicAttack;
     private PlayerRoll roll;
     public bool canBeHit { get; set; }
-    
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        Rigidbody body = hit.collider.attachedRigidbody;
+
+        // no rigidbody
+        if (body == null || body.isKinematic)
+        {
+            return;
+        }
+
+        // We dont want to push objects below us
+        if (hit.moveDirection.y < -0.3)
+        {
+            return;
+        }
+
+        Vector3 pushDir = new Vector3(hit.moveDirection.x, 0, hit.moveDirection.z);
+
+        body.velocity = pushDir * 2;
+    }
+
     // Start is called before the first frame update
     private void Start()
     {

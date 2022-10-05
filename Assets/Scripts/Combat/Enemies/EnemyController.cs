@@ -55,7 +55,7 @@ public class EnemyController : MonoBehaviour
     /// </summary>
     virtual protected void Think()
     {
-
+        
         bool shouldAttack = (!actions.GetAttackCooldown() && Vector3.Distance(target.position, transform.position) <= distanceFromTarget);
         if (shouldAttack)
         {

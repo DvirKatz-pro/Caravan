@@ -102,9 +102,13 @@ public class EnemyActions : MonoBehaviour
             NavMeshHit hit;
             if (NavMesh.SamplePosition(position, out hit, 100, NavMesh.AllAreas))
             {
+                agent.avoidancePriority = 50;
                 StartCoroutine(MoveAgent(hit.position));
             }
-            
+            else
+            {
+                Stop();
+            }
         }
     }
     private IEnumerator MoveAgent(Vector3 position)
@@ -148,6 +152,7 @@ public class EnemyActions : MonoBehaviour
             agent.enabled = false;
             obstacle.enabled = true;
         }
+        agent.avoidancePriority = 45;
         SetAnimation("Moving", false);
         SetAnimation("Idle");
     }
@@ -162,13 +167,15 @@ public class EnemyActions : MonoBehaviour
         while (timeElapsed < moveDuration)
         {
             valueToLerp = Vector3.Lerp(startValue, endValue, timeElapsed / moveDuration);
-            //MoveModel(valueToLerp - transform.position);
+            MoveModel(valueToLerp - transform.position,4000);
             timeElapsed += Time.deltaTime;
             Debug.DrawLine(startValue, endValue, Color.green);
             yield return null;
         }
         valueToLerp = endValue;
-       // MoveModel(valueToLerp - transform.position);
+        MoveModel(valueToLerp - transform.position,4000);
+        Stop();
+        MoveModel(valueToLerp - transform.position, 0);
     }
 
     public void MoveToRally(Vector3 rallyPos,float rallyWaitTime)
@@ -180,7 +187,7 @@ public class EnemyActions : MonoBehaviour
     {
         while (rallyWaitTime > 0)
         {
-            if (Vector3.Distance(transform.position, player.position) > MaxRallyDistanceFromPlayer)
+            if (Vector3.Distance(transform.position, player.position) > MaxRallyDistanceFromPlayer || Vector3.Distance(transform.position, player.position) <= attackRange + 1.0f)
             {
                 rallyWaitTime = 0;
             }
