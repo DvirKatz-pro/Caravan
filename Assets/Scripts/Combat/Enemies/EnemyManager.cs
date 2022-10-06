@@ -44,9 +44,12 @@ public class EnemyManager : MonoBehaviour
     {
         CoordinateEnemyies();
     }
-
+    /// <summary>
+    /// based on current distance to player and attack availability, decide who can attack the player and who cannot
+    /// </summary>
     public void CoordinateEnemyies()
     {
+        //sort the enemies according to distance from player
         enemies.Sort(delegate (GameObject firstEnemy, GameObject secondEnemy)
         {
             return Vector2.Distance(player.transform.position, firstEnemy.transform.position)
@@ -56,6 +59,7 @@ public class EnemyManager : MonoBehaviour
        
         for (int i = 0; i < enemies.Count; i++)
         {
+            //the closest x enemies that can attack or are already attacking will be given permissionToAttack
             EnemyActions enemyActions = enemies[i].GetComponent<EnemyActions>();
             EnemyController enemyController = enemies[i].GetComponent<EnemyController>();
             if (i < amountShouldAttackPlayer && enemyActions.GetAttackCooldown() && enemyActions.GetAction() == EnemyActions.Actions.attacking)
@@ -68,6 +72,7 @@ public class EnemyManager : MonoBehaviour
             }
             else
             {
+                //otherwise we generate a random point on a torus and set that as a rally position
                 enemyController.permissionToAttack = false;
                 float torusMidPointRadius = (enemyRallyCircleRadius - playerAvoidanceCircleRadius) * 0.5f;
                 float circleCenterToTorusCenterRadius = playerAvoidanceCircleRadius + torusMidPointRadius;

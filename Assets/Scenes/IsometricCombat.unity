@@ -331,6 +331,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Simple Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 1934125327674002329, guid: 06d34a002c16bd541a6230bbc83ca392,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1934125327674002336, guid: 06d34a002c16bd541a6230bbc83ca392,
         type: 3}
       propertyPath: m_RootOrder
@@ -763,7 +768,7 @@ PrefabInstance:
     - target: {fileID: 67535377293484243, guid: 57d14740b7dd1984bba0523d9ada0e9d,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 67535377293484252, guid: 57d14740b7dd1984bba0523d9ada0e9d,
         type: 3}
@@ -932,7 +937,7 @@ PrefabInstance:
     - target: {fileID: 1934125327674002329, guid: 06d34a002c16bd541a6230bbc83ca392,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1934125327674002332, guid: 06d34a002c16bd541a6230bbc83ca392,
         type: 3}
@@ -1323,7 +1328,7 @@ PrefabInstance:
     - target: {fileID: 1934125327674002329, guid: 06d34a002c16bd541a6230bbc83ca392,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1934125327674002332, guid: 06d34a002c16bd541a6230bbc83ca392,
         type: 3}
@@ -1539,7 +1544,7 @@ PrefabInstance:
     - target: {fileID: 1934125327674002329, guid: 06d34a002c16bd541a6230bbc83ca392,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1934125327674002332, guid: 06d34a002c16bd541a6230bbc83ca392,
         type: 3}
@@ -1623,7 +1628,7 @@ PrefabInstance:
     - target: {fileID: 67535377293484243, guid: 57d14740b7dd1984bba0523d9ada0e9d,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 67535377293484252, guid: 57d14740b7dd1984bba0523d9ada0e9d,
         type: 3}
@@ -1759,15 +1764,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 6270693203086591303, guid: 223bf25cf356ca043b4fc3cb1fc04e9c,
+    - target: {fileID: 7997038945310352165, guid: 223bf25cf356ca043b4fc3cb1fc04e9c,
         type: 3}
-      propertyPath: rollknockbackDistance
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6270693203086591303, guid: 223bf25cf356ca043b4fc3cb1fc04e9c,
-        type: 3}
-      propertyPath: invincibilityFramesAmount
-      value: 0.45
+      propertyPath: firstComboDistance
+      value: 1.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 223bf25cf356ca043b4fc3cb1fc04e9c, type: 3}

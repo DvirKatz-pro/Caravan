@@ -12,20 +12,16 @@ public class EnemyController : MonoBehaviour
     [SerializeField] protected float distanceFromTarget;
     [SerializeField] protected Vector2 timeToRallyMinMax;
     [SerializeField] protected bool canBeKnockedBack;
+    public bool permissionToAttack { get; set; }
+    protected Vector3 avoidVec = Vector3.zero;
+    public Vector3 RallyPos { get; set; }
+    public bool onCooldown { get; set; }
 
     //Needed components
     protected Transform target;
     protected EnemyManager manager;
     protected EnemyActions actions;
 
-    public bool onCooldown { get; set; }
-
-    public bool permissionToAttack { get; set; }
-
-    protected Vector3 avoidVec = Vector3.zero;
-    public Vector3 RallyPos { get; set; }
-    
-   
     // Start is called before the first frame update
     protected virtual void Start()
     {

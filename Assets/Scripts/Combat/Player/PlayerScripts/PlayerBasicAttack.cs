@@ -29,6 +29,10 @@ public class PlayerBasicAttack : MonoBehaviour
     [SerializeField] private float attackHitAngle;
     [SerializeField] protected float attackKnockbackDistance;
     [SerializeField] protected float attackKnockbackDuration;
+    [SerializeField] protected float firstComboDistance;
+    [SerializeField] protected float firstComboDuration;
+    [SerializeField] protected float forthComboDistance;
+    [SerializeField] protected float forthComboDuration;
 
     [SerializeField] private GameObject sword;
 
@@ -93,7 +97,16 @@ public class PlayerBasicAttack : MonoBehaviour
             controller.ChangeState(CharacterAreaController.State.basicAttack);
             //up our combo
             combo++;
+           
             movement.RotateToMouse();
+            if (combo == 1)
+            {
+                StartCoroutine(movement.MoveOverTime(transform.forward,firstComboDistance,firstComboDuration));
+            }
+            else if (combo == 4)
+            {
+                StartCoroutine(movement.MoveOverTime(transform.forward, forthComboDistance, forthComboDuration));
+            }
             anim.SetInteger("Combo", combo);
            //attackParticle.Play();
             checkDamage();

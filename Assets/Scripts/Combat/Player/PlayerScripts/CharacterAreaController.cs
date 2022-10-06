@@ -56,7 +56,7 @@ public class CharacterAreaController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        //ability do stuff based on current state
+        //ability to do stuff based on current state
         
         switch (currentState)
         {

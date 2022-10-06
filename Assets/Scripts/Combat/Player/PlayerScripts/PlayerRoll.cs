@@ -36,7 +36,9 @@ public class PlayerRoll : MonoBehaviour
     {
 
     }
-
+    // <summary>
+    /// The player will roll forword and be invunrable for a certain duration
+    /// </summary>
     public void Roll()
     {
         //if we hit space and are not already rolling, then start rolling

@@ -35,7 +35,9 @@ public class CharacterMovement : MonoBehaviour
 
 
     #region Rotate and movement
-
+    /// <summary>
+    /// rotate player forword to mouse
+    /// </summary>
     public void RotateToMouse()
     {
         //get the mouse point on screen
@@ -120,6 +122,9 @@ public class CharacterMovement : MonoBehaviour
         //Rotate();
 
     }
+    /// <summary>
+    /// given a movement direction the player will move a certain distance in a certain amount of time
+    /// </summary>
     public IEnumerator MoveOverTime(Vector3 movementDirection, float distance,float movementDuration)
     {
         Vector3 startValue = transform.position;

@@ -100,6 +100,7 @@ public class EnemyActions : MonoBehaviour
         {
             obstacle.enabled = false;
             NavMeshHit hit;
+            //get nearst avilable position on the navmesh 
             if (NavMesh.SamplePosition(position, out hit, 100, NavMesh.AllAreas))
             {
                 agent.avoidancePriority = 50;
@@ -113,29 +114,17 @@ public class EnemyActions : MonoBehaviour
     }
     private IEnumerator MoveAgent(Vector3 position)
     {
+        //we give the obstecule component an extra frame to deactivate
         yield return null;
         elapsed -= 1.0f;
         agent.enabled = true;
         SetAnimation("Moving", true);
         agent.SetDestination(position);
     }
-    /// <summary>
-    /// given a position, the enemy will move to that position. The currentAction will not change and animation will not play
-    /// </summary>
-    public void MoveRaw(Vector3 position)
-    {
-        if (agent.enabled == false)
-        {
-            obstacle.enabled = false;
-            agent.enabled = true;
-        }
-        agent.SetDestination(position);
-    }
 
-    public void MoveModel(Vector3 movement)
-    {
-        MoveModel(movement, 1);
-    }
+    /// <summary>
+    /// The enemy will move without animation and without navmesh 
+    /// </summary>
     public void MoveModel(Vector3 movement,float speed)
     {
         rb.velocity = (movement * Time.deltaTime * speed);
@@ -156,7 +145,9 @@ public class EnemyActions : MonoBehaviour
         SetAnimation("Moving", false);
         SetAnimation("Idle");
     }
-    
+    /// <summary>
+    /// Given a direction the enemy will move in that direction for a certain amount of distance in a certain amount of time
+    /// </summary>
     public IEnumerator MoveOverTime(Vector3 moveDirection, float distance, float moveDuration)
     {
         Vector3 startValue = transform.position;
@@ -177,7 +168,9 @@ public class EnemyActions : MonoBehaviour
         Stop();
         MoveModel(valueToLerp - transform.position, 0);
     }
-
+    /// <summary>
+    /// The enemy will move to a rally position and will not rally to another position for a certain amount of time
+    /// </summary>
     public void MoveToRally(Vector3 rallyPos,float rallyWaitTime)
     {
         isRallying = true;
@@ -187,6 +180,7 @@ public class EnemyActions : MonoBehaviour
     {
         while (rallyWaitTime > 0)
         {
+            //if the enemy is too close or too far to the player, he will stop moving to current rally position
             if (Vector3.Distance(transform.position, player.position) > MaxRallyDistanceFromPlayer || Vector3.Distance(transform.position, player.position) <= attackRange + 1.0f)
             {
                 rallyWaitTime = 0;

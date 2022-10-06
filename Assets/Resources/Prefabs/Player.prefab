@@ -1853,7 +1853,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba68abde7892e0e4ab30de1ddf2179a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackPauseTime: 0.65
+  attackPauseTime: 0.5
   comboPauseTime: 0.65
   comboResetTime: 0.75
   attackDamage: 15
@@ -1861,6 +1861,10 @@ MonoBehaviour:
   attackHitAngle: 0.3
   attackKnockbackDistance: 4
   attackKnockbackDuration: 0.2
+  firstComboDistance: 1.5
+  firstComboDuration: 0.2
+  forthComboDistance: 2.5
+  forthComboDuration: 0.2
   sword: {fileID: 7134968221714234525}
 --- !u!114 &8527596725169957674
 MonoBehaviour:
@@ -1916,9 +1920,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rollSpeed: 20
   rollTime: 0.6
-  rollknockbackDistance: 2
-  rollKnockbackDuration: 0.1
-  invincibilityFramesAmount: 0
+  invincibilityFramesAmount: 0.45
 --- !u!208 &69956399194653954
 NavMeshObstacle:
   m_ObjectHideFlags: 0
