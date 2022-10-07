@@ -13,23 +13,21 @@ public class EnemyController : MonoBehaviour
     [SerializeField] protected Vector2 timeToRallyMinMax;
     [SerializeField] protected bool canBeKnockedBack;
     public bool permissionToAttack { get; set; }
-    protected Vector3 avoidVec = Vector3.zero;
     public Vector3 RallyPos { get; set; }
     public bool onCooldown { get; set; }
 
     //Needed components
-    protected Transform target;
+    [SerializeField] protected Transform player;
     protected EnemyManager manager;
     protected EnemyActions actions;
 
     // Start is called before the first frame update
     protected virtual void Start()
     {
-        target = GameObject.Find("Player").GetComponent<Transform>();
 
         actions = GetComponent<EnemyActions>();
 
-        manager = GameObject.Find("Enemy Manager").GetComponent<EnemyManager>();
+        manager = EnemyManager.Instance;
 
         manager.Registar(this.gameObject);
 
@@ -52,7 +50,7 @@ public class EnemyController : MonoBehaviour
     virtual protected void Think()
     {
         
-        bool shouldAttack = (!actions.GetAttackCooldown() && Vector3.Distance(target.position, transform.position) <= distanceFromTarget);
+        bool shouldAttack = (!actions.GetAttackCooldown() && Vector3.Distance(player.position, transform.position) <= distanceFromTarget);
         if (shouldAttack)
         {
             actions.Stop();
@@ -62,7 +60,7 @@ public class EnemyController : MonoBehaviour
         {
             if (permissionToAttack)
             {
-                actions.Move(target.position);
+                actions.Move(player.position);
             }
             else if (!actions.IsRallying() && RallyPos != Vector3.zero)
             {
@@ -91,6 +89,11 @@ public class EnemyController : MonoBehaviour
     public void EnableCarving()
     {
         GetComponent<NavMeshObstacle>().carving = true;
+    }
+
+    public Transform GetPlayer()
+    {
+        return player;
     }
 
 }

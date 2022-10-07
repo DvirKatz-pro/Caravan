@@ -5731,6 +5731,7 @@ MonoBehaviour:
   distanceFromTarget: 1.5
   timeToRallyMinMax: {x: 6, y: 10}
   canBeKnockedBack: 1
+  player: {fileID: 4503331726222379189, guid: 223bf25cf356ca043b4fc3cb1fc04e9c, type: 3}
 --- !u!114 &1934125327674002335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5773,7 +5774,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e94be5023d204b8439051c470c5cf89a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colorModel: {fileID: 0}
+  colorModel: {fileID: 1934125327772075009}
   health: 100
   colorTimer: 0
 --- !u!1 &1934125327717621403

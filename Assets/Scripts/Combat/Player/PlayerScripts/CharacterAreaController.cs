@@ -18,6 +18,8 @@ public class CharacterAreaController : MonoBehaviour
     }
    
     State currentState = State.idle;
+
+    //Needed components
     private CharacterMovement movement;
     private PlayerBasicAttack basicAttack;
     private PlayerRoll roll;
@@ -25,6 +27,7 @@ public class CharacterAreaController : MonoBehaviour
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
+        //push enemies away
         Rigidbody body = hit.collider.attachedRigidbody;
 
         // no rigidbody
