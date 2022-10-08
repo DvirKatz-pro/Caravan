@@ -1795,23 +1795,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7997038945310352165, guid: 223bf25cf356ca043b4fc3cb1fc04e9c,
         type: 3}
-      propertyPath: comboPauseTime
-      value: 0.75
+      propertyPath: firstComboDistance
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7997038945310352165, guid: 223bf25cf356ca043b4fc3cb1fc04e9c,
         type: 3}
-      propertyPath: comboResetTime
-      value: 0.65
-      objectReference: {fileID: 0}
-    - target: {fileID: 7997038945310352165, guid: 223bf25cf356ca043b4fc3cb1fc04e9c,
-        type: 3}
-      propertyPath: attackPauseTime
+      propertyPath: firstComboDuration
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 8527596725169957674, guid: 223bf25cf356ca043b4fc3cb1fc04e9c,
+    - target: {fileID: 7997038945310352165, guid: 223bf25cf356ca043b4fc3cb1fc04e9c,
         type: 3}
-      propertyPath: m_Enabled
-      value: 1
+      propertyPath: forthComboDistance
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7997038945310352165, guid: 223bf25cf356ca043b4fc3cb1fc04e9c,
+        type: 3}
+      propertyPath: forthComboDuration
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7997038945310352165, guid: 223bf25cf356ca043b4fc3cb1fc04e9c,
+        type: 3}
+      propertyPath: attackKnockbackDistance
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 223bf25cf356ca043b4fc3cb1fc04e9c, type: 3}

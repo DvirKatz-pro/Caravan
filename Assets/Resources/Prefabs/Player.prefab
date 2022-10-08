@@ -1853,9 +1853,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba68abde7892e0e4ab30de1ddf2179a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackPauseTime: 0.5
-  comboPauseTime: 0.65
-  comboResetTime: 0.75
+  attackPauseTime: 0.25
+  SecoundToLastAttackPauseTime: 0.5
+  comboPauseTime: 0.5
+  comboResetTime: 0.6
+  maxCombo: 3
   attackDamage: 15
   attackRange: 3.5
   attackHitAngle: 0.3
