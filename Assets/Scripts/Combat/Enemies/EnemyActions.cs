@@ -40,11 +40,13 @@ public class EnemyActions : MonoBehaviour
     protected Animator animator;
     protected NavMeshAgent agent;
     protected NavMeshObstacle obstacle;
-    private NavMeshPath path;
 
     private EnemyManager manager;
 
+    //PlayerComponents
     protected Transform player;
+    protected CharacterMovement playerMovement;
+    protected PlayerStatus playerStatus;
 
     //Track actions
     protected bool attacking = false;
@@ -78,12 +80,12 @@ public class EnemyActions : MonoBehaviour
         animator = GetComponent<Animator>();
         controller = GetComponent<EnemyController>();
         status = GetComponent<EnemyStatus>();
-        manager = GameObject.Find("Enemy Manager").GetComponent<EnemyManager>();
+        manager = EnemyManager.Instance;
         rb = GetComponent<Rigidbody>();
+        player = controller.GetPlayer();
+        playerMovement = player.GetComponent<CharacterMovement>();
+        playerStatus = player.GetComponent<PlayerStatus>();
 
-        player = GameObject.Find("Player").transform;
-
-        path = new NavMeshPath();
         elapsed = 0.0f;
 
     }
@@ -152,7 +154,6 @@ public class EnemyActions : MonoBehaviour
     {
         Vector3 startValue = transform.position;
         Vector3 endValue = transform.position + moveDirection.normalized * distance;
-        Debug.DrawLine(startValue, endValue,Color.green);
         float timeElapsed = 0;
         Vector3 valueToLerp;
         while (timeElapsed < moveDuration)
@@ -160,7 +161,6 @@ public class EnemyActions : MonoBehaviour
             valueToLerp = Vector3.Lerp(startValue, endValue, timeElapsed / moveDuration);
             MoveModel(valueToLerp - transform.position,4000);
             timeElapsed += Time.deltaTime;
-            Debug.DrawLine(startValue, endValue, Color.green);
             yield return null;
         }
         valueToLerp = endValue;
@@ -237,7 +237,6 @@ public class EnemyActions : MonoBehaviour
         Stop();
         yield return new WaitForSeconds(attackDuration - 0.5f);
         
-
         currentAction = Actions.idle;
         SetAnimation("Idle");
         yield return new WaitForSeconds(attackCooldownTime);
@@ -253,8 +252,8 @@ public class EnemyActions : MonoBehaviour
         float angle = Vector3.Angle(transform.forward, enemyPlayer);
         if (angle <= attackAngle && Vector3.Distance(player.position, transform.position) <= attackRange)
         {
-            player.GetComponent<PlayerStatus>().TakeDamage(attackDamage);
-            StartCoroutine(player.GetComponent<CharacterMovement>().MoveOverTime(transform.forward, attackKnockbackDistance,attackKnockbackDuration));
+            playerStatus.TakeDamage(attackDamage);
+            StartCoroutine(playerMovement.MoveOverTime(transform.forward, attackKnockbackDistance,attackKnockbackDuration));
         }
     }
     /// <summary>

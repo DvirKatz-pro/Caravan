@@ -6,13 +6,14 @@ using UnityEngine.AI;
 /// <summary>
 /// Class incharge of Enemy group behaviour
 /// </summary>
-public class EnemyManager : MonoBehaviour
+public class EnemyManager : SingletonManager<EnemyManager>
 {
     //list of close range enemies and long range enemies
     private List<GameObject> enemies = new List<GameObject>();
     private List<GameObject> charactersToAvoid = new List<GameObject>();
-    [SerializeField] private GameObject player;
 
+    [SerializeField] private GameObject player;
+    //Enemy Rally positions
     [SerializeField] private int amountShouldAttackPlayer;
     [SerializeField] private float enemyRallyCircleRadius;
     [SerializeField] private float playerAvoidanceCircleRadius;
@@ -95,7 +96,9 @@ public class EnemyManager : MonoBehaviour
         }
         return true;
     }
-
+    /// <summary>
+    /// Given the radius of the circle within the torus and the radius to the mid torus point generate a random point in the torus
+    /// </summary>
     Vector3 GetRandomPositionInTorus(float circleCenterToTorusCenterRadius, float torusMidPointRadius)
     {
         float rndAngle = Random.value * (2 * Mathf.PI);

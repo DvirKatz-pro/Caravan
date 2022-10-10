@@ -16,12 +16,13 @@ public class PlayerBasicAttack : MonoBehaviour
     //combo related values
     private float comboResetTimer = 0;
     [SerializeField] private float attackPauseTime = 1f;
+    [SerializeField] private float SecoundToLastAttackPauseTime = 1f;
     [SerializeField] private float comboPauseTime = 2f;
     [SerializeField] private float comboResetTime = 1.5f;
 
     //combo and the maxCombo
     private int combo = 0;
-    private readonly int maxCombo = 4;
+    [SerializeField] private int maxCombo = 4;
 
     //Attack values
     [SerializeField] private float attackDamage;
@@ -101,9 +102,10 @@ public class PlayerBasicAttack : MonoBehaviour
             movement.RotateToMouse();
             if (combo == 1)
             {
-                StartCoroutine(movement.MoveOverTime(transform.forward,firstComboDistance,firstComboDuration));
+                StartCoroutine(movement.MoveOverTime(transform.forward, firstComboDistance, firstComboDuration));
             }
-            else if (combo == 4)
+           
+            else if (combo == maxCombo)
             {
                 StartCoroutine(movement.MoveOverTime(transform.forward, forthComboDistance, forthComboDuration));
             }
@@ -114,6 +116,10 @@ public class PlayerBasicAttack : MonoBehaviour
             if (combo >= maxCombo)
             {
                 StartCoroutine(AttackPause(comboPauseTime,true));
+            }
+            else if (combo == maxCombo - 1)
+            {
+                StartCoroutine(AttackPause(SecoundToLastAttackPauseTime, false));
             }
             else
             {
@@ -158,7 +164,10 @@ public class PlayerBasicAttack : MonoBehaviour
                 if (angle > attackHitAngle)
                 {
                     c.transform.root.gameObject.GetComponent<EnemyStatus>().TakeDamage(attackDamage);
-                    StartCoroutine(c.transform.root.gameObject.GetComponent<EnemyActions>().MoveOverTime(transform.forward, attackKnockbackDistance, attackKnockbackDuration));
+                    if (combo == maxCombo)
+                    {
+                        StartCoroutine(c.transform.root.gameObject.GetComponent<EnemyActions>().MoveOverTime(transform.forward, attackKnockbackDistance, attackKnockbackDuration));
+                    }
                 }
             }
         }
@@ -186,11 +195,7 @@ public class PlayerBasicAttack : MonoBehaviour
         }
         else
         {
-            if (combo > 0)
-            {
-                Reset();
-            }
-            
+            Reset();
         }
     }
     #endregion

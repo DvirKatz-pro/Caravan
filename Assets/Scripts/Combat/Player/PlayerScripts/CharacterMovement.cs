@@ -10,6 +10,7 @@ using UnityEngine;
 public class CharacterMovement : MonoBehaviour
 {
     public float movementSpeed = 1.0f;
+    private bool canMove { get; set; }
    
     //components we need
     private CharacterController charController;
@@ -25,6 +26,7 @@ public class CharacterMovement : MonoBehaviour
         controller = GetComponent<CharacterAreaController>();
         animator = GetComponent<Animator>();
         floorMask = LayerMask.GetMask("Terrain");
+        canMove = true;
     }
     private void Update()
     {
@@ -73,6 +75,12 @@ public class CharacterMovement : MonoBehaviour
    
     public void Move()
     {
+        
+        if (!canMove)
+        {
+            return;
+        }
+
         /*
         Vector3 currentPos = transform.position;
         
@@ -107,6 +115,7 @@ public class CharacterMovement : MonoBehaviour
         charController.Move(movement * Time.deltaTime * movementSpeed);
         if (movement != Vector3.zero)
         {
+            Debug.Log("Moving");
             gameObject.transform.forward = movement;
             controller.ChangeState(CharacterAreaController.State.moveing);
             animator.SetBool("Idle", false);
@@ -127,10 +136,12 @@ public class CharacterMovement : MonoBehaviour
     /// </summary>
     public IEnumerator MoveOverTime(Vector3 movementDirection, float distance,float movementDuration)
     {
+        yield return null;
         Vector3 startValue = transform.position;
         Vector3 endValue = transform.position + movementDirection.normalized * distance;
         float timeElapsed = 0;
         Vector3 valueToLerp;
+        canMove = false;
         while (timeElapsed < movementDuration)
         {
             valueToLerp = Vector3.Lerp(startValue, endValue, timeElapsed / movementDuration);
@@ -140,6 +151,8 @@ public class CharacterMovement : MonoBehaviour
         }
         valueToLerp = endValue;
         charController.Move(valueToLerp - transform.position);
+        yield return null;
+        canMove = true;
     }
     #endregion
 
