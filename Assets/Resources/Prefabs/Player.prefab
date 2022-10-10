@@ -1853,20 +1853,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba68abde7892e0e4ab30de1ddf2179a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackPauseTime: 0.25
-  SecoundToLastAttackPauseTime: 0.5
-  comboPauseTime: 0.5
-  comboResetTime: 0.6
+  attackPauseTime: 0.5
+  SecoundToLastAttackPauseTime: 0.65
+  comboPauseTime: 0.65
+  comboResetTime: 0.7
   maxCombo: 3
   attackDamage: 15
   attackRange: 3.5
   attackHitAngle: 0.3
-  attackKnockbackDistance: 4
+  attackKnockbackDistance: 0.5
   attackKnockbackDuration: 0.2
-  firstComboDistance: 1.5
-  firstComboDuration: 0.2
+  firstComboDistance: 2
+  firstComboDuration: 0.5
   forthComboDistance: 2.5
-  forthComboDuration: 0.2
+  forthComboDuration: 0.5
   sword: {fileID: 7134968221714234525}
 --- !u!114 &8527596725169957674
 MonoBehaviour:
