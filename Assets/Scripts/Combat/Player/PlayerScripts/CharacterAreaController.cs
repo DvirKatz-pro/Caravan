@@ -23,15 +23,18 @@ public class CharacterAreaController : MonoBehaviour
     private CharacterMovement movement;
     private PlayerBasicAttack basicAttack;
     private PlayerRoll roll;
-    public bool canBeHit { get; set; }
+    public bool canBeHit { get; set; } = true;
+
+    public float pushForce { get; set; } = 0;
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         //push enemies away
         Rigidbody body = hit.collider.attachedRigidbody;
+        EnemyController enemyController = hit.gameObject.GetComponent<EnemyController>();
 
         // no rigidbody
-        if (body == null || body.isKinematic)
+        if (body == null || body.isKinematic || enemyController == null)
         {
             return;
         }
@@ -41,10 +44,11 @@ public class CharacterAreaController : MonoBehaviour
         {
             return;
         }
-
-        Vector3 pushDir = new Vector3(hit.moveDirection.x, 0, hit.moveDirection.z);
-
-        body.velocity = pushDir * 2;
+        if (enemyController.CheckCanBeKnockedBack())
+        {
+            Vector3 pushDir = new Vector3(hit.moveDirection.x, 0, hit.moveDirection.z);
+            body.velocity = pushDir * pushForce;
+        }
     }
 
     // Start is called before the first frame update

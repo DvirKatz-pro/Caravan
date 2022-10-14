@@ -12,6 +12,8 @@ public class PlayerBasicAttack : MonoBehaviour
     private CharacterAreaController controller;
     private Animator anim;
     private CharacterMovement movement;
+    private CharacterController charController;
+    
 
     //combo related values
     private float comboResetTimer = 0;
@@ -28,14 +30,16 @@ public class PlayerBasicAttack : MonoBehaviour
     [SerializeField] private float attackDamage;
     [SerializeField] private float attackRange;
     [SerializeField] private float attackHitAngle;
-    [SerializeField] protected float attackKnockbackDistance;
-    [SerializeField] protected float attackKnockbackDuration;
     [SerializeField] protected float firstComboDistance;
     [SerializeField] protected float firstComboDuration;
-    [SerializeField] protected float forthComboDistance;
-    [SerializeField] protected float forthComboDuration;
+    [SerializeField] protected float lastComboDistance;
+    [SerializeField] protected float lastComboDuration;
+    [SerializeField] protected float attackKnockBackDistance;
+    [SerializeField] protected float attackKnockBackDuration;
+
 
     [SerializeField] private GameObject sword;
+    [SerializeField] private ParticleSystem attackVFX;
 
     //reference to attack particles
     ////[SerializeField] private GameObject attackParticleGameobject;
@@ -72,6 +76,7 @@ public class PlayerBasicAttack : MonoBehaviour
         {
             Debug.LogError("CharacterMovement not found");
         }
+        charController = GetComponent<CharacterController>();
 
     }
 
@@ -98,20 +103,21 @@ public class PlayerBasicAttack : MonoBehaviour
             controller.ChangeState(CharacterAreaController.State.basicAttack);
             //up our combo
             combo++;
-           
+            attackVFX.Play();
             movement.RotateToMouse();
-            if (combo == 1)
+            Vector3 movementVector = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+            if (combo == 1 && movementVector != Vector3.zero)
             {
                 StartCoroutine(movement.MoveOverTime(transform.forward, firstComboDistance, firstComboDuration));
             }
-           
-            else if (combo == maxCombo)
+            else if (combo == maxCombo && movementVector != Vector3.zero)
             {
-                StartCoroutine(movement.MoveOverTime(transform.forward, forthComboDistance, forthComboDuration));
+                StartCoroutine(movement.MoveOverTime(transform.forward, lastComboDistance, lastComboDuration));
             }
             anim.SetInteger("Combo", combo);
            //attackParticle.Play();
             checkDamage();
+            
             //pause depending on current combo
             if (combo >= maxCombo)
             {
@@ -135,7 +141,7 @@ public class PlayerBasicAttack : MonoBehaviour
     {
         //can we attack and should we reset our combo
         yield return new WaitForSeconds(pauseTime);
-       // attackParticle.Stop();
+        attackVFX.Stop();
         if (shouldReset)
         {
             Reset();
@@ -163,10 +169,11 @@ public class PlayerBasicAttack : MonoBehaviour
                 float angle = Vector3.Dot(targetDir, transform.forward);
                 if (angle > attackHitAngle)
                 {
-                    c.transform.root.gameObject.GetComponent<EnemyStatus>().TakeDamage(attackDamage);
-                    if (combo == maxCombo)
+                    GameObject enemy = c.transform.root.gameObject;
+                    enemy.GetComponent<EnemyStatus>().TakeDamage(attackDamage);
+                    if (combo == maxCombo && enemy.GetComponent<EnemyController>().CheckCanBeKnockedBack())
                     {
-                        StartCoroutine(c.transform.root.gameObject.GetComponent<EnemyActions>().MoveOverTime(transform.forward, attackKnockbackDistance, attackKnockbackDuration));
+                       StartCoroutine(enemy.GetComponent<EnemyActions>().MoveOverTime(enemy.transform.forward * -1,attackKnockBackDistance,attackKnockBackDuration));
                     }
                 }
             }

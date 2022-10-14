@@ -25,12 +25,12 @@ public class RangedEnemyActions : EnemyActions
     
     protected override IEnumerator PreAttack()
     {
-        Vector3 fireDirection = player.position - transform.position;
+        Vector3 fireDirection = player.transform.position - transform.position;
         SetAnimation("Draw");
         //Try to Loose where the player will be rather than his current position
         if (player.GetComponent<CharacterAreaController>().GetState() == CharacterAreaController.State.moveing)
         {
-            fireDirection = player.forward.normalized * Random.Range(4.5f, 7f) + player.position - transform.position;
+            fireDirection = player.transform.forward.normalized * Random.Range(4.5f, 7f) + player.transform.position - transform.position;
         }
 
         //create an arrow
@@ -69,7 +69,7 @@ public class RangedEnemyActions : EnemyActions
                 Vector3 firePosition;
                 if (player.GetComponent<CharacterAreaController>().GetState() == CharacterAreaController.State.moveing)
                 {
-                    firePosition = player.forward.normalized * Random.Range(5.5f, 7.5f) + player.position;
+                    firePosition = player.transform.forward.normalized * Random.Range(5.5f, 7.5f) + player.transform.position;
                 }
                 else
                 {

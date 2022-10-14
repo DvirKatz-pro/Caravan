@@ -65,10 +65,12 @@ public class EnemyManager : SingletonManager<EnemyManager>
             EnemyController enemyController = enemies[i].GetComponent<EnemyController>();
             if (i < amountShouldAttackPlayer && enemyActions.GetAttackCooldown() && enemyActions.GetAction() == EnemyActions.Actions.attacking)
             {
+                enemyController.RallyPos = Vector3.zero;
                 enemyController.permissionToAttack = true;
             }
             else if (i < amountShouldAttackPlayer && !enemyActions.GetAttackCooldown() && (enemyActions.GetAction() == EnemyActions.Actions.idle || enemyActions.GetAction() == EnemyActions.Actions.moveing))
             {
+                enemyController.RallyPos = Vector3.zero;
                 enemyController.permissionToAttack = true;
             }
             else
@@ -79,7 +81,7 @@ public class EnemyManager : SingletonManager<EnemyManager>
                 float circleCenterToTorusCenterRadius = playerAvoidanceCircleRadius + torusMidPointRadius;
                 Vector3 randPointTorus = GetRandomPositionInTorus(circleCenterToTorusCenterRadius, torusMidPointRadius);
 
-                enemies[i].GetComponent<EnemyController>().RallyPos = randPointTorus;
+                enemyController.RallyPos = randPointTorus;
             }
            
         }

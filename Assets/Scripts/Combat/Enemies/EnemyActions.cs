@@ -44,16 +44,16 @@ public class EnemyActions : MonoBehaviour
     private EnemyManager manager;
 
     //PlayerComponents
-    protected Transform player;
+    protected GameObject player;
     protected CharacterMovement playerMovement;
     protected PlayerStatus playerStatus;
+    protected CharacterAreaController playerAreaController;
 
     //Track actions
     protected bool attacking = false;
     protected bool isStunned = false;
     protected bool onAttackCooldown = false;
     protected bool isRallying = false;
-    private float elapsed = 0.0f;
 
 
     /// <summary>
@@ -85,9 +85,19 @@ public class EnemyActions : MonoBehaviour
         player = controller.GetPlayer();
         playerMovement = player.GetComponent<CharacterMovement>();
         playerStatus = player.GetComponent<PlayerStatus>();
+        playerAreaController = player.GetComponent<CharacterAreaController>();
 
-        elapsed = 0.0f;
-
+    }
+    protected virtual void Update()
+    {
+        if (controller.isTracking && playerAreaController.GetState() != CharacterAreaController.State.roll)
+        {
+            transform.LookAt(player.transform.position);
+        }
+        else if (controller.isTracking && playerAreaController.GetState() == CharacterAreaController.State.roll)
+        {
+            controller.isTracking = false;
+        }
     }
 
     #region Actions
@@ -96,29 +106,21 @@ public class EnemyActions : MonoBehaviour
     /// </summary>
     public void Move(Vector3 position)
     {
-        currentAction = Actions.moveing;
-        elapsed += Time.deltaTime;
-        if (elapsed > 1.0f)
+        NavMeshHit hit;
+        //get nearst avilable position on the navmesh 
+        if (NavMesh.SamplePosition(position, out hit, 100, NavMesh.AllAreas))
         {
+            currentAction = Actions.moveing;
             obstacle.enabled = false;
-            NavMeshHit hit;
-            //get nearst avilable position on the navmesh 
-            if (NavMesh.SamplePosition(position, out hit, 100, NavMesh.AllAreas))
-            {
-                agent.avoidancePriority = 50;
-                StartCoroutine(MoveAgent(hit.position));
-            }
-            else
-            {
-                Stop();
-            }
+            agent.avoidancePriority = 50;
+            StartCoroutine(OnMove(hit.position));
         }
+        
     }
-    private IEnumerator MoveAgent(Vector3 position)
+    private IEnumerator OnMove(Vector3 position)
     {
         //we give the obstecule component an extra frame to deactivate
         yield return null;
-        elapsed -= 1.0f;
         agent.enabled = true;
         SetAnimation("Moving", true);
         agent.SetDestination(position);
@@ -127,47 +129,49 @@ public class EnemyActions : MonoBehaviour
     /// <summary>
     /// The enemy will move without animation and without navmesh 
     /// </summary>
-    public void MoveModel(Vector3 movement,float speed)
+   
+    public IEnumerator MoveOverTime(Vector3 direction, float distance, float duration)
     {
-        rb.velocity = (movement * Time.deltaTime * speed);
+        yield return null;
+        Vector3 startValue = transform.position;
+        Vector3 endValue = transform.position + direction.normalized * distance;
+        float timeElapsed = 0;
+        Vector3 valueToLerp;
+        while (timeElapsed < duration)
+        {
+            valueToLerp = Vector3.Lerp(startValue, endValue, (timeElapsed / duration));
+            rb.MovePosition(valueToLerp);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+        valueToLerp = endValue;
+        rb.MovePosition(valueToLerp);
+        yield return null;
     }
     /// <summary>
     /// The enemy will stop at its current position
     /// </summary>
     public void Stop()
     {
-        if (agent.enabled == true)
-        {
+        agent.avoidancePriority = 45;
+        if (agent.enabled)
+        { 
             agent.velocity = Vector3.zero;
             agent.isStopped = true;
             agent.enabled = false;
-            obstacle.enabled = true;
         }
-        agent.avoidancePriority = 45;
+        StartCoroutine(OnStop());
+    }
+    private IEnumerator OnStop()
+    {
+        //we give the obstecule component an extra frame to deactivate
+        yield return null;
+        obstacle.enabled = true;
+        SetAnimation("Moving", true);
         SetAnimation("Moving", false);
         SetAnimation("Idle");
     }
-    /// <summary>
-    /// Given a direction the enemy will move in that direction for a certain amount of distance in a certain amount of time
-    /// </summary>
-    public IEnumerator MoveOverTime(Vector3 moveDirection, float distance, float moveDuration)
-    {
-        Vector3 startValue = transform.position;
-        Vector3 endValue = transform.position + moveDirection.normalized * distance;
-        float timeElapsed = 0;
-        Vector3 valueToLerp;
-        while (timeElapsed < moveDuration)
-        {
-            valueToLerp = Vector3.Lerp(startValue, endValue, timeElapsed / moveDuration);
-            MoveModel(valueToLerp - transform.position,4000);
-            timeElapsed += Time.deltaTime;
-            yield return null;
-        }
-        valueToLerp = endValue;
-        MoveModel(valueToLerp - transform.position,4000);
-        Stop();
-        MoveModel(valueToLerp - transform.position, 0);
-    }
+
     /// <summary>
     /// The enemy will move to a rally position and will not rally to another position for a certain amount of time
     /// </summary>
@@ -178,10 +182,10 @@ public class EnemyActions : MonoBehaviour
     }
     private IEnumerator OnMoveToRally(Vector3 rallyPos,float rallyWaitTime)
     {
-        while (rallyWaitTime > 0)
+        while (rallyWaitTime > 0 && !controller.permissionToAttack)
         {
             //if the enemy is too close or too far to the player, he will stop moving to current rally position
-            if (Vector3.Distance(transform.position, player.position) > MaxRallyDistanceFromPlayer || Vector3.Distance(transform.position, player.position) <= attackRange + 1.0f)
+            if (Vector3.Distance(transform.position, player.transform.position) > MaxRallyDistanceFromPlayer)
             {
                 rallyWaitTime = 0;
             }
@@ -209,7 +213,8 @@ public class EnemyActions : MonoBehaviour
         {
             currentAction = Actions.attacking;
             onAttackCooldown = true;
-
+            controller.isTracking = true;
+            Stop();
             StartCoroutine(PreAttack());
         }
     }
@@ -218,7 +223,7 @@ public class EnemyActions : MonoBehaviour
     /// </summary>
     protected virtual IEnumerator PreAttack()
     {
-        transform.LookAt(player);
+        transform.LookAt(player.transform);
         preAttackParticle.Play();
         SetAnimation("Idle");
         yield return new WaitForSeconds(attackWarmUpTime);
@@ -232,13 +237,12 @@ public class EnemyActions : MonoBehaviour
         preAttackParticle.Stop();
         SetAnimation("Basic Attack");
         StartCoroutine(MoveOverTime(transform.forward, attackTravelDistance, attackTravelDuration));
-        yield return new WaitForSeconds(0.5f);
         DealDamage();
-        Stop();
-        yield return new WaitForSeconds(attackDuration - 0.5f);
+        yield return new WaitForSeconds(attackDuration);
         
         currentAction = Actions.idle;
         SetAnimation("Idle");
+        controller.isTracking = false;
         yield return new WaitForSeconds(attackCooldownTime);
         onAttackCooldown = false;
 
@@ -248,9 +252,9 @@ public class EnemyActions : MonoBehaviour
     /// </summary>
     public virtual void DealDamage()
     {
-        Vector3 enemyPlayer = (player.position - transform.position);
+        Vector3 enemyPlayer = (player.transform.position - transform.position);
         float angle = Vector3.Angle(transform.forward, enemyPlayer);
-        if (angle <= attackAngle && Vector3.Distance(player.position, transform.position) <= attackRange)
+        if (angle <= attackAngle && Vector3.Distance(player.transform.position, transform.position) <= attackRange && playerAreaController.canBeHit)
         {
             playerStatus.TakeDamage(attackDamage);
             StartCoroutine(playerMovement.MoveOverTime(transform.forward, attackKnockbackDistance,attackKnockbackDuration));

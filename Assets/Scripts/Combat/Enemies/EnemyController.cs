@@ -11,13 +11,15 @@ public class EnemyController : MonoBehaviour
     //Gameplay related values
     [SerializeField] protected float distanceFromTarget;
     [SerializeField] protected Vector2 timeToRallyMinMax;
-    [SerializeField] protected bool canBeKnockedBack;
+    [SerializeField] protected bool canBeKnockedBack = false;
     public bool permissionToAttack { get; set; }
     public Vector3 RallyPos { get; set; }
     public bool onCooldown { get; set; }
 
+    public bool isTracking { get; set; }
+
     //Needed components
-    [SerializeField] protected Transform player;
+    [SerializeField] protected GameObject player;
     protected EnemyManager manager;
     protected EnemyActions actions;
 
@@ -50,7 +52,7 @@ public class EnemyController : MonoBehaviour
     virtual protected void Think()
     {
         
-        bool shouldAttack = (!actions.GetAttackCooldown() && Vector3.Distance(player.position, transform.position) <= distanceFromTarget);
+        bool shouldAttack = (!actions.GetAttackCooldown() && Vector3.Distance(player.transform.position, transform.position) <= distanceFromTarget);
         if (shouldAttack)
         {
             actions.Stop();
@@ -60,7 +62,7 @@ public class EnemyController : MonoBehaviour
         {
             if (permissionToAttack)
             {
-                actions.Move(player.position);
+                actions.Move(player.transform.position);
             }
             else if (!actions.IsRallying() && RallyPos != Vector3.zero)
             {
@@ -72,8 +74,16 @@ public class EnemyController : MonoBehaviour
       
         
     }
-    public bool GetCanBeKnockedBack()
+    public bool CheckCanBeKnockedBack()
     {
+        if (!canBeKnockedBack)
+        {
+            return false;
+        }
+        else if (actions.GetAction() == EnemyActions.Actions.attacking)
+        {
+            return false;
+        }
         return canBeKnockedBack;
     }
     /// <summary>
@@ -91,7 +101,7 @@ public class EnemyController : MonoBehaviour
         GetComponent<NavMeshObstacle>().carving = true;
     }
 
-    public Transform GetPlayer()
+    public GameObject GetPlayer()
     {
         return player;
     }

@@ -115,7 +115,6 @@ public class CharacterMovement : MonoBehaviour
         charController.Move(movement * Time.deltaTime * movementSpeed);
         if (movement != Vector3.zero)
         {
-            Debug.Log("Moving");
             gameObject.transform.forward = movement;
             controller.ChangeState(CharacterAreaController.State.moveing);
             animator.SetBool("Idle", false);

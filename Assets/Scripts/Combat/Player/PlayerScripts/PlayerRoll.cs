@@ -9,9 +9,10 @@ public class PlayerRoll : MonoBehaviour
 {
 
     //Roll attributes
-    [SerializeField] private float rollSpeed = 5;
+    [SerializeField] private float rollSpeed = 5f;
     [SerializeField] private float rollTime;
     [SerializeField] private float invincibilityFramesAmount;
+    [SerializeField] private float pushForce = 2f;
     private float invincibilityFramesCount;
 
     private float currentRollTime = 0;
@@ -59,6 +60,7 @@ public class PlayerRoll : MonoBehaviour
         anim.SetBool("Moving", false);
         Vector3 forword = transform.forward;
         forword = forword.normalized;
+        controller.pushForce = pushForce;
         //move forword for a certain amount of time based on rollTime var
         while (currentRollTime < rollTime)
         {
@@ -84,6 +86,7 @@ public class PlayerRoll : MonoBehaviour
         currentRollTime = 0;
         anim.SetBool("Idle", true);
         anim.SetBool("Roll", false);
+        controller.pushForce = 0f;
         controller.ChangeState(CharacterAreaController.State.idle);
 
         ///yield return new WaitForSeconds(0.2f);
