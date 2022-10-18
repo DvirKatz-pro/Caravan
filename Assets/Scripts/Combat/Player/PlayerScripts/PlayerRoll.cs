@@ -89,7 +89,7 @@ public class PlayerRoll : MonoBehaviour
         controller.pushForce = 0f;
         controller.ChangeState(CharacterAreaController.State.idle);
 
-        ///yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.2f);
         isRolling = false;
 
     }

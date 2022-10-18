@@ -5598,13 +5598,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1934125327674002336}
   - component: {fileID: 1934125327674002337}
-  - component: {fileID: 1934125327674002338}
-  - component: {fileID: 1934125327674002339}
   - component: {fileID: 1934125327674002332}
-  - component: {fileID: 1934125327674002333}
   - component: {fileID: 1934125327674002334}
   - component: {fileID: 1934125327674002335}
   - component: {fileID: 1934125327674002328}
+  - component: {fileID: 112514218}
   m_Layer: 0
   m_Name: Simple Enemy
   m_TagString: Enemy
@@ -5648,36 +5646,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!54 &1934125327674002338
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1934125327674002329}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 5
-  m_AngularDrag: 363.13
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 84
-  m_CollisionDetection: 1
---- !u!136 &1934125327674002339
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1934125327674002329}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 1, z: 0}
 --- !u!195 &1934125327674002332
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -5688,7 +5656,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 5
+  m_Speed: 4
   m_Acceleration: 10
   avoidancePriority: 50
   m_AngularSpeed: 180
@@ -5700,22 +5668,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!208 &1934125327674002333
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1934125327674002329}
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Shape: 0
-  m_Extents: {x: 1, y: 1, z: 1}
-  m_MoveThreshold: 0
-  m_Carve: 1
-  m_CarveOnlyStationary: 0
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0
 --- !u!114 &1934125327674002334
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5747,18 +5699,18 @@ MonoBehaviour:
   preAttackParticle: {fileID: 1934125326054372761}
   movementSpeed: 0
   attackWarmUpTime: 0.2
-  attackTravelDistance: 0.5
-  attackTravelDuration: 0.2
+  attackTravelDistance: 4
+  attackTravelDuration: 0.1
   attackKnockbackDistance: 0.5
-  attackKnockbackDuration: 0.2
-  attackKnockbackSpeed: 0.4
+  attackKnockbackDuration: 0.1
+  attackKnockbackSpeed: 0.1
   attackDuration: 0.5
   postAttackTime: 1.5
   attackDamage: 20
   attackCooldownTime: 4
   attackAngle: 45
   attackRange: 4
-  stunnedDuration: 1
+  stunnedDuration: 3
   stunnedCooldown: 5
   MaxRallyDistanceFromPlayer: 10
   strafeTime: 0
@@ -5776,7 +5728,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   colorModel: {fileID: 1934125327772075009}
   health: 100
-  colorTimer: 0
+  colorTimer: 1
+--- !u!143 &112514218
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1934125327674002329}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &1934125327717621403
 GameObject:
   m_ObjectHideFlags: 0

@@ -6727,7 +6727,7 @@ MonoBehaviour:
   firstComboDistance: 2.5
   firstComboDuration: 0.6
   lastComboDistance: 2.5
-  lastComboDuration: 0.4
+  lastComboDuration: 0.5
   attackKnockBackDistance: 0
   attackKnockBackDuration: 0
   sword: {fileID: 7134968221714234525}
@@ -6787,7 +6787,7 @@ MonoBehaviour:
   rollSpeed: 20
   rollTime: 0.6
   invincibilityFramesAmount: 0.45
-  pushForce: 8
+  pushForce: 1
 --- !u!208 &69956399194653954
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -6818,7 +6818,7 @@ CharacterController:
   m_Height: 2
   m_Radius: 0.5
   m_SlopeLimit: 45
-  m_StepOffset: 0.3
+  m_StepOffset: 0
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1, z: 0}

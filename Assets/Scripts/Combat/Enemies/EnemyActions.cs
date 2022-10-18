@@ -35,11 +35,10 @@ public class EnemyActions : MonoBehaviour
     //Needed components
     protected EnemyController controller;
     protected EnemyStatus status;
-    private Rigidbody rb;
 
     protected Animator animator;
     protected NavMeshAgent agent;
-    protected NavMeshObstacle obstacle;
+    private CharacterController charController;
 
     private EnemyManager manager;
 
@@ -54,6 +53,9 @@ public class EnemyActions : MonoBehaviour
     protected bool isStunned = false;
     protected bool onAttackCooldown = false;
     protected bool isRallying = false;
+    protected bool isMoving = false;
+
+    private IEnumerator OnMoveOverTimeRoutine;
 
 
     /// <summary>
@@ -71,21 +73,30 @@ public class EnemyActions : MonoBehaviour
 
     protected Actions currentAction = Actions.idle;
 
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        CharacterController characterController = hit.gameObject.GetComponent<CharacterController>();
+        if (characterController == null)
+        {
+            return;
+        }
+        StopCoroutine(OnMoveOverTimeRoutine);
+    }
+
     // Start is called before the first frame update
     protected virtual void Start()
     {
 
         agent = GetComponent<NavMeshAgent>();
-        obstacle = GetComponent<NavMeshObstacle>();
         animator = GetComponent<Animator>();
         controller = GetComponent<EnemyController>();
         status = GetComponent<EnemyStatus>();
         manager = EnemyManager.Instance;
-        rb = GetComponent<Rigidbody>();
         player = controller.GetPlayer();
         playerMovement = player.GetComponent<CharacterMovement>();
         playerStatus = player.GetComponent<PlayerStatus>();
         playerAreaController = player.GetComponent<CharacterAreaController>();
+        charController = GetComponent<CharacterController>();
 
     }
     protected virtual void Update()
@@ -110,42 +121,42 @@ public class EnemyActions : MonoBehaviour
         //get nearst avilable position on the navmesh 
         if (NavMesh.SamplePosition(position, out hit, 100, NavMesh.AllAreas))
         {
+            agent.ResetPath();
             currentAction = Actions.moveing;
-            obstacle.enabled = false;
             agent.avoidancePriority = 50;
-            StartCoroutine(OnMove(hit.position));
+            SetAnimation("Moving", true);
+            agent.SetDestination(position);
         }
-        
     }
-    private IEnumerator OnMove(Vector3 position)
+
+    public void MoveOverTime(Vector3 direction, float distance, float duration)
     {
-        //we give the obstecule component an extra frame to deactivate
-        yield return null;
-        agent.enabled = true;
-        SetAnimation("Moving", true);
-        agent.SetDestination(position);
+        OnMoveOverTimeRoutine = OnMoveOverTime(direction,distance,duration);
+        StartCoroutine(OnMoveOverTimeRoutine);
     }
 
     /// <summary>
     /// The enemy will move without animation and without navmesh 
     /// </summary>
    
-    public IEnumerator MoveOverTime(Vector3 direction, float distance, float duration)
+    public IEnumerator OnMoveOverTime(Vector3 direction, float distance, float duration)
     {
         yield return null;
         Vector3 startValue = transform.position;
         Vector3 endValue = transform.position + direction.normalized * distance;
+        float velocity = distance / duration;
         float timeElapsed = 0;
         Vector3 valueToLerp;
         while (timeElapsed < duration)
         {
             valueToLerp = Vector3.Lerp(startValue, endValue, (timeElapsed / duration));
-            rb.MovePosition(valueToLerp);
+            agent.velocity = valueToLerp - transform.position;
             timeElapsed += Time.deltaTime;
             yield return null;
         }
         valueToLerp = endValue;
-        rb.MovePosition(valueToLerp);
+        agent.velocity = valueToLerp - transform.position;
+        agent.ResetPath();
         yield return null;
     }
     /// <summary>
@@ -153,21 +164,12 @@ public class EnemyActions : MonoBehaviour
     /// </summary>
     public void Stop()
     {
+        agent.enabled = true;
         agent.avoidancePriority = 45;
-        if (agent.enabled)
-        { 
-            agent.velocity = Vector3.zero;
-            agent.isStopped = true;
-            agent.enabled = false;
-        }
-        StartCoroutine(OnStop());
-    }
-    private IEnumerator OnStop()
-    {
-        //we give the obstecule component an extra frame to deactivate
-        yield return null;
-        obstacle.enabled = true;
-        SetAnimation("Moving", true);
+        agent.SetDestination(transform.position);
+        agent.velocity = Vector3.zero;
+        agent.isStopped = true;
+        
         SetAnimation("Moving", false);
         SetAnimation("Idle");
     }
@@ -176,13 +178,14 @@ public class EnemyActions : MonoBehaviour
     /// The enemy will move to a rally position and will not rally to another position for a certain amount of time
     /// </summary>
     public void MoveToRally(Vector3 rallyPos,float rallyWaitTime)
-    {
+    {  
         isRallying = true;
         StartCoroutine(OnMoveToRally(rallyPos,rallyWaitTime));
     }
     private IEnumerator OnMoveToRally(Vector3 rallyPos,float rallyWaitTime)
     {
-        while (rallyWaitTime > 0 && !controller.permissionToAttack)
+        yield return null;
+        while (rallyWaitTime > 0 && currentAction != Actions.attacking && !controller.permissionToAttack)
         {
             //if the enemy is too close or too far to the player, he will stop moving to current rally position
             if (Vector3.Distance(transform.position, player.transform.position) > MaxRallyDistanceFromPlayer)
@@ -236,7 +239,7 @@ public class EnemyActions : MonoBehaviour
     {
         preAttackParticle.Stop();
         SetAnimation("Basic Attack");
-        StartCoroutine(MoveOverTime(transform.forward, attackTravelDistance, attackTravelDuration));
+        MoveOverTime(transform.forward, attackTravelDistance, attackTravelDuration);
         DealDamage();
         yield return new WaitForSeconds(attackDuration);
         
@@ -293,7 +296,6 @@ public class EnemyActions : MonoBehaviour
         SetAnimation("Death",true);
         GetComponent<Collider>().enabled = false;
         agent.enabled = false;
-        obstacle.enabled = false;
         currentAction = Actions.dead;
         controller.enabled = false;
         status.enabled = false;

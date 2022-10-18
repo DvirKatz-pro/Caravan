@@ -1,8 +1,6 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Security.Cryptography;
-using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.AI;
 
 /// <summary>
 /// Class Detailing Player movement and rotation
@@ -16,6 +14,9 @@ public class CharacterMovement : MonoBehaviour
     private CharacterController charController;
     private CharacterAreaController controller;
     private Animator animator;
+    private NavMeshAgent agent;
+
+    string i = "*"; 
 
     //terrain layer 
     private int floorMask;
@@ -25,12 +26,9 @@ public class CharacterMovement : MonoBehaviour
         charController = GetComponent<CharacterController>();
         controller = GetComponent<CharacterAreaController>();
         animator = GetComponent<Animator>();
+        agent = GetComponent<NavMeshAgent>();
         floorMask = LayerMask.GetMask("Terrain");
         canMove = true;
-    }
-    private void Update()
-    {
-        transform.position = new Vector3(transform.position.x, 0, transform.position.z);
     }
 
 
@@ -112,7 +110,8 @@ public class CharacterMovement : MonoBehaviour
         Vector3 movement = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
         //Rotate our movement vector by 45 degrees because our camera is at a 45 degree angle (isomentric)
         movement = Quaternion.AngleAxis(45, Vector3.up) * movement;
-        charController.Move(movement * Time.deltaTime * movementSpeed);
+        movement.y = 0;
+        agent.velocity = movement * Time.deltaTime * movementSpeed;
         if (movement != Vector3.zero)
         {
             gameObject.transform.forward = movement;
@@ -144,12 +143,12 @@ public class CharacterMovement : MonoBehaviour
         while (timeElapsed < movementDuration)
         {
             valueToLerp = Vector3.Lerp(startValue, endValue, timeElapsed / movementDuration);
-            charController.Move(valueToLerp - transform.position);
+            agent.velocity = valueToLerp - transform.position;
             timeElapsed += Time.deltaTime;
             yield return null;
         }
         valueToLerp = endValue;
-        charController.Move(valueToLerp - transform.position);
+        agent.velocity = valueToLerp - transform.position;
         yield return null;
         canMove = true;
     }

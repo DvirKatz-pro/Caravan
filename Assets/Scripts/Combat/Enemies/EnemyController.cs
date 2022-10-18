@@ -55,7 +55,6 @@ public class EnemyController : MonoBehaviour
         bool shouldAttack = (!actions.GetAttackCooldown() && Vector3.Distance(player.transform.position, transform.position) <= distanceFromTarget);
         if (shouldAttack)
         {
-            actions.Stop();
             actions.Attack();
         }
         else
@@ -77,10 +76,6 @@ public class EnemyController : MonoBehaviour
     public bool CheckCanBeKnockedBack()
     {
         if (!canBeKnockedBack)
-        {
-            return false;
-        }
-        else if (actions.GetAction() == EnemyActions.Actions.attacking)
         {
             return false;
         }

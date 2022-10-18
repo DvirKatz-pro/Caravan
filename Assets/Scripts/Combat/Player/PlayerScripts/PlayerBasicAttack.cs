@@ -83,7 +83,7 @@ public class PlayerBasicAttack : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (combo > 0 && combo < maxCombo)
+        if (combo > 0 && combo <= maxCombo)
         {
             ComboReset();
         }
@@ -95,7 +95,6 @@ public class PlayerBasicAttack : MonoBehaviour
         //if we are trying to attack and we can attack, then we attack
         if (Input.GetMouseButton(0) && canAttack)
         {
-            
             //disable 
             canAttack = false;
             //reset the combo timer
@@ -149,7 +148,6 @@ public class PlayerBasicAttack : MonoBehaviour
         else
         {
             canAttack = true;
-            controller.ChangeState(CharacterAreaController.State.idle);
         }
         
     }
@@ -173,7 +171,7 @@ public class PlayerBasicAttack : MonoBehaviour
                     enemy.GetComponent<EnemyStatus>().TakeDamage(attackDamage);
                     if (combo == maxCombo && enemy.GetComponent<EnemyController>().CheckCanBeKnockedBack())
                     {
-                       StartCoroutine(enemy.GetComponent<EnemyActions>().MoveOverTime(enemy.transform.forward * -1,attackKnockBackDistance,attackKnockBackDuration));
+                       enemy.GetComponent<EnemyActions>().MoveOverTime(enemy.transform.forward * -1,attackKnockBackDistance,attackKnockBackDuration);
                     }
                 }
             }

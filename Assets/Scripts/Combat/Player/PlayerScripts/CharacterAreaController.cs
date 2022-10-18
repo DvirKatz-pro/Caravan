@@ -30,11 +30,12 @@ public class CharacterAreaController : MonoBehaviour
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         //push enemies away
-        Rigidbody body = hit.collider.attachedRigidbody;
+        CharacterController characterController = hit.collider.GetComponent<CharacterController>();
         EnemyController enemyController = hit.gameObject.GetComponent<EnemyController>();
+        EnemyActions enemyActions = hit.gameObject.GetComponent<EnemyActions>();
 
         // no rigidbody
-        if (body == null || body.isKinematic || enemyController == null)
+        if (characterController == null || enemyController == null || enemyActions == null)
         {
             return;
         }
@@ -47,7 +48,7 @@ public class CharacterAreaController : MonoBehaviour
         if (enemyController.CheckCanBeKnockedBack())
         {
             Vector3 pushDir = new Vector3(hit.moveDirection.x, 0, hit.moveDirection.z);
-            body.velocity = pushDir * pushForce;
+            enemyActions.MoveOverTime(pushDir, pushForce, 0.2f);
         }
     }
 
@@ -85,7 +86,6 @@ public class CharacterAreaController : MonoBehaviour
             default:
                 break;
         }
-        
         
     }
 
