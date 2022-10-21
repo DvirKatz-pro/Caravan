@@ -10,6 +10,10 @@ public class EnemyController : MonoBehaviour
 {
     //Gameplay related values
     [SerializeField] protected float distanceFromTarget;
+    [SerializeField] protected float attemptDistanceFromTarget;
+    [Range(0.01f, 1f)]
+    [SerializeField] protected float attemptChance;
+    [SerializeField] protected float attemptDot;
     [SerializeField] protected Vector2 timeToRallyMinMax;
     [SerializeField] protected bool canBeKnockedBack = false;
     public bool permissionToAttack { get; set; }
@@ -53,6 +57,16 @@ public class EnemyController : MonoBehaviour
     {
         
         bool shouldAttack = (!actions.GetAttackCooldown() && Vector3.Distance(player.transform.position, transform.position) <= distanceFromTarget);
+        Vector3 enemyPlayer = (player.transform.position - transform.position);
+        float playerEnemyAngle = Vector3.Dot(enemyPlayer, transform.forward);
+        Vector3 playerEnemy = (transform.position - player.transform.position);
+        float enemyPlayerAngle = Vector3.Dot(playerEnemy, player.transform.forward);
+
+        bool couldAttack = (!actions.GetAttackCooldown() && Vector3.Distance(player.transform.position, transform.position) <= attemptDistanceFromTarget && playerEnemyAngle <= attemptDot && enemyPlayerAngle <= attemptDot);
+        if (!shouldAttack && couldAttack)
+        {
+            shouldAttack = Random.Range(0.01f, 1f) <= attemptChance;
+        }
         if (shouldAttack)
         {
             actions.Attack();

@@ -1299,6 +1299,16 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 262320337}
+    - target: {fileID: 1934125327674002334, guid: 06d34a002c16bd541a6230bbc83ca392,
+        type: 3}
+      propertyPath: attemptChance
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1934125327674002334, guid: 06d34a002c16bd541a6230bbc83ca392,
+        type: 3}
+      propertyPath: attemptDistanceFromTarget
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 1934125327674002336, guid: 06d34a002c16bd541a6230bbc83ca392,
         type: 3}
       propertyPath: m_RootOrder
