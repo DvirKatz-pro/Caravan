@@ -23,7 +23,8 @@ public class EnemyActions : MonoBehaviour
     [SerializeField] protected float postAttackTime;
     [SerializeField] protected float attackDamage;
     [SerializeField] protected float attackCooldownTime;
-    [SerializeField] protected float attackAngle;
+    [Range(0.01f, 1f)]
+    [SerializeField] protected float attackDot;
     [SerializeField] protected float attackRange;
 
     [SerializeField] protected float stunnedDuration;
@@ -255,9 +256,9 @@ public class EnemyActions : MonoBehaviour
     /// </summary>
     public virtual void DealDamage()
     {
-        Vector3 enemyPlayer = (player.transform.position - transform.position);
-        float angle = Vector3.Angle(transform.forward, enemyPlayer);
-        if (angle <= attackAngle && Vector3.Distance(player.transform.position, transform.position) <= attackRange && playerAreaController.canBeHit)
+        Vector3 enemyPlayer = (transform.position - player.transform.position);
+        float enemyPlayerAngle = Vector3.Dot(enemyPlayer.normalized, player.transform.forward.normalized);
+        if (enemyPlayerAngle >= attackDot && Vector3.Distance(player.transform.position, transform.position) <= attackRange && playerAreaController.canBeHit)
         {
             playerStatus.TakeDamage(attackDamage);
             StartCoroutine(playerMovement.MoveOverTime(transform.forward, attackKnockbackDistance,attackKnockbackDuration));

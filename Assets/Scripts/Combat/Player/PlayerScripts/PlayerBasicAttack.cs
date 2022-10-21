@@ -29,7 +29,8 @@ public class PlayerBasicAttack : MonoBehaviour
     //Attack values
     [SerializeField] private float attackDamage;
     [SerializeField] private float attackRange;
-    [SerializeField] private float attackHitAngle;
+    [Range(0.01f, 1f)]
+    [SerializeField] protected float attackHitDot;
     [SerializeField] protected float firstComboDistance;
     [SerializeField] protected float firstComboDuration;
     [SerializeField] protected float lastComboDistance;
@@ -163,9 +164,8 @@ public class PlayerBasicAttack : MonoBehaviour
             {
 
                 Vector3 targetDir = c.transform.position - transform.position;
-                targetDir = targetDir.normalized;
-                float angle = Vector3.Dot(targetDir, transform.forward);
-                if (angle > attackHitAngle)
+                float angle = Vector3.Dot(targetDir.normalized, transform.forward.normalized);
+                if (angle >= attackHitDot)
                 {
                     GameObject enemy = c.transform.root.gameObject;
                     enemy.GetComponent<EnemyStatus>().TakeDamage(attackDamage);
