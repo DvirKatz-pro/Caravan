@@ -34,7 +34,7 @@ public class CharacterAreaController : MonoBehaviour
         EnemyController enemyController = hit.gameObject.GetComponent<EnemyController>();
         EnemyActions enemyActions = hit.gameObject.GetComponent<EnemyActions>();
 
-        // no rigidbody
+        // no character controller
         if (characterController == null || enemyController == null || enemyActions == null)
         {
             return;

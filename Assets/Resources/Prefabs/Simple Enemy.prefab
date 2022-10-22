@@ -5680,7 +5680,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cf75883edca8c04d959e3f827c7952d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distanceFromTarget: 2.5
+  distanceFromTarget: 3
+  attemptDistanceFromTarget: 5
+  attemptChance: 0.3
+  attemptDot: 0
   timeToRallyMinMax: {x: 6, y: 10}
   canBeKnockedBack: 1
   player: {fileID: 0}
@@ -5708,7 +5711,7 @@ MonoBehaviour:
   postAttackTime: 1.5
   attackDamage: 20
   attackCooldownTime: 4
-  attackAngle: 45
+  attackDot: 0.2
   attackRange: 4
   stunnedDuration: 3
   stunnedCooldown: 5

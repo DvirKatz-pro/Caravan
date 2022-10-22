@@ -36,11 +36,8 @@ public class EnemyActions : MonoBehaviour
     //Needed components
     protected EnemyController controller;
     protected EnemyStatus status;
-
     protected Animator animator;
     protected NavMeshAgent agent;
-    private CharacterController charController;
-
     private EnemyManager manager;
 
     //PlayerComponents
@@ -81,6 +78,7 @@ public class EnemyActions : MonoBehaviour
         {
             return;
         }
+        //Stop moving if hitting another characterController
         StopCoroutine(OnMoveOverTimeRoutine);
     }
 
@@ -97,11 +95,11 @@ public class EnemyActions : MonoBehaviour
         playerMovement = player.GetComponent<CharacterMovement>();
         playerStatus = player.GetComponent<PlayerStatus>();
         playerAreaController = player.GetComponent<CharacterAreaController>();
-        charController = GetComponent<CharacterController>();
 
     }
     protected virtual void Update()
     {
+        //Look at the player until he rolls away
         if (controller.isTracking && playerAreaController.GetState() != CharacterAreaController.State.roll)
         {
             transform.LookAt(player.transform.position);
@@ -137,15 +135,13 @@ public class EnemyActions : MonoBehaviour
     }
 
     /// <summary>
-    /// The enemy will move without animation and without navmesh 
+    /// The enemy will move without animation and without navmesh in a direction for a certain distance over time
     /// </summary>
-   
     public IEnumerator OnMoveOverTime(Vector3 direction, float distance, float duration)
     {
         yield return null;
         Vector3 startValue = transform.position;
         Vector3 endValue = transform.position + direction.normalized * distance;
-        float velocity = distance / duration;
         float timeElapsed = 0;
         Vector3 valueToLerp;
         while (timeElapsed < duration)
@@ -188,7 +184,7 @@ public class EnemyActions : MonoBehaviour
         yield return null;
         while (rallyWaitTime > 0 && currentAction != Actions.attacking && !controller.permissionToAttack)
         {
-            //if the enemy is too close or too far to the player, he will stop moving to current rally position
+            //if the enemy is too far to the player, he will stop moving to current rally position
             if (Vector3.Distance(transform.position, player.transform.position) > MaxRallyDistanceFromPlayer)
             {
                 rallyWaitTime = 0;

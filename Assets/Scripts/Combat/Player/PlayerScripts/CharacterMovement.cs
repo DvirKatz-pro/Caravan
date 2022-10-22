@@ -16,8 +16,6 @@ public class CharacterMovement : MonoBehaviour
     private Animator animator;
     private NavMeshAgent agent;
 
-    string i = "*"; 
-
     //terrain layer 
     private int floorMask;
     // Start is called before the first frame update

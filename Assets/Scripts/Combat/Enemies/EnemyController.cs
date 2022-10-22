@@ -63,6 +63,7 @@ public class EnemyController : MonoBehaviour
         Vector3 enemyPlayer = (transform.position - player.transform.position);
         float enemyPlayerAngle = Vector3.Dot(enemyPlayer.normalized, player.transform.forward.normalized);
 
+        //if the player and the enemy are looking at each other the enemy might attack even though the player is not in range
         bool couldAttack = (!actions.GetAttackCooldown() && Vector3.Distance(player.transform.position, transform.position) <= attemptDistanceFromTarget && playerEnemyAngle >= attemptDot && enemyPlayerAngle >= attemptDot);
         if (!shouldAttack && couldAttack)
         {
