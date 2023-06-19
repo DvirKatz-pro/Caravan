@@ -12,7 +12,6 @@ public class EnemyActions : MonoBehaviour
     [SerializeField] protected ParticleSystem preAttackParticle;
 
     //Gameplay related values
-    [SerializeField] protected float movementSpeed;
     [SerializeField] protected float attackWarmUpTime;
     [SerializeField] protected float attackTravelDistance;
     [SerializeField] protected float attackTravelDuration;
@@ -181,8 +180,10 @@ public class EnemyActions : MonoBehaviour
     }
     private IEnumerator OnMoveToRally(Vector3 rallyPos,float rallyWaitTime)
     {
-        yield return null;
-        while (rallyWaitTime > 0 && (currentAction != Actions.attacking || currentAction != Actions.stunned) && !controller.permissionToAttack)
+        float speed = agent.speed;
+        agent.speed *= 0.6f;
+
+        while (rallyWaitTime > 0 && currentAction != Actions.attacking && currentAction != Actions.stunned && !controller.permissionToAttack)
         {
             //if the enemy is too far to the player, he will stop moving to current rally position
             if (Vector3.Distance(transform.position, player.transform.position) > MaxRallyDistanceFromPlayer)
@@ -191,6 +192,7 @@ public class EnemyActions : MonoBehaviour
             }
             if (Vector3.Distance(transform.position, rallyPos) > 0.5f)
             {
+                transform.LookAt(player.transform);
                 Move(rallyPos);
             }
             else
@@ -202,6 +204,7 @@ public class EnemyActions : MonoBehaviour
             yield return null;
         }
         isRallying=false;
+        agent.speed = speed;
     }
 
     /// <summary>
@@ -269,6 +272,7 @@ public class EnemyActions : MonoBehaviour
         {
             isStunned = true;
             currentAction = Actions.stunned;
+            Stop();
             SetAnimation("Moving", false);
             SetAnimation("Stunned",true);
             StartCoroutine(OnStunned());
@@ -291,6 +295,7 @@ public class EnemyActions : MonoBehaviour
     public void OnDeath()
     {
         SetAnimation("Death");
+        Stop();
         GetComponent<Collider>().enabled = false;
         currentAction = Actions.dead;
         controller.enabled = false;

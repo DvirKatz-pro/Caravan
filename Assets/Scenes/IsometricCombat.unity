@@ -775,6 +775,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 67535377293484246, guid: 57d14740b7dd1984bba0523d9ada0e9d,
+        type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 262320337}
     - target: {fileID: 67535377293484252, guid: 57d14740b7dd1984bba0523d9ada0e9d,
         type: 3}
       propertyPath: m_RootOrder
@@ -1300,22 +1305,22 @@ PrefabInstance:
     - target: {fileID: 1934125327674002336, guid: 06d34a002c16bd541a6230bbc83ca392,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.9999742
       objectReference: {fileID: 0}
     - target: {fileID: 1934125327674002336, guid: 06d34a002c16bd541a6230bbc83ca392,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 1934125327674002336, guid: 06d34a002c16bd541a6230bbc83ca392,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0.0071895025
       objectReference: {fileID: 0}
     - target: {fileID: 1934125327674002336, guid: 06d34a002c16bd541a6230bbc83ca392,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 1934125327674002336, guid: 06d34a002c16bd541a6230bbc83ca392,
         type: 3}
@@ -1325,7 +1330,7 @@ PrefabInstance:
     - target: {fileID: 1934125327674002336, guid: 06d34a002c16bd541a6230bbc83ca392,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -0.824
       objectReference: {fileID: 0}
     - target: {fileID: 1934125327674002336, guid: 06d34a002c16bd541a6230bbc83ca392,
         type: 3}
@@ -1704,21 +1709,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Simple Ranged Enemy
       objectReference: {fileID: 0}
-    - target: {fileID: 67535377293484243, guid: 57d14740b7dd1984bba0523d9ada0e9d,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 67535377293484245, guid: 57d14740b7dd1984bba0523d9ada0e9d,
-        type: 3}
-      propertyPath: attacksetUpTime
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 67535377293484245, guid: 57d14740b7dd1984bba0523d9ada0e9d,
-        type: 3}
-      propertyPath: attackWarmUpTime
-      value: 0.5
-      objectReference: {fileID: 0}
     - target: {fileID: 67535377293484246, guid: 57d14740b7dd1984bba0523d9ada0e9d,
         type: 3}
       propertyPath: player
@@ -1732,7 +1722,7 @@ PrefabInstance:
     - target: {fileID: 67535377293484252, guid: 57d14740b7dd1984bba0523d9ada0e9d,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 38.78
+      value: 32.09
       objectReference: {fileID: 0}
     - target: {fileID: 67535377293484252, guid: 57d14740b7dd1984bba0523d9ada0e9d,
         type: 3}

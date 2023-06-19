@@ -70,12 +70,10 @@ public class CharacterAreaController : MonoBehaviour
         {
             case State.idle:
                 movement.Move();
-                roll.Roll();
                 basicAttack.BasicAttack();
                 break;
             case State.moveing:
                 movement.Move();
-                roll.Roll();
                 basicAttack.BasicAttack();
                 break;
             case State.basicAttack:
@@ -87,6 +85,24 @@ public class CharacterAreaController : MonoBehaviour
                 break;
         }
         
+    }
+    private void Update() 
+    {
+        switch (currentState)
+        {
+            case State.idle:
+                roll.Roll();
+                break;
+            case State.moveing:
+                roll.Roll();
+                break;
+            case State.basicAttack:
+                break;
+            case State.roll:
+
+            default:
+                break;
+        }
     }
 
     public void ChangeState(State state)
