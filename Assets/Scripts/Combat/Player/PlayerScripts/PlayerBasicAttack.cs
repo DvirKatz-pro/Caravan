@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Tilemaps;
 
 /// <summary>
@@ -13,7 +14,8 @@ public class PlayerBasicAttack : MonoBehaviour
     private Animator anim;
     private CharacterMovement movement;
     private CharacterController charController;
-    
+    private NavMeshAgent agent;
+
 
     //combo related values
     private float comboResetTimer = 0;
@@ -78,6 +80,7 @@ public class PlayerBasicAttack : MonoBehaviour
             Debug.LogError("CharacterMovement not found");
         }
         charController = GetComponent<CharacterController>();
+        agent = GetComponent<NavMeshAgent>();
 
     }
 
@@ -96,6 +99,7 @@ public class PlayerBasicAttack : MonoBehaviour
         //if we are trying to attack and we can attack, then we attack
         if (Input.GetMouseButton(0) && canAttack)
         {
+            agent.velocity = Vector3.zero;
             //disable 
             canAttack = false;
             //reset the combo timer
@@ -114,6 +118,7 @@ public class PlayerBasicAttack : MonoBehaviour
             {
                 StartCoroutine(movement.MoveOverTime(transform.forward, lastComboDistance, lastComboDuration));
             }
+            
             anim.SetInteger("Combo", combo);
            //attackParticle.Play();
             checkDamage();
@@ -170,8 +175,8 @@ public class PlayerBasicAttack : MonoBehaviour
                     GameObject enemy = c.transform.root.gameObject;
                     enemy.GetComponent<EnemyStatus>().TakeDamage(attackDamage);
                     if (combo == maxCombo && enemy.GetComponent<EnemyController>().CheckCanBeKnockedBack())
-                    {
-                       enemy.GetComponent<EnemyActions>().MoveOverTime(enemy.transform.forward * -1,attackKnockBackDistance,attackKnockBackDuration);
+                    { 
+                        enemy.GetComponent<EnemyActions>().MoveOverTime(targetDir.normalized,attackKnockBackDistance,attackKnockBackDuration);
                     }
                 }
             }

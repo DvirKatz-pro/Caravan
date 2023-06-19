@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 /// <summary>
 /// Class Detailing Player Roll to avoid attacks
@@ -22,6 +23,7 @@ public class PlayerRoll : MonoBehaviour
     CharacterAreaController controller;
     private CharacterController charController;
     Animator anim;
+    private NavMeshAgent agent;
 
     // Start is called before the first frame update
     private void Start()
@@ -29,6 +31,7 @@ public class PlayerRoll : MonoBehaviour
         controller = GetComponent<CharacterAreaController>();
         charController = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
+        agent = GetComponent<NavMeshAgent>();
         invincibilityFramesCount = invincibilityFramesAmount;
     }
 
@@ -46,6 +49,7 @@ public class PlayerRoll : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && !isRolling)
         {
             isRolling = true;
+            agent.avoidancePriority = 20;
             controller.ChangeState(CharacterAreaController.State.roll);
             StartCoroutine(OnRoll());
         }

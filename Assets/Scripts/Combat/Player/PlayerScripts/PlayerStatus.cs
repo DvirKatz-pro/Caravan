@@ -30,7 +30,7 @@ public class PlayerStatus : MonoBehaviour
     {
         currentHealth -= amount;
         healthBar.fillAmount = currentHealth / health;
-        //StartCoroutine(DamageScreen());
+       // StartCoroutine(DamageScreen());
 
     }
     /*

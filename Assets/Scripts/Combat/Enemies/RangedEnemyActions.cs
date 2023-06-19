@@ -15,6 +15,9 @@ public class RangedEnemyActions : EnemyActions
     //Gameplay related Values
     [SerializeField] private float secoundryAttackDuration;
     [SerializeField] private float arrowSpeed;
+    [SerializeField] private float attacksetUpTime;
+
+    private bool settingUpAttack = false;
 
     protected Ray sightRay;
     
@@ -25,28 +28,35 @@ public class RangedEnemyActions : EnemyActions
     
     protected override IEnumerator PreAttack()
     {
-        Vector3 fireDirection = player.transform.position - transform.position;
+        
+        
         SetAnimation("Draw");
-        //Try to Loose where the player will be rather than his current position
-        if (player.GetComponent<CharacterAreaController>().GetState() == CharacterAreaController.State.moveing)
-        {
-            fireDirection = player.transform.forward.normalized * Random.Range(4.5f, 7f) + player.transform.position - transform.position;
-        }
+        
 
         //create an arrow
         arrowInstance = Instantiate(arrow, arrowPosition);
         arrowInstance.GetComponent<ArrowCollision>().SetDamage(attackDamage);
 
+        settingUpAttack = true;
         transform.forward = transform.right;
 
+
+        yield return new WaitForSeconds(attacksetUpTime);
+
+        
+
+        Vector3 fireDirection = player.transform.position - transform.position;
+        //Try to Loose where the player will be rather than his current position
+        if (player.GetComponent<CharacterAreaController>().GetState() == CharacterAreaController.State.moveing)
+        {
+            fireDirection = player.transform.forward.normalized * Random.Range(4.5f, 7f) + player.transform.position - transform.position;
+        }
         sightRay.origin = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
         //set the Ray direction
         sightRay.direction = fireDirection * 50;
 
-
-        yield return new WaitForSeconds(attackWarmUpTime - 0.5f);
+        yield return new WaitForSeconds(attackWarmUpTime);
         preAttackParticle.Play();
-        
         yield return new WaitForSeconds(0.5f);
         StartCoroutine(OnAttack());
     }
@@ -54,7 +64,7 @@ public class RangedEnemyActions : EnemyActions
    
     protected override IEnumerator OnAttack()
     {
-        
+        settingUpAttack = false;
         preAttackParticle.Stop();
         
         SetAnimation("Basic Attack");
@@ -102,7 +112,6 @@ public class RangedEnemyActions : EnemyActions
                 arrowInstance.GetComponent<Rigidbody>().AddForce(force * Time.deltaTime * arrowSpeed, ForceMode.Impulse);
                 yield return new WaitForSeconds(attackDuration);
             }
-            transform.forward = transform.right * -1;
 
 
         }
@@ -112,7 +121,29 @@ public class RangedEnemyActions : EnemyActions
         yield return new WaitForSeconds(attackCooldownTime);
         onAttackCooldown = false;
     }
-    
+    protected override void Update()
+    {
+        //Look at the player until he rolls away
+        if (controller.isTracking && playerAreaController.GetState() != CharacterAreaController.State.roll)
+        {
+            if (settingUpAttack)
+            {
+                Vector3 fireDirection = player.transform.position - transform.position;
+                Quaternion rotation = Quaternion.LookRotation(fireDirection, Vector3.up) * Quaternion.Euler(0, 90f, 0);
+                transform.rotation = rotation;
+            }
+            else
+            {
+                transform.LookAt(player.transform.position);
+            }
+            
+        }
+        else if (controller.isTracking && playerAreaController.GetState() == CharacterAreaController.State.roll)
+        {
+            controller.isTracking = false;
+        }
+    }
+
     #endregion
-    
+
 }

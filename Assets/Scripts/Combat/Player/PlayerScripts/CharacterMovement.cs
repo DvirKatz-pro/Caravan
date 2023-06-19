@@ -109,7 +109,8 @@ public class CharacterMovement : MonoBehaviour
         //Rotate our movement vector by 45 degrees because our camera is at a 45 degree angle (isomentric)
         movement = Quaternion.AngleAxis(45, Vector3.up) * movement;
         movement.y = 0;
-        agent.velocity = movement * Time.deltaTime * movementSpeed;
+        Debug.Log(Time.deltaTime);
+        agent.velocity = movement * movementSpeed * Time.deltaTime;
         if (movement != Vector3.zero)
         {
             gameObject.transform.forward = movement;

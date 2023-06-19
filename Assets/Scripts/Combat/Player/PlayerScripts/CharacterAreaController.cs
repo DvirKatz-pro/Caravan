@@ -47,8 +47,8 @@ public class CharacterAreaController : MonoBehaviour
         }
         if (enemyController.CheckCanBeKnockedBack())
         {
-            Vector3 pushDir = new Vector3(hit.moveDirection.x, 0, hit.moveDirection.z);
-            enemyActions.MoveOverTime(pushDir, pushForce, 0.2f);
+           Vector3 pushDir = new Vector3(hit.moveDirection.x, 0, hit.moveDirection.z);
+           enemyActions.MoveOverTime(pushDir, pushForce, 0.2f);
         }
     }
 
@@ -62,7 +62,7 @@ public class CharacterAreaController : MonoBehaviour
     }
 
     // Update is called once per frame
-    private void Update()
+    private void FixedUpdate()
     {
         //ability to do stuff based on current state
         

@@ -182,7 +182,7 @@ public class EnemyActions : MonoBehaviour
     private IEnumerator OnMoveToRally(Vector3 rallyPos,float rallyWaitTime)
     {
         yield return null;
-        while (rallyWaitTime > 0 && currentAction != Actions.attacking && !controller.permissionToAttack)
+        while (rallyWaitTime > 0 && (currentAction != Actions.attacking || currentAction != Actions.stunned) && !controller.permissionToAttack)
         {
             //if the enemy is too far to the player, he will stop moving to current rally position
             if (Vector3.Distance(transform.position, player.transform.position) > MaxRallyDistanceFromPlayer)
@@ -268,9 +268,9 @@ public class EnemyActions : MonoBehaviour
         if (!isStunned && currentAction != Actions.attacking)
         {
             isStunned = true;
+            currentAction = Actions.stunned;
             SetAnimation("Moving", false);
             SetAnimation("Stunned",true);
-            currentAction = Actions.stunned;
             StartCoroutine(OnStunned());
         }
     }
@@ -290,12 +290,12 @@ public class EnemyActions : MonoBehaviour
     /// </summary>
     public void OnDeath()
     {
-        SetAnimation("Death",true);
+        SetAnimation("Death");
         GetComponent<Collider>().enabled = false;
-        agent.enabled = false;
         currentAction = Actions.dead;
         controller.enabled = false;
         status.enabled = false;
+        agent.enabled = false;
         this.enabled = false;
         manager.UnRegistar(this.gameObject);
     }
