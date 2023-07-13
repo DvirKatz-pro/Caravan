@@ -109,9 +109,16 @@ public class DialogueManager : SingletonManager<DialogueManager>
     #endregion
     private void OnDisable()
     {
-        currentNPC.GetComponent<NPCDialogue>().EndDialouge();
+        if (!this.gameObject.scene.isLoaded) return;
+
+        if (currentNPC != null) 
+        {
+            currentNPC.GetComponent<NPCDialogue>().EndDialouge();
+        }
         textObject.GetComponent<TMP_Text>().text = "";
+        
         dialogeUI.SetActive(false);
+        
         PauseControl.Instance.ResumeGame();
     }
 

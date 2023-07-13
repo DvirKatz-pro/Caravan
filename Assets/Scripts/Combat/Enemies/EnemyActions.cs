@@ -10,6 +10,7 @@ public class EnemyActions : MonoBehaviour
 {
     //Needed objects
     [SerializeField] protected ParticleSystem preAttackParticle;
+    [SerializeField] private ParticleSystem attackVFX;
 
     //Gameplay related values
     [SerializeField] protected float attackWarmUpTime;
@@ -117,7 +118,7 @@ public class EnemyActions : MonoBehaviour
     {
         NavMeshHit hit;
         //get nearst avilable position on the navmesh 
-        if (NavMesh.SamplePosition(position, out hit, 100, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(position, out hit, 100, NavMesh.AllAreas) && agent.isActiveAndEnabled)
         {
             agent.ResetPath();
             currentAction = Actions.moveing;
@@ -129,8 +130,11 @@ public class EnemyActions : MonoBehaviour
 
     public void MoveOverTime(Vector3 direction, float distance, float duration)
     {
-        OnMoveOverTimeRoutine = OnMoveOverTime(direction,distance,duration);
-        StartCoroutine(OnMoveOverTimeRoutine);
+        if (agent.isActiveAndEnabled)
+        {
+            OnMoveOverTimeRoutine = OnMoveOverTime(direction, distance, duration);
+            StartCoroutine(OnMoveOverTimeRoutine);
+        }
     }
 
     /// <summary>
@@ -138,22 +142,22 @@ public class EnemyActions : MonoBehaviour
     /// </summary>
     public IEnumerator OnMoveOverTime(Vector3 direction, float distance, float duration)
     {
-        yield return null;
-        Vector3 startValue = transform.position;
-        Vector3 endValue = transform.position + direction.normalized * distance;
-        float timeElapsed = 0;
-        Vector3 valueToLerp;
-        while (timeElapsed < duration)
-        {
-            valueToLerp = Vector3.Lerp(startValue, endValue, (timeElapsed / duration));
+       
+            Vector3 startValue = transform.position;
+            Vector3 endValue = transform.position + direction.normalized * distance;
+            float timeElapsed = 0;
+            Vector3 valueToLerp;
+            while (timeElapsed < duration)
+            {
+                valueToLerp = Vector3.Lerp(startValue, endValue, (timeElapsed / duration));
+                agent.velocity = valueToLerp - transform.position;
+                timeElapsed += Time.deltaTime;
+                yield return null;
+            }
+            valueToLerp = endValue;
             agent.velocity = valueToLerp - transform.position;
-            timeElapsed += Time.deltaTime;
+            agent.ResetPath();
             yield return null;
-        }
-        valueToLerp = endValue;
-        agent.velocity = valueToLerp - transform.position;
-        agent.ResetPath();
-        yield return null;
     }
     /// <summary>
     /// The enemy will stop at its current position
@@ -183,7 +187,7 @@ public class EnemyActions : MonoBehaviour
         float speed = agent.speed;
         agent.speed *= 0.6f;
 
-        while (rallyWaitTime > 0 && currentAction != Actions.attacking && currentAction != Actions.stunned && !controller.permissionToAttack)
+        while (rallyWaitTime > 0 && currentAction != Actions.attacking && currentAction != Actions.stunned && currentAction != Actions.dead && !controller.permissionToAttack)
         {
             //if the enemy is too far to the player, he will stop moving to current rally position
             if (Vector3.Distance(transform.position, player.transform.position) > MaxRallyDistanceFromPlayer)
@@ -239,12 +243,14 @@ public class EnemyActions : MonoBehaviour
     {
         preAttackParticle.Stop();
         SetAnimation("Basic Attack");
+        attackVFX.Play();
         MoveOverTime(transform.forward, attackTravelDistance, attackTravelDuration);
         DealDamage();
         yield return new WaitForSeconds(attackDuration);
         
         currentAction = Actions.idle;
         SetAnimation("Idle");
+        attackVFX.Stop();
         controller.isTracking = false;
         yield return new WaitForSeconds(attackCooldownTime);
         onAttackCooldown = false;
@@ -255,8 +261,8 @@ public class EnemyActions : MonoBehaviour
     /// </summary>
     public virtual void DealDamage()
     {
-        Vector3 enemyPlayer = (transform.position - player.transform.position);
-        float enemyPlayerAngle = Vector3.Dot(enemyPlayer.normalized, player.transform.forward.normalized);
+        Vector3 enemyPlayer = (player.transform.position - transform.position);
+        float enemyPlayerAngle = Vector3.Dot(enemyPlayer.normalized, transform.forward.normalized);
         if (enemyPlayerAngle >= attackDot && Vector3.Distance(player.transform.position, transform.position) <= attackRange && playerAreaController.canBeHit)
         {
             playerStatus.TakeDamage(attackDamage);
@@ -295,14 +301,17 @@ public class EnemyActions : MonoBehaviour
     public void OnDeath()
     {
         SetAnimation("Death");
-        Stop();
-        GetComponent<Collider>().enabled = false;
         currentAction = Actions.dead;
+        Stop();
+        StopAllCoroutines();
+        preAttackParticle.Stop();
+        attackVFX.Stop();
+        GetComponent<Collider>().enabled = false;
         controller.enabled = false;
         status.enabled = false;
         agent.enabled = false;
-        this.enabled = false;
         manager.UnRegistar(this.gameObject);
+        this.enabled = false;
     }
     #endregion
     #region Info and general methods

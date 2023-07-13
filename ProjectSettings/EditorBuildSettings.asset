@@ -4,5 +4,11 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/SideScroll.unity
+    guid: f81454d1654ed0042995f7227d55f603
+  - enabled: 1
+    path: Assets/Scenes/Travel.unity
+    guid: e39d27a94e25449488a1e82be343c85c
   m_configObjects: {}
