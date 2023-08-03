@@ -12,8 +12,13 @@ public class Road : MonoBehaviour
     [SerializeField] private Transform startPos;
     [SerializeField] private Transform endPos;
 
-    [SerializeField] private Transform cameraPos;
-    [SerializeField] private Vector2 cameraOffset;
+    [SerializeField] private CameraMove cameraMove;
+    [SerializeField] float cameraSpeed;
+
+    [SerializeField] private GameObject fadeImage;
+    [SerializeField, Range(1, 100)] float fadeTimeSeconds;
+
+
     // Start is called before the first frame update
     // called first
     void OnEnable()
@@ -21,7 +26,7 @@ public class Road : MonoBehaviour
         roadManager = RoadManager.Instance;
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
-
+    
     // called second
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -37,7 +42,21 @@ public class Road : MonoBehaviour
 
     public void initializeTravel(RoadManager.Roads roadName) 
     {
-        Debug.Log(roadName);
+        PauseControl.Instance.ResumeGame();
+        cameraMove.onStartTravel(cameraSpeed);
+        StartCoroutine(unFadeScreen(fadeTimeSeconds));
+
+    }
+    private IEnumerator unFadeScreen(float fadeTimeSeconds)
+    {
+        CanvasGroup fadeCanvas = fadeImage.GetComponent<CanvasGroup>();
+        float alpha = fadeCanvas.alpha;
+        float amountPerSec = alpha / fadeTimeSeconds;
+        while (alpha > 0)
+        {
+            fadeCanvas.alpha -= amountPerSec * Time.deltaTime;
+            yield return null;
+        }
     }
 
     public GameObject getPlayer()
