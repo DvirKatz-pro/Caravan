@@ -12,9 +12,6 @@ public class Road : MonoBehaviour
     [SerializeField] private Transform startPos;
     [SerializeField] private Transform endPos;
 
-    [SerializeField] private CameraMove cameraMove;
-    [SerializeField] float cameraSpeed;
-
     [SerializeField] private GameObject fadeImage;
     [SerializeField, Range(1, 100)] float fadeTimeSeconds;
 
@@ -43,7 +40,6 @@ public class Road : MonoBehaviour
     public void initializeTravel(RoadManager.Roads roadName) 
     {
         PauseControl.Instance.ResumeGame();
-        cameraMove.onStartTravel(cameraSpeed);
         StartCoroutine(unFadeScreen(fadeTimeSeconds));
 
     }

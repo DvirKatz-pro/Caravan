@@ -4,31 +4,34 @@ using UnityEngine;
 
 public class CameraMove : MonoBehaviour
 {
+    [SerializeField] private Transform player;
+    [SerializeField] private float cameraOffsetX;
+    bool followPlayer = false;
 
-    bool traveling = false;
+    [SerializeField] private float cameraInitSpeed;
 
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame
     void Update()
     {
-        
-    }
-    public void onStartTravel(float cameraSpeed) 
-    {
-        traveling = true;
-        StartCoroutine(moveCamera(cameraSpeed));
-    }
-    private IEnumerator moveCamera(float cameraSpeed)
-    {
-        while (traveling) 
+        if (followPlayer)
         {
-            transform.Translate(Vector3.right * cameraSpeed, Space.Self);
-            yield return null;
+            transform.position = new Vector3(player.position.x + cameraOffsetX, transform.position.y, transform.position.z);
+        }
+        else 
+        {
+            float xMovement = transform.position.x + cameraInitSpeed * Time.deltaTime;
+            transform.position = new Vector3(xMovement, transform.position.y, transform.position.z);
+
+            float intendedXPos = player.position.x + cameraOffsetX;
+            if (!(transform.position.x <= intendedXPos))
+            {
+                followPlayer = true;
+            }
         }
     }
 }
