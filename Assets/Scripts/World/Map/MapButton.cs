@@ -30,7 +30,7 @@ public class MapButton : MonoBehaviour
         // This is particularly good for creating loading screens.
         // You could also load the Scene by using sceneBuildIndex. In this case Scene2 has
         // a sceneBuildIndex of 1 as shown in Build Settings.
-        roadManager.currentRoad = RoadManager.Roads.Road1;
+        roadManager.currentRoadName = RoadManager.RoadNames.Road1;
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(TRAVEL);
 
         // Wait until the asynchronous scene fully loads

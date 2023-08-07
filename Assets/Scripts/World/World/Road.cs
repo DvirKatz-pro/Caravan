@@ -6,14 +6,15 @@ using UnityEngine.SceneManagement;
 public class Road : MonoBehaviour
 {
     RoadManager roadManager;
-    RoadManager.Roads roadName;
+    RoadManager.RoadNames roadName;
 
     [SerializeField] private GameObject player;
     [SerializeField] private Transform startPos;
-    [SerializeField] private Transform endPos;
+    public Transform endPos;
 
     [SerializeField] private GameObject fadeImage;
-    [SerializeField, Range(1, 100)] float fadeTimeSeconds;
+    [SerializeField, Range(1, 100)] private float unFadeTimeSeconds;
+    [SerializeField, Range(1, 100)] private float fadeTimeSeconds;
 
 
     // Start is called before the first frame update
@@ -27,7 +28,8 @@ public class Road : MonoBehaviour
     // called second
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        initializeTravel(roadManager.currentRoad);
+        InitializeTravel(roadManager.currentRoadName);
+        roadManager.currentRoad = this;
     }
 
     
@@ -37,22 +39,39 @@ public class Road : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    public void initializeTravel(RoadManager.Roads roadName) 
+    public void InitializeTravel(RoadManager.RoadNames roadName) 
     {
         PauseControl.Instance.ResumeGame();
-        StartCoroutine(unFadeScreen(fadeTimeSeconds));
+        StartCoroutine(fadeScreen(unFadeTimeSeconds,false));
 
     }
-    private IEnumerator unFadeScreen(float fadeTimeSeconds)
+    public void EndTravel()
+    {
+        StartCoroutine(fadeScreen(fadeTimeSeconds, true));
+    }
+    private IEnumerator fadeScreen(float timeSeconds, bool fade)
     {
         CanvasGroup fadeCanvas = fadeImage.GetComponent<CanvasGroup>();
-        float alpha = fadeCanvas.alpha;
-        float amountPerSec = alpha / fadeTimeSeconds;
-        while (alpha > 0)
+        float amountPerSec = 0;
+        if (!fade)
         {
-            fadeCanvas.alpha -= amountPerSec * Time.deltaTime;
-            yield return null;
+            amountPerSec = 1 / timeSeconds;
+            while (fadeCanvas.alpha > 0)
+            {
+                fadeCanvas.alpha -= amountPerSec * Time.deltaTime;
+                yield return null;
+            }
         }
+        else
+        {
+            amountPerSec = 1 / timeSeconds;
+            while (fadeCanvas.alpha < 1)
+            {
+                fadeCanvas.alpha += amountPerSec * Time.deltaTime;
+                yield return null;
+            }
+        }
+        
     }
 
     public GameObject getPlayer()

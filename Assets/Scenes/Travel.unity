@@ -199,7 +199,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 26473408}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -543.493, y: -263.631, z: -0.21257502}
+  m_LocalPosition: {x: -503.37, y: -266.71, z: -0.21257502}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 170171575}
@@ -402,6 +402,49 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 177153152}
   m_CullTransparentMesh: 1
+--- !u!1 &207551373
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 207551375}
+  - component: {fileID: 207551374}
+  m_Layer: 0
+  m_Name: RoadManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &207551374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 207551373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 030cd6ba615c5d245befff3c3c9788e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &207551375
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 207551373}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -66.869995, y: -78.20999, z: -0.21257502}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &282834991
 GameObject:
   m_ObjectHideFlags: 0
@@ -500,7 +543,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1098195158}
   cameraOffsetX: 2
-  cameraInitSpeed: 2
 --- !u!1 &450887565
 GameObject:
   m_ObjectHideFlags: 0
@@ -1156,7 +1198,8 @@ MonoBehaviour:
   startPos: {fileID: 975856580}
   endPos: {fileID: 26473410}
   fadeImage: {fileID: 177153152}
-  fadeTimeSeconds: 10
+  unFadeTimeSeconds: 5
+  fadeTimeSeconds: 5
 --- !u!1 &1643686984
 GameObject:
   m_ObjectHideFlags: 0

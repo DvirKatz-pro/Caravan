@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class RoadManager : SingletonManager<RoadManager>
 {
-    public Roads currentRoad { get; set; }
-    public enum Roads
+    public Road currentRoad { get; set; }
+    public RoadNames currentRoadName { get; set; }
+    
+    public enum RoadNames
     {
         Road1
     }
