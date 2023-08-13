@@ -9,7 +9,7 @@ public class Road : MonoBehaviour
     RoadManager.RoadNames roadName;
 
     [SerializeField] private GameObject player;
-    [SerializeField] private Transform startPos;
+    public Transform startPos;
     public Transform endPos;
 
     [SerializeField] private GameObject fadeImage;
