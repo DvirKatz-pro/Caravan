@@ -1,0 +1,30 @@
+{
+  "Dialouge": 
+  {
+    "Text": "You are deep in thought when you notice that the road ahaead is blocked. Rocks, branches and debries block the way forword, something feels odd about this whole situation. You tense up when the sounds of footsteps break the silence, several faces emarge from the forest. Bandits no doubt. they have set up a checkpoint of sorts to block your way. One bandit distances himself from the group, clearly he is the leader. \"Hand over your goods and you wont be harmed! \" The leader barks at you",
+    "Responses": 
+    [
+      {
+        "Intimidate": "Try to intimidate them",
+        "Text": "You pump your chest full of air and step out of the wagon, landing with a large thud on the ground and begin walking towards the bandit leader. You walk closer and closer, you walk until you notice the other bandits begin tightening the grip on their weapons. You look at the bandit leader with determination and anger and say.\"I suggest you get out of my way. I dont have time for this but I will kill you all if I must\"",
+        "Options": 
+        [
+          {
+            "Sucssess": "You stare directly at the bandit leader and for a split secound the leaders gaze dosent meet yours, he seems to have lost some of his nerve, \"Pack it up boys, this ones not worth the trouble\" The bandits causiously head back into the forest. You wait until you are certain that they are gone and you begin clearing away the road block. It dosent take long before the road is clear and you pass with no trouble",
+            "Fail": "The bandit seems slightly amuzed by your efforts \"ive been itching for a fight all day. This is going to be fun\"",
+            "CriticalFail" :  "While you were walking up you fail to notice that one of the bandits has snuck up behind the wagon. You turn around just in time to see him grab something from the back and run into the forest"
+
+          }
+        ]
+      },
+      {
+        "ResponseText": "shut up please"
+      },
+      {
+        "ResponseText": "Show me your wares",
+        "Trade": true
+      }
+    ]
+  }
+  
+}

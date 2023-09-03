@@ -10,12 +10,12 @@ public class NPCDialogue : MonoBehaviour
     [SerializeField] private string jsonPath = "NPCText";
     private bool inDialouge = false;
 
-    private void OnMouseDown()
+    private void Awake()
     {
         if (!inDialouge && !PauseControl.gameIsPaused)
         {
             inDialouge = true;
-            DialogueManager.Instance.OpenJson(jsonPath,this.gameObject);
+            JSONParser.Instance.OpenJson(jsonPath);
         }
 
     }
