@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using TMPro;
 using UnityEngine;
+using static EventObject;
 
 public class JSONParser : SingletonManager<JSONParser>
 {
@@ -31,12 +32,44 @@ public class JSONParser : SingletonManager<JSONParser>
             JObject dialouge = (JObject)jsonText["Dialouge"];
             if (dialouge != null)
             {
-                ParseJSON(dialouge,new List<EventObject>());
+                EventObject headEvent = CreateEvents(dialouge,null);
             }
         }
     }
 
-    public EventObject ParseJSON(JObject head,List<EventObject> responses) {
+    public EventObject CreateEvents(JObject head, EventObject parentObject)
+    {
+        string text = null;
+        string responseText = null;
+        EventObject.EventActions action = EventObject.EventActions.None;
+        List<EventObject> events = null;
+        if (head.ContainsKey("Text"))
+        {
+            text = head["Text"].ToString();
+        }
+        if (head.ContainsKey("ResponseText"))
+        {
+            responseText = head["ResponseText"].ToString();
+        }
+        if (head.ContainsKey("Action")) 
+        {
+            action = (EventActions)Enum.Parse(typeof(EventActions), head["Action"].ToString(), ignoreCase: true);
+        }
+        JArray responsesArray = (JArray)head["Responses"];
+        EventObject eventObject = new EventObject(text, responseText,parentObject, action);
+        if (responsesArray != null && responsesArray.Count > 0)
+        { 
+            events = new List<EventObject>();
+            for (int i = 0; i < responsesArray.Count; i++)
+            {
+                events.Add(CreateEvents((JObject)responsesArray[i], eventObject));
+            }
+        }
+        eventObject.events = events;
+        return eventObject;
+    }
+    /*
+    public EventObject ParseJSON(JObject head, EventObject eventObject) {
 
         if (head.ContainsKey("Text"))
         {
@@ -46,6 +79,7 @@ public class JSONParser : SingletonManager<JSONParser>
             {
                 responseText = head["ResponseText"].ToString();
             }
+
             JArray responsesArray = (JArray)head["Responses"];
             if (responsesArray != null && responsesArray.Count > 0)
             {
@@ -70,4 +104,5 @@ public class JSONParser : SingletonManager<JSONParser>
         
 
     }
+    */
 }

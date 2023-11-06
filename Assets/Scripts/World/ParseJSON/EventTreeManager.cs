@@ -5,10 +5,7 @@ using UnityEngine;
 
 public class EventTreeManager : SingletonManager<EventTreeManager>
 {
-    public enum EventActions { 
-        Trade,
-        Fight
-    }
+    
     // Start is called before the first frame update
     void Start()
     {

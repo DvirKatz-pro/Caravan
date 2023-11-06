@@ -19,7 +19,7 @@
       },
       {
         "ResponseText": "Show me your wares",
-        "Trade": true
+        "Action": "Trade"
       }
     ]
   }
