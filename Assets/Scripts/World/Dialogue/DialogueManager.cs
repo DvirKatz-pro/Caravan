@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 using System.Collections;
+using System.Diagnostics;
 
 /// <summary>
 /// Class that opens dialouge between NPC and player and handles player response
@@ -20,7 +21,7 @@ public class DialogueManager : SingletonManager<DialogueManager>
 
     //Needed Values
     private float buttonHeight;
-    private JArray responses;
+    private StoryObject currentStory;
     private List<GameObject> buttons;
     private int chosenResponseNum = -1;
 
@@ -34,11 +35,14 @@ public class DialogueManager : SingletonManager<DialogueManager>
         buttons = new List<GameObject>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnOpenDialogue(StoryObject storyObject, GameObject currentNPC) 
     {
-        
+        this.currentNPC = currentNPC;
+        dialogeUI.SetActive(true);
+        PauseControl.Instance.PauseGame();
+        OnParseDialouge(storyObject);
     }
+   
     #region Dialogue and response parsing
     public void OnChooseResponse(int responseNum)
     {
@@ -60,12 +64,59 @@ public class DialogueManager : SingletonManager<DialogueManager>
             Destroy(button);
         }
         buttons = new List<GameObject>();
-        ParseDialouge((JObject)responses[tempChosenResponse - 1]);
+        OnParseDialouge(currentStory.stories[tempChosenResponse - 1]);
         yield break;
     }
+
+    public void OnParseDialouge(StoryObject currentStory)
+    {
+        this.currentStory = currentStory;
+        if (currentStory.text != null) 
+        {
+            string text = currentStory.text.ToString();
+            textObject.GetComponent<TMP_Text>().text = text;
+        }
+        switch (currentStory.action)
+        {
+            case StoryObject.EventActions.Trade:
+                TradeManager.Instance.OpenTradeScreen(currentNPC);
+                OnDisable();
+                break;
+            case StoryObject.EventActions.Fight:
+                break;
+            case StoryObject.EventActions.None:
+                break;
+            default:
+                OnDisable();
+                break;
+        }
+
+        if (currentStory.stories != null && currentStory.stories.Count > 0)
+        {
+            List<StoryObject> stories = currentStory.stories;
+            for (int i = 0; i < stories.Count; i++)
+            {
+                //Here we dynamiclly add buttons to UI depending on the amount of responses that exist
+                GameObject button = Instantiate(ResponseButton, content.transform);
+                Vector3 newButtonPos = buttonPosition;
+                newButtonPos.y -= buttonHeight * i;
+                button.GetComponent<RectTransform>().anchoredPosition = newButtonPos;
+                button.transform.GetChild(0).GetComponent<Text>().text = stories[i].responseText.ToString();
+                ResponseButton responseButton = button.GetComponent<ResponseButton>();
+                responseButton.responseNum = i + 1;
+                buttons.Add(button);
+            }
+            StartCoroutine(ResponseRoutine());
+        }
+        else
+        { OnDisable(); }
+
+    }
+
     /// <summary>
     /// Parse a Json object that contains text, responses and Rest of dialouge tree
     /// </summary>
+    /*
     private void ParseDialouge(JObject responseObject)
     {
         if (responseObject["Text"] != null)
@@ -106,38 +157,20 @@ public class DialogueManager : SingletonManager<DialogueManager>
         }
 
     }
+    */
     #endregion
     private void OnDisable()
     {
         if (!this.gameObject.scene.isLoaded) return;
 
-        if (currentNPC != null) 
-        {
-            currentNPC.GetComponent<NPCDialogue>().EndDialouge();
-        }
         textObject.GetComponent<TMP_Text>().text = "";
-        
+
+        if (currentNPC != null)
+        {
+            currentNPC.GetComponent<NPCDialogue>().inDialogue = false;
+        }
         dialogeUI.SetActive(false);
         
         PauseControl.Instance.ResumeGame();
     }
-
-    /// <summary>
-    /// Open given json of NPC that contains the dialouge tree
-    /// </summary>
-    public void OpenJson(string jsonPath,GameObject npc)
-    {
-        currentNPC = npc;
-        JObject jsonText = JObject.Parse(File.ReadAllText(jsonPath));
-        JObject dialouge = (JObject)jsonText["Dialouge"];
-        dialogeUI.SetActive(true);
-        if (dialouge != null)
-        {
-            PauseControl.Instance.PauseGame();
-            ParseDialouge(dialouge);
-        }
-    }
-
-    
-
 }

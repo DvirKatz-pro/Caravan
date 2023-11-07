@@ -17,7 +17,7 @@ public class EventTreeManager : SingletonManager<EventTreeManager>
     {
         
     }
-    public void OpenEventUI(EventObject eventObject) {
+    public void OpenEventUI(StoryObject eventObject) {
         PauseControl.Instance.PauseGame();
     }
 

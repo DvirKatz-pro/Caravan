@@ -3887,7 +3887,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00010359169}
+  m_AnchoredPosition: {x: -0.00053373224, y: 0.0000038146973}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &585752858
@@ -4639,7 +4639,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 659911630}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -555.4662, y: -263.5839, z: 0}
+  m_LocalPosition: {x: -555, y: -263.5839, z: 0}
   m_LocalScale: {x: 1.6816653, y: 1.7177601, z: 1}
   m_Children: []
   m_Father: {fileID: 1540437412}
@@ -4678,6 +4678,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61b58c49ea43f51479920a2aff919492, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dialogueDistance: 1
   jsonPath: Assets\Resources\NPCDialouge\NPCText.json
 --- !u!114 &659911635
 MonoBehaviour:
@@ -4701,7 +4702,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -17199,7 +17200,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00010359169}
+  m_AnchoredPosition: {x: -0.00053373224, y: 0.000030517578}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1990328255
@@ -18836,6 +18837,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533673283284661216, guid: d735256cfcd41c747a899f5f0c071e8f,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533673283284661216, guid: d735256cfcd41c747a899f5f0c071e8f,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 4533673283284661216, guid: d735256cfcd41c747a899f5f0c071e8f,
         type: 3}

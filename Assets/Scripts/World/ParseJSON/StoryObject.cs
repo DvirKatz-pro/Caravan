@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EventObject
+public class StoryObject
 {
     public string text { get; set; }
     public string responseText { get; set; }
-    public EventObject parentEvent { get; set; }
-    public List<EventObject> events { get; set; }
+    public StoryObject parentEvent { get; set; }
+    public List<StoryObject> stories { get; set; }
     public EventActions action { get; set; }
 
     public enum EventActions
@@ -17,15 +17,15 @@ public class EventObject
         None
     }
 
-    public EventObject(string text, string responseText,EventObject parentEvent,EventActions action, List<EventObject> responses) {
+    public StoryObject(string text, string responseText,StoryObject parentEvent,EventActions action, List<StoryObject> responses) {
         this.text = text;
         this.responseText = responseText;
         this.parentEvent = parentEvent;
         this.action = action;
-        this.events = responses;
+        this.stories = responses;
     }
 
-    public EventObject(string text, string responseText, EventObject parentEvent, EventActions action)
+    public StoryObject(string text, string responseText, StoryObject parentEvent, EventActions action)
     {
         this.text = text;
         this.responseText = responseText;

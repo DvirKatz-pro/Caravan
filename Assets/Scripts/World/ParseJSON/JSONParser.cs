@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using TMPro;
 using UnityEngine;
-using static EventObject;
+using static StoryObject;
 
 public class JSONParser : SingletonManager<JSONParser>
 {
@@ -24,25 +24,27 @@ public class JSONParser : SingletonManager<JSONParser>
     /// <summary>
     /// Open given json of NPC that contains the dialouge tree
     /// </summary>
-    public void OpenJson(string jsonPath)
+    public StoryObject OpenJson(string jsonPath)
     {
+        StoryObject headEvent = null;
         JObject jsonText = JObject.Parse(File.ReadAllText(jsonPath));
         if (jsonText.ContainsKey("Dialouge")) 
         {
             JObject dialouge = (JObject)jsonText["Dialouge"];
             if (dialouge != null)
             {
-                EventObject headEvent = CreateEvents(dialouge,null);
+                headEvent = CreateEvents(dialouge,null);
             }
         }
+        return headEvent;
     }
 
-    public EventObject CreateEvents(JObject head, EventObject parentObject)
+    public StoryObject CreateEvents(JObject head, StoryObject parentObject)
     {
         string text = null;
         string responseText = null;
-        EventObject.EventActions action = EventObject.EventActions.None;
-        List<EventObject> events = null;
+        StoryObject.EventActions action = StoryObject.EventActions.None;
+        List<StoryObject> events = null;
         if (head.ContainsKey("Text"))
         {
             text = head["Text"].ToString();
@@ -56,16 +58,16 @@ public class JSONParser : SingletonManager<JSONParser>
             action = (EventActions)Enum.Parse(typeof(EventActions), head["Action"].ToString(), ignoreCase: true);
         }
         JArray responsesArray = (JArray)head["Responses"];
-        EventObject eventObject = new EventObject(text, responseText,parentObject, action);
+        StoryObject eventObject = new StoryObject(text, responseText,parentObject, action);
         if (responsesArray != null && responsesArray.Count > 0)
         { 
-            events = new List<EventObject>();
+            events = new List<StoryObject>();
             for (int i = 0; i < responsesArray.Count; i++)
             {
                 events.Add(CreateEvents((JObject)responsesArray[i], eventObject));
             }
         }
-        eventObject.events = events;
+        eventObject.stories = events;
         return eventObject;
     }
     /*
