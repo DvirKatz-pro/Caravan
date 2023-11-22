@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static StoryObject;
 
 public class StoryObject
 {
@@ -8,29 +10,39 @@ public class StoryObject
     public string responseText { get; set; }
     public StoryObject parentEvent { get; set; }
     public List<StoryObject> stories { get; set; }
-    public EventActions action { get; set; }
+    public Actions action { get; set; }
 
-    public enum EventActions
+    SpecialStoryAction specialStoryAction {get; set;}
+
+    public enum Actions
     {
         Trade,
         Fight,
         None
     }
 
-    public StoryObject(string text, string responseText,StoryObject parentEvent,EventActions action, List<StoryObject> responses) {
+    public enum SpecialActions
+    {
+        Intimidate,
+        Convince
+    }
+
+    public StoryObject(string text, string responseText,StoryObject parentEvent,Actions action, SpecialStoryAction specialStoryAction, List<StoryObject> responses) {
         this.text = text;
         this.responseText = responseText;
         this.parentEvent = parentEvent;
         this.action = action;
+        this.specialStoryAction = specialStoryAction;
         this.stories = responses;
     }
 
-    public StoryObject(string text, string responseText, StoryObject parentEvent, EventActions action)
+    public StoryObject(string text, string responseText, StoryObject parentEvent, Actions action, SpecialStoryAction specialStoryAction)
     {
         this.text = text;
         this.responseText = responseText;
         this.parentEvent = parentEvent;
         this.action = action;
+        this.specialStoryAction = specialStoryAction;
     }
 
     // Start is called before the first frame update
@@ -43,5 +55,24 @@ public class StoryObject
     void Update()
     {
         
+    }
+    public class SpecialStoryAction 
+    {
+        public SpecialActions specialAction { get; set; }
+        public string actionText { get; set; }
+        public Dictionary<ActionOutcomes, Tuple<int,string>> actionOutcomes { get; set; }
+
+        public enum ActionOutcomes
+        {
+            Succsess,
+            Failure,
+            CriticalFailure
+        }
+        public SpecialStoryAction(SpecialActions specialAction, string actionText, Dictionary<ActionOutcomes, Tuple<int, string>> actionOutcomes)
+        {
+            this.specialAction = specialAction;
+            this.actionText = actionText;
+            this.actionOutcomes = actionOutcomes;
+        }
     }
 }

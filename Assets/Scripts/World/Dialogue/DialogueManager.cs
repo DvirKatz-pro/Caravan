@@ -78,13 +78,13 @@ public class DialogueManager : SingletonManager<DialogueManager>
         }
         switch (currentStory.action)
         {
-            case StoryObject.EventActions.Trade:
+            case StoryObject.Actions.Trade:
                 TradeManager.Instance.OpenTradeScreen(currentNPC);
                 OnDisable();
                 break;
-            case StoryObject.EventActions.Fight:
+            case StoryObject.Actions.Fight:
                 break;
-            case StoryObject.EventActions.None:
+            case StoryObject.Actions.None:
                 break;
             default:
                 OnDisable();
