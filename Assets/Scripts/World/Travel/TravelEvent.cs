@@ -5,17 +5,14 @@ using UnityEngine;
 
 public class TravelEvent : MonoBehaviour
 {
-    //Needed Values
-    private float buttonHeight;
-    private JArray responses;
-    private List<GameObject> buttons;
-    private int chosenResponseNum = -1;
-
+    
     public Vector2 triggerPos { get; set; }
+    public StoryObject storyHead { get; set; }
 
-    public TravelEvent(Vector2 triggerPos)
+    public TravelEvent(Vector2 triggerPos,StoryObject headStory)
     {
         this.triggerPos = triggerPos;
+        this.storyHead = headStory;
     }
 
 
@@ -27,8 +24,8 @@ public class TravelEvent : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
-
+        
     }
 }

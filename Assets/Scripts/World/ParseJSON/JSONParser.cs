@@ -62,17 +62,17 @@ public class JSONParser : SingletonManager<JSONParser>
         if (head.ContainsKey("SpecialActionObject"))
         {
             JObject specialActionObject = (JObject)head["SpecialActionObject"];
-            StoryObject.SpecialActions specialActionAction = (SpecialActions)Enum.Parse(typeof(SpecialActions), head["specialAction"].ToString(), ignoreCase: true);
+            StoryObject.SpecialActions specialActionAction = (SpecialActions)Enum.Parse(typeof(SpecialActions), specialActionObject["SpecialAction"].ToString(), ignoreCase: true);
             string specialActionText = specialActionObject["Text"].ToString();
             Dictionary<SpecialStoryAction.ActionOutcomes, Tuple<int, string>> actionOutcomes = new Dictionary<ActionOutcomes, Tuple<int, string>>();
-            JObject options = (JObject)head["Options"];
+            JObject options = (JObject)specialActionObject["Options"];
             string succsessText = options["Sucssess"].ToString();
-            string failText = options["fail"].ToString();
+            string failText = options["Fail"].ToString();
             string criticalFailText = options["CriticalFail"].ToString();
 
-            int succsessChance = int.Parse(succsessText.Substring(succsessText.Length-4,succsessText.Length-1));
-            int failChance = int.Parse(failText.Substring(succsessText.Length - 4, succsessText.Length - 1));
-            int criticalFailChance = int.Parse(criticalFailText.Substring(succsessText.Length - 4, succsessText.Length - 1));
+            int succsessChance = int.Parse(succsessText.Substring(succsessText.Length-3,2));
+            int failChance = int.Parse(failText.Substring(failText.Length - 3, 2));
+            int criticalFailChance = int.Parse(criticalFailText.Substring(criticalFailText.Length - 3,2));
 
             actionOutcomes.Add(SpecialStoryAction.ActionOutcomes.Succsess, new Tuple<int, string>(succsessChance, succsessText));
             actionOutcomes.Add(SpecialStoryAction.ActionOutcomes.Failure, new Tuple<int, string>(failChance, failText));

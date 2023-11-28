@@ -4679,7 +4679,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueDistance: 1
-  jsonPath: Assets\Resources\NPCDialouge\NPCText.json
+  jsonName: NPCText.json
 --- !u!114 &659911635
 MonoBehaviour:
   m_ObjectHideFlags: 0

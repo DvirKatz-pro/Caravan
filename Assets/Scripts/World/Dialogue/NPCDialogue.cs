@@ -9,7 +9,9 @@ using UnityEngine.EventSystems;
 public class NPCDialogue : MonoBehaviour
 {
     [SerializeField] private float dialogueDistance;
-    [SerializeField] private string jsonPath = "NPCText";
+    [SerializeField] private string jsonName = "NPCText.json";
+
+    private const string DIALOGUE_PATH = "Assets\\Resources\\NPCDialouge\\";
 
     public StoryObject headDialouge { get; set; }
 
@@ -20,7 +22,7 @@ public class NPCDialogue : MonoBehaviour
 
     private void Awake()
     {
-        headDialouge = JSONParser.Instance.OpenJson(jsonPath);
+        headDialouge = JSONParser.Instance.OpenJson(DIALOGUE_PATH + jsonName);
         player = GameManager.Instance.GetPlayer();
     }
 
