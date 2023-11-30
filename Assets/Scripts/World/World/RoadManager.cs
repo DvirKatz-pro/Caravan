@@ -22,6 +22,11 @@ public class RoadManager : SingletonManager<RoadManager>
     {
         
     }
-    
+
+    public void OnInitailizeRoad(Road road)
+    {
+        
+    }
+
 
 }

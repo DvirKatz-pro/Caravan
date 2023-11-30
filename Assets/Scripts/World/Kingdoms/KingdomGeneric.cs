@@ -9,11 +9,12 @@ using UnityEngine;
 public class KingdomGeneric : MonoBehaviour
 {
     [SerializeField] private List<GameObject> traders;
-
+    private List<Road> nearRoads;
     // Start is called before the first frame update
     void Start()
     {
         InitializeStock();
+        InitializeRoads();
     }
     /// <summary>
     /// Create an NPC inventory containing different frquency and types of items
@@ -53,6 +54,14 @@ public class KingdomGeneric : MonoBehaviour
             
         }
 
+    }
+    private void InitializeRoads() {
+        /*
+        foreach (Road road in nearRoads)
+        {
+            
+        }
+        */
     }
 
     private void AddItemsToStock(List<TradeableItem> npcStock, List<TradeableItem> items,int amountTotal ,int amountOfNecessaryItems)

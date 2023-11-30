@@ -12,7 +12,7 @@ public class StoryObject
     public List<StoryObject> stories { get; set; }
     public Actions action { get; set; }
 
-    SpecialStoryAction specialStoryAction {get; set;}
+    public SpecialStoryAction specialStoryAction {get; set;}
 
     public enum Actions
     {
