@@ -59,29 +59,40 @@ public class JSONParser : SingletonManager<JSONParser>
         {
             action = (Actions)Enum.Parse(typeof(Actions), head["Action"].ToString(), ignoreCase: true);
         }
+        StoryObject eventObject = new StoryObject(text, responseText, parentObject, action);
         if (head.ContainsKey("SpecialActionObject"))
         {
             JObject specialActionObject = (JObject)head["SpecialActionObject"];
             StoryObject.SpecialActions specialActionAction = (SpecialActions)Enum.Parse(typeof(SpecialActions), specialActionObject["SpecialAction"].ToString(), ignoreCase: true);
             string specialActionText = specialActionObject["Text"].ToString();
-            Dictionary<SpecialStoryAction.ActionOutcomes, Tuple<int, string>> actionOutcomes = new Dictionary<ActionOutcomes, Tuple<int, string>>();
+            Dictionary<SpecialStoryAction.ActionOutcomes, StoryObject> actionOutcomes = new Dictionary<ActionOutcomes, StoryObject>();
             JObject options = (JObject)specialActionObject["Options"];
-            string succsessText = options["Sucssess"].ToString();
-            string failText = options["Fail"].ToString();
-            string criticalFailText = options["CriticalFail"].ToString();
+            int succsess = (int)options["SucssessChance"];
+            int fail = (int)options["FailChance"];
+            int criticalFail = (int)options["CriticalFailChance"];
 
-            int succsessChance = int.Parse(succsessText.Substring(succsessText.Length-3,2));
-            int failChance = int.Parse(failText.Substring(failText.Length - 3, 2));
-            int criticalFailChance = int.Parse(criticalFailText.Substring(criticalFailText.Length - 3,2));
 
-            actionOutcomes.Add(SpecialStoryAction.ActionOutcomes.Succsess, new Tuple<int, string>(succsessChance, succsessText));
-            actionOutcomes.Add(SpecialStoryAction.ActionOutcomes.Failure, new Tuple<int, string>(failChance, failText));
-            actionOutcomes.Add(SpecialStoryAction.ActionOutcomes.CriticalFailure, new Tuple<int, string>(criticalFailChance, criticalFailText));
+            int chosenRoll = UnityEngine.Random.Range(0, 100);
 
-            specialAction = new SpecialStoryAction(specialActionAction,specialActionText, actionOutcomes);
+            SpecialStoryAction.ActionOutcomes chosenOutcome = SpecialStoryAction.ActionOutcomes.Succsess;
+
+            if (chosenRoll <= fail) {
+                chosenOutcome = SpecialStoryAction.ActionOutcomes.Failure;
+            }
+            else if(chosenRoll > fail && chosenRoll <= fail + criticalFail )
+            {
+                chosenOutcome = SpecialStoryAction.ActionOutcomes.CriticalFailure;
+            }
+
+
+
+            actionOutcomes.Add(SpecialStoryAction.ActionOutcomes.Succsess, CreateEvents((JObject)options["Sucssess"], eventObject));
+            actionOutcomes.Add(SpecialStoryAction.ActionOutcomes.Failure, CreateEvents((JObject)options["Fail"], eventObject));
+            actionOutcomes.Add(SpecialStoryAction.ActionOutcomes.CriticalFailure, CreateEvents((JObject)options["CriticalFail"], eventObject));
+
+            specialAction = new SpecialStoryAction(specialActionAction,specialActionText, actionOutcomes,chosenOutcome);
         }
         JArray responsesArray = (JArray)head["Responses"];
-        StoryObject eventObject = new StoryObject(text, responseText,parentObject, action, specialAction);
         if (responsesArray != null && responsesArray.Count > 0)
         { 
             events = new List<StoryObject>();
@@ -90,6 +101,7 @@ public class JSONParser : SingletonManager<JSONParser>
                 events.Add(CreateEvents((JObject)responsesArray[i], eventObject));
             }
         }
+        eventObject.specialStoryAction = specialAction;
         eventObject.stories = events;
         return eventObject;
     }

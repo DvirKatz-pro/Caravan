@@ -36,13 +36,12 @@ public class StoryObject
         this.stories = responses;
     }
 
-    public StoryObject(string text, string responseText, StoryObject parentEvent, Actions action, SpecialStoryAction specialStoryAction)
+    public StoryObject(string text, string responseText, StoryObject parentEvent, Actions action)
     {
         this.text = text;
         this.responseText = responseText;
         this.parentEvent = parentEvent;
         this.action = action;
-        this.specialStoryAction = specialStoryAction;
     }
 
     // Start is called before the first frame update
@@ -60,7 +59,9 @@ public class StoryObject
     {
         public SpecialActions specialAction { get; set; }
         public string actionText { get; set; }
-        public Dictionary<ActionOutcomes, Tuple<int,string>> actionOutcomes { get; set; }
+        public Dictionary<ActionOutcomes, StoryObject> actionOutcomes { get; set; }
+
+        public ActionOutcomes rolledOutcome { get; set; }
 
         public enum ActionOutcomes
         {
@@ -68,11 +69,12 @@ public class StoryObject
             Failure,
             CriticalFailure
         }
-        public SpecialStoryAction(SpecialActions specialAction, string actionText, Dictionary<ActionOutcomes, Tuple<int, string>> actionOutcomes)
+        public SpecialStoryAction(SpecialActions specialAction, string actionText, Dictionary<ActionOutcomes, StoryObject> actionOutcomes,ActionOutcomes rolledOutcome)
         {
             this.specialAction = specialAction;
             this.actionText = actionText;
             this.actionOutcomes = actionOutcomes;
+            this.rolledOutcome = rolledOutcome;
         }
     }
 }

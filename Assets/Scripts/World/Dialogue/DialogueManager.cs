@@ -104,6 +104,7 @@ public class DialogueManager : SingletonManager<DialogueManager>
                 button.transform.GetChild(0).GetComponent<Text>().text = stories[i].responseText.ToString();
                 ResponseButton responseButton = button.GetComponent<ResponseButton>();
                 responseButton.responseNum = i + 1;
+                responseButton.isDialogue = true;
                 buttons.Add(button);
             }
             StartCoroutine(ResponseRoutine());

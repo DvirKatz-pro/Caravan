@@ -8,11 +8,19 @@ using UnityEngine;
 /// </summary>
 public class ResponseButton : MonoBehaviour
 {
+     
     public int responseNum { get; set; }
-    
+    public bool isDialogue { get; set; }
 
     public void OnClick()
     {
-        DialogueManager.Instance.OnChooseResponse(responseNum);
+        if (isDialogue)
+        {
+            DialogueManager.Instance.OnChooseResponse(responseNum);
+        }
+        else 
+        {
+            TravelEventsManager.Instance.OnChooseResponse(responseNum);
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static StoryObject;
 
 public class TravelEventsManager : SingletonManager<TravelEventsManager>
 {
@@ -88,14 +89,27 @@ public class TravelEventsManager : SingletonManager<TravelEventsManager>
         yield break;
     }
 
+    public void OnChooseResponse(int responseNum)
+    {
+        chosenResponseNum = responseNum;
+    }
+
     public void OnParseEvent(StoryObject currentStory)
     {
-        this.currentStory = currentStory;
         if (currentStory.text != null)
         {
             string text = currentStory.text.ToString();
             textObject.GetComponent<TMP_Text>().text = text;
         }
+        else if (currentStory.specialStoryAction != null)
+        {
+            SpecialStoryAction specialStoryAction = currentStory.specialStoryAction;
+            string text = specialStoryAction.actionText;
+            textObject.GetComponent<TMP_Text>().text = text;
+            currentStory = specialStoryAction.actionOutcomes[currentStory.specialStoryAction.rolledOutcome];
+            
+        }
+        this.currentStory = currentStory;
         /*
         switch (currentStory.action)
         {
@@ -129,6 +143,7 @@ public class TravelEventsManager : SingletonManager<TravelEventsManager>
                 button.transform.GetChild(0).GetComponent<Text>().text = responseText.ToString();
                 ResponseButton responseButton = button.GetComponent<ResponseButton>();
                 responseButton.responseNum = i + 1;
+                responseButton.isDialogue = false;
                 buttons.Add(button);
             }
             StartCoroutine(ResponseRoutine());
