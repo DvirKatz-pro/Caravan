@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Road : MonoBehaviour
 {
+    private const string SIDE_SCROLL = "SideScroll";
     RoadManager roadManager;
     RoadManager.RoadNames roadName;
 
@@ -49,6 +51,11 @@ public class Road : MonoBehaviour
     {
         StartCoroutine(fadeScreen(fadeTimeSeconds, true));
     }
+
+    public void OnTravelEnded()
+    {
+        StartCoroutine(LoadYourAsyncScene());
+    }
     private IEnumerator fadeScreen(float timeSeconds, bool fade)
     {
         CanvasGroup fadeCanvas = fadeImage.GetComponent<CanvasGroup>();
@@ -70,8 +77,26 @@ public class Road : MonoBehaviour
                 fadeCanvas.alpha += amountPerSec * Time.deltaTime;
                 yield return null;
             }
+            OnTravelEnded();
         }
         
+    }
+
+    IEnumerator LoadYourAsyncScene()
+    {
+        // The Application loads the Scene in the background as the current Scene runs.
+        // This is particularly good for creating loading screens.
+        // You could also load the Scene by using sceneBuildIndex. In this case Scene2 has
+        // a sceneBuildIndex of 1 as shown in Build Settings.
+        roadManager.currentRoadName = RoadManager.RoadNames.Road1;
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(SIDE_SCROLL);
+
+        // Wait until the asynchronous scene fully loads
+        while (!asyncLoad.isDone)
+        {
+            yield return null;
+        }
+
     }
 
     public GameObject getPlayer()

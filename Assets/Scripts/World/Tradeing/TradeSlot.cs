@@ -25,7 +25,7 @@ public class TradeSlot : UISlot
 
     public override void OnPointerClick(PointerEventData eventData) {
         //check if this slot is in the buy or sell screen
-        if (gameObject.tag.Equals("SellScreen") || gameObject.tag.Equals("BuyScreen"))
+        if (this.item != null && (gameObject.tag.Equals("SellScreen") || gameObject.tag.Equals("BuyScreen")))
         {
             //if we are clicked in the sell screen return this item to the Player inventory
             if (gameObject.tag.Equals("SellScreen"))
@@ -46,7 +46,7 @@ public class TradeSlot : UISlot
 
         }
         //if this slot is not in the sell/buy screen then add it to the appropriate screen
-        else
+        else if(this.item != null)
         { 
 
             GameObject slot = Instantiate(this.gameObject, tradeContent.transform);
