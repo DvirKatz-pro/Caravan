@@ -5,10 +5,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using static StoryObject;
 
+/// <summary>
+/// Class that handles travel events
+/// </summary>
 public class TravelEventsManager : SingletonManager<TravelEventsManager>
 {
-    [SerializeField] private GameObject player;
     //Needed GameObjects
+    [SerializeField] private GameObject player;
     [SerializeField] private GameObject travelEventUI;
     [SerializeField] private GameObject textObject;
     [SerializeField] private GameObject ResponseButton;
@@ -16,15 +19,18 @@ public class TravelEventsManager : SingletonManager<TravelEventsManager>
     [SerializeField] private Vector3 buttonPosition;
     [SerializeField] private string jsonName = "AmbushEvent.json";
 
+    //Needed managers
     JSONParser parser;
     PauseControl pauseControl;
     RoadManager roadManager;
 
     private const string TRAVEL_EVENT_PATH = "Assets\\Resources\\TravelEvents\\";
 
+    //Track the events that trigger
     private List<TravelEvent> events;
     TravelEventComparer compareEvents;
 
+    //UI values
     private float buttonHeight;
     private StoryObject currentStory;
     private List<GameObject> buttons;
@@ -53,6 +59,7 @@ public class TravelEventsManager : SingletonManager<TravelEventsManager>
     // Update is called once per frame
     void Update()
     {
+        //check if we triggerd an event
         if (events.Count > 0 && player.transform.position.x >= events[0].triggerPos.x)
         {
             TriggerEvent(events[0]);
@@ -64,7 +71,7 @@ public class TravelEventsManager : SingletonManager<TravelEventsManager>
         events.Add(travelEvent);
         events.Sort(compareEvents);
     }
-
+    #region HandleEvent
     public void TriggerEvent(TravelEvent travelEvent)
     {
         travelEventUI.SetActive(true);
@@ -72,6 +79,9 @@ public class TravelEventsManager : SingletonManager<TravelEventsManager>
         OnParseEvent(travelEvent.storyHead);
     }
 
+    /// <summary>
+    /// Wait for the player to pick a response and handle the resulting event
+    /// </summary>
     private IEnumerator ResponseRoutine()
     {
         while (chosenResponseNum < 0)
@@ -93,14 +103,18 @@ public class TravelEventsManager : SingletonManager<TravelEventsManager>
     {
         chosenResponseNum = responseNum;
     }
-
+    /// <summary>
+    /// Set the UI components for the given StoryObject
+    /// </summary>
     public void OnParseEvent(StoryObject currentStory)
     {
+        //set the text
         if (currentStory.text != null)
         {
             string text = currentStory.text.ToString();
             textObject.GetComponent<TMP_Text>().text = text;
         }
+        //if this is a special story action, check the rolled result and continue from the rolled outcome
         else if (currentStory.specialStoryAction != null)
         {
             SpecialStoryAction specialStoryAction = currentStory.specialStoryAction;
@@ -126,6 +140,7 @@ public class TravelEventsManager : SingletonManager<TravelEventsManager>
                 break;
         }
         */
+        //if we have responses, create buttons for each response
         if (currentStory.stories != null && currentStory.stories.Count > 0)
         {
             List<StoryObject> stories = currentStory.stories;
@@ -151,7 +166,10 @@ public class TravelEventsManager : SingletonManager<TravelEventsManager>
         else
         { OnDisable(); }
     }
-
+    #endregion
+    /// <summary>
+    /// Sort the events by distance
+    /// </summary>
     public class TravelEventComparer : IComparer<TravelEvent> 
     {
         public int Compare(TravelEvent a, TravelEvent b)

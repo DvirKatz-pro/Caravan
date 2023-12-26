@@ -73,11 +73,6 @@ public class TradeManager : SingletonManager<TradeManager>
         transform.GetChild(0).gameObject.SetActive(true);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
    
     /// <summary>
     /// When an item is added/removed from the trade screen we update the current trade balance

@@ -4,11 +4,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using static StoryObject;
 
+/// <summary>
+/// A class representing a Story object, it contains all needed objects for a dialouge tree or Travel Event Tree
+/// </summary>
 public class StoryObject
 {
+    //the main text that displays at the top
     public string text { get; set; }
+    //the text to appear as part of a response button
     public string responseText { get; set; }
+    //the event that called this event
     public StoryObject parentEvent { get; set; }
+    //list of responses
     public List<StoryObject> stories { get; set; }
     public Actions action { get; set; }
 
@@ -44,17 +51,6 @@ public class StoryObject
         this.action = action;
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     public class SpecialStoryAction 
     {
         public SpecialActions specialAction { get; set; }

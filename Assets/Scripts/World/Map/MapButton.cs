@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+/// <summary>
+/// A class representing a button that exists on the player map, and the player can travel to
+/// </summary>
 public class MapButton : MonoBehaviour
 {
     private const string TRAVEL = "Travel";

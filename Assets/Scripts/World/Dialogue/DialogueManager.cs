@@ -29,12 +29,14 @@ public class DialogueManager : SingletonManager<DialogueManager>
   
     
     // Start is called before the first frame update
-    private void Awake()
+    private new void Awake()
     {
         buttonHeight = ResponseButton.GetComponent<RectTransform>().sizeDelta.y;
         buttons = new List<GameObject>();
     }
-
+    // <summary>
+    /// Activate the Dialogue UI and parse the head storyObject
+    /// </summary>
     public void OnOpenDialogue(StoryObject storyObject, GameObject currentNPC) 
     {
         this.currentNPC = currentNPC;
@@ -67,15 +69,19 @@ public class DialogueManager : SingletonManager<DialogueManager>
         OnParseDialouge(currentStory.stories[tempChosenResponse - 1]);
         yield break;
     }
-
+    // <summary>
+    /// Parse a single storyObject and display the appropriate text onscreen
+    /// </summary>
     public void OnParseDialouge(StoryObject currentStory)
     {
+        //get the basic text
         this.currentStory = currentStory;
         if (currentStory.text != null) 
         {
             string text = currentStory.text.ToString();
             textObject.GetComponent<TMP_Text>().text = text;
         }
+        //if the story object holds an action, execute the action
         switch (currentStory.action)
         {
             case StoryObject.Actions.Trade:
@@ -90,7 +96,7 @@ public class DialogueManager : SingletonManager<DialogueManager>
                 OnDisable();
                 break;
         }
-
+        //if the story has follow up responses dynamically create buttons to represent them
         if (currentStory.stories != null && currentStory.stories.Count > 0)
         {
             List<StoryObject> stories = currentStory.stories;
@@ -114,51 +120,6 @@ public class DialogueManager : SingletonManager<DialogueManager>
 
     }
 
-    /// <summary>
-    /// Parse a Json object that contains text, responses and Rest of dialouge tree
-    /// </summary>
-    /*
-    private void ParseDialouge(JObject responseObject)
-    {
-        if (responseObject["Text"] != null)
-        {
-            string text = responseObject["Text"].ToString();
-            textObject.GetComponent<TMP_Text>().text = text;
-            responses = (JArray)responseObject["Responses"];
-            if (responses != null && responses.Count > 0)
-            {
-                for (int i = 0; i < responses.Count; i++)
-                {
-                    //Here we dynamiclly add buttons to UI depending on the amount of responses that exist
-                    GameObject button = Instantiate(ResponseButton, content.transform);
-                    Vector3 newButtonPos = buttonPosition;
-                    newButtonPos.y -= buttonHeight * i;
-                    button.GetComponent<RectTransform>().anchoredPosition = newButtonPos;
-                    button.transform.GetChild(0).GetComponent<Text>().text = responses[i]["ResponseText"].ToString();
-                    ResponseButton responseButton = button.GetComponent<ResponseButton>();
-                    responseButton.responseNum = i + 1;
-                    buttons.Add(button);
-                }
-
-                StartCoroutine(ResponseRoutine());
-            }
-
-        }
-        else if (responseObject.SelectToken("Trade").Value<bool>())
-        {
-            if (currentNPC.GetComponent<NPCInventory>() != null)
-            {
-                TradeManager.Instance.OpenTradeScreen(currentNPC);
-            }
-            OnDisable();
-        }
-        else
-        {
-            OnDisable();
-        }
-
-    }
-    */
     #endregion
     private void OnDisable()
     {

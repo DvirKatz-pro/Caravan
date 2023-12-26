@@ -1503,7 +1503,7 @@ GameObject:
   - component: {fileID: 177153155}
   - component: {fileID: 177153154}
   m_Layer: 5
-  m_Name: Image
+  m_Name: FadeImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1954,6 +1954,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 030cd6ba615c5d245befff3c3c9788e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unFadeTimeSeconds: 8
+  fadeTimeSeconds: 8
 --- !u!4 &207551375
 Transform:
   m_ObjectHideFlags: 0
@@ -10406,12 +10408,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa27efb620ff758409110f137090b3bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fadeImage: {fileID: 177153152}
   player: {fileID: 1098195156}
   startPos: {fileID: 975856580}
   endPos: {fileID: 26473410}
-  fadeImage: {fileID: 177153152}
-  unFadeTimeSeconds: 5
-  fadeTimeSeconds: 5
 --- !u!1001 &1251567028
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14200,11 +14200,10 @@ MonoBehaviour:
     - {fileID: 1844674401}
     - {fileID: 1880543499}
     - {fileID: 1820105474}
-  jsonPath: Assets/Resources/GameData/TradeableItems.json
   selectedObject: {fileID: 126539537}
   slotsContainer: {fileID: 1283722260}
-  startingFunds: 100
   fundsText: {fileID: 1828451614}
+  startingFunds: 100
 --- !u!1001 &1820105472
 PrefabInstance:
   m_ObjectHideFlags: 0

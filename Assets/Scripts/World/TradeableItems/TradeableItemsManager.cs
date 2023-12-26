@@ -18,7 +18,7 @@ public class TradeableItemsManager : SingletonManager<TradeableItemsManager>
     Dictionary<string, TradeableItem> armorItems;
 
     // Start is called before the first frame update
-    void Awake()
+    new void Awake()
     {
         allItems = new Dictionary<string, TradeableItem>();
         foodItems = new Dictionary<string, TradeableItem>();

@@ -14,6 +14,7 @@ public class ResponseButton : MonoBehaviour
 
     public void OnClick()
     {
+        //either this button comes from a dialouge tree or from a travel event tree
         if (isDialogue)
         {
             DialogueManager.Instance.OnChooseResponse(responseNum);

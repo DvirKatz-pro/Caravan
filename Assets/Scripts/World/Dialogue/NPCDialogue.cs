@@ -15,7 +15,6 @@ public class NPCDialogue : MonoBehaviour
 
     public StoryObject headDialouge { get; set; }
 
-    private GameManager gameManager;
     private GameObject player;
 
     public bool inDialogue { get; set; } = false;

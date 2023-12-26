@@ -56,14 +56,12 @@ public class KingdomGeneric : MonoBehaviour
 
     }
     private void InitializeRoads() {
-        /*
-        foreach (Road road in nearRoads)
-        {
-            
-        }
-        */
+       
     }
 
+    /// <summary>
+    /// Add random items items to an NPC Inventory stock, making sure that an x amount of "must have" items are always added
+    /// </summary>
     private void AddItemsToStock(List<TradeableItem> npcStock, List<TradeableItem> items,int amountTotal ,int amountOfNecessaryItems)
     {
         TradeableItemsManager tradeableItemsManager = TradeableItemsManager.Instance;

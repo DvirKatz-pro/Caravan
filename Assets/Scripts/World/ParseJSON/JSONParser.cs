@@ -8,6 +8,9 @@ using UnityEngine;
 using static StoryObject;
 using static StoryObject.SpecialStoryAction;
 
+/// <summary>
+/// A class to parse a JSON into storyObject Tree to be used in Dialouge or Travel Events
+/// </summary>
 public class JSONParser : SingletonManager<JSONParser>
 {
     // Start is called before the first frame update
@@ -34,13 +37,15 @@ public class JSONParser : SingletonManager<JSONParser>
             JObject dialouge = (JObject)jsonText["Dialouge"];
             if (dialouge != null)
             {
-                headEvent = CreateEvents(dialouge,null);
+                headEvent = CreateStoryObjects(dialouge,null);
             }
         }
         return headEvent;
     }
-
-    public StoryObject CreateEvents(JObject head, StoryObject parentObject)
+    /// <summary>
+    /// given a head story object, create the story object tree and recursevly traverse the json tree
+    /// </summary>
+    public StoryObject CreateStoryObjects(JObject head, StoryObject parentObject)
     {
         string text = null;
         string responseText = null;
@@ -62,16 +67,18 @@ public class JSONParser : SingletonManager<JSONParser>
         StoryObject eventObject = new StoryObject(text, responseText, parentObject, action);
         if (head.ContainsKey("SpecialActionObject"))
         {
+            // and create a special story object inside the StoryObject class
             JObject specialActionObject = (JObject)head["SpecialActionObject"];
             StoryObject.SpecialActions specialActionAction = (SpecialActions)Enum.Parse(typeof(SpecialActions), specialActionObject["SpecialAction"].ToString(), ignoreCase: true);
             string specialActionText = specialActionObject["Text"].ToString();
+            //get the type of special action
             Dictionary<SpecialStoryAction.ActionOutcomes, StoryObject> actionOutcomes = new Dictionary<ActionOutcomes, StoryObject>();
             JObject options = (JObject)specialActionObject["Options"];
             int succsess = (int)options["SucssessChance"];
             int fail = (int)options["FailChance"];
             int criticalFail = (int)options["CriticalFailChance"];
 
-
+            //alculate the chance of each outcome of the action
             int chosenRoll = UnityEngine.Random.Range(0, 100);
 
             SpecialStoryAction.ActionOutcomes chosenOutcome = SpecialStoryAction.ActionOutcomes.Succsess;
@@ -85,61 +92,25 @@ public class JSONParser : SingletonManager<JSONParser>
             }
 
 
-
-            actionOutcomes.Add(SpecialStoryAction.ActionOutcomes.Succsess, CreateEvents((JObject)options["Sucssess"], eventObject));
-            actionOutcomes.Add(SpecialStoryAction.ActionOutcomes.Failure, CreateEvents((JObject)options["Fail"], eventObject));
-            actionOutcomes.Add(SpecialStoryAction.ActionOutcomes.CriticalFailure, CreateEvents((JObject)options["CriticalFail"], eventObject));
-
+            //recursvly traverse the storyObject tree of each outcome
+            actionOutcomes.Add(SpecialStoryAction.ActionOutcomes.Succsess, CreateStoryObjects((JObject)options["Sucssess"], eventObject));
+            actionOutcomes.Add(SpecialStoryAction.ActionOutcomes.Failure, CreateStoryObjects((JObject)options["Fail"], eventObject));
+            actionOutcomes.Add(SpecialStoryAction.ActionOutcomes.CriticalFailure, CreateStoryObjects((JObject)options["CriticalFail"], eventObject));
+            //create a new specialStoryAction inside the StoryObject class
             specialAction = new SpecialStoryAction(specialActionAction,specialActionText, actionOutcomes,chosenOutcome);
         }
+        //recursvly traverse the storyObject tree of each response
         JArray responsesArray = (JArray)head["Responses"];
         if (responsesArray != null && responsesArray.Count > 0)
         { 
             events = new List<StoryObject>();
             for (int i = 0; i < responsesArray.Count; i++)
             {
-                events.Add(CreateEvents((JObject)responsesArray[i], eventObject));
+                events.Add(CreateStoryObjects((JObject)responsesArray[i], eventObject));
             }
         }
         eventObject.specialStoryAction = specialAction;
         eventObject.stories = events;
         return eventObject;
     }
-    /*
-    public EventObject ParseJSON(JObject head, EventObject eventObject) {
-
-        if (head.ContainsKey("Text"))
-        {
-            string text = head["Text"].ToString();
-            string responseText = null;
-            if (head.ContainsKey("ResponseText"))
-            {
-                responseText = head["ResponseText"].ToString();
-            }
-
-            JArray responsesArray = (JArray)head["Responses"];
-            if (responsesArray != null && responsesArray.Count > 0)
-            {
-                for (int i = 0; i < responsesArray.Count; i++)
-                {
-                    responses.Add(ParseJSON((JObject)responsesArray[i], new List<EventObject>()));
-                }
-                return new EventObject(text, responseText, responses);
-            }
-
-        }
-        else if (head.ContainsKey("ResponseText")) 
-        {
-            string responseText = head["ResponseText"].ToString();
-            return new EventObject(null, responseText, null);
-        }
-        else if (head.SelectToken("Trade").Value<bool>())
-        {
-
-        }
-        return null;
-        
-
-    }
-    */
 }

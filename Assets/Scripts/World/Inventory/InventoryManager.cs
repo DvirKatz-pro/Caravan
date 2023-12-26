@@ -16,17 +16,19 @@ public class InventoryManager : SingletonManager<InventoryManager>
     {
         public List<GameObject> slots;
     }
-
+    //Needed gameobjects
     [SerializeField] private List<InvnetorySlots> slots;
-    [SerializeField] private string jsonPath;
     [SerializeField] private GameObject selectedObject;
     [SerializeField] private GameObject slotsContainer;
-    [SerializeField] private float startingFunds = 0;
     [SerializeField] private TextMeshProUGUI fundsText;
+
+    //Gameplay related variables
+    [SerializeField] private float startingFunds = 0;
+
     private float currentFunds = 0;
+    private float availableSpace = 0;
 
     public const string FUNDS_TEXT = "funds: ";
-    private float availableSpace = 0;
 
     TradeableItemsManager tradeItemManager;
 
