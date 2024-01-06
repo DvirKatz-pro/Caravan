@@ -8,6 +8,7 @@ using UnityEngine;
 /// </summary>
 public class KingdomGeneric : MonoBehaviour
 {
+
     [SerializeField] private List<GameObject> traders;
     private List<Road> nearRoads;
     // Start is called before the first frame update
