@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// A class representing a travel event with its StoryObject and trigger position
 /// </summary>
-public class TravelEvent : MonoBehaviour
+public class TravelEvent
 {
 
     public Vector2 triggerPos { get; set; }

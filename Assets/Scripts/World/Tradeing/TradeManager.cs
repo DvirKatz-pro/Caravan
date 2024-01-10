@@ -8,8 +8,9 @@ using UnityEngine;
 /// </summary>
 public class TradeManager : SingletonManager<TradeManager>
 {
-   
+
     //Needed items and classes
+    [SerializeField] private GameObject tradeUI;
     [SerializeField] private List<InventoryManager.InvnetorySlots> sellSlots;
     [SerializeField] private List<InventoryManager.InvnetorySlots> buySlots;
     [SerializeField] private TextMeshProUGUI fundsText;
@@ -70,7 +71,7 @@ public class TradeManager : SingletonManager<TradeManager>
         {
             AddToBuyInventory(item);
         }
-        transform.GetChild(0).gameObject.SetActive(true);
+        tradeUI.SetActive(true);
     }
 
    
@@ -153,7 +154,7 @@ public class TradeManager : SingletonManager<TradeManager>
             }
             
         }
-        TradeManager.Instance.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+        tradeUI.SetActive(false);
     }
     #endregion
     #region Buy/Sell Screen actions

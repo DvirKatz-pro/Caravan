@@ -31,6 +31,7 @@ public class DialogueManager : SingletonManager<DialogueManager>
     // Start is called before the first frame update
     private new void Awake()
     {
+        base.Awake();
         buttonHeight = ResponseButton.GetComponent<RectTransform>().sizeDelta.y;
         buttons = new List<GameObject>();
     }
