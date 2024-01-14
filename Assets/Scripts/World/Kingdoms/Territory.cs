@@ -4,11 +4,7 @@ using UnityEngine;
 
 public class Territory : MonoBehaviour
 {
-    public enum Territories 
-    {
-        Nis,
-        None
-    }
+    
 
     [SerializeField] private List<GameObject> traders;
 

@@ -20,12 +20,15 @@ public class KingdomManager : SingletonManager<KingdomManager>
 
 
 
-
+        HashSet<Kingdom.Territories> territories = new HashSet<Kingdom.Territories>
+        {
+            Kingdom.Territories.Nis
+        };
         Kingdoms[] kingdomsArr = (Kingdoms[])Enum.GetValues(typeof(Kingdoms));
         for (int i = 0; i < Enum.GetValues(typeof(Kingdoms)).Length - 1; i++) 
         {
             Kingdoms kingdomName = kingdomsArr[i];
-            Kingdom kingdom = new Kingdom(kingdomName, Kingdom.PoliticalState.Peace,null,"Peter",500,500,500);
+            Kingdom kingdom = new Kingdom(kingdomName, Kingdom.PoliticalState.Peace,territories,"Peter",500,500,500);
             kingdoms.Add(kingdomName, kingdom);
         }
 

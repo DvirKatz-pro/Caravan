@@ -11,9 +11,15 @@ public class Kingdom : MonoBehaviour
         Peace
     }
 
+    public enum Territories
+    {
+        Nis,
+        None
+    }
+
     public KingdomManager.Kingdoms kingdomName { get; set; }
     private PoliticalState politicalState { get; set; }
-    private List<Territories> ownedTerritory { get; set; }
+    private HashSet<Territories> ownedTerritory { get; set; }
 
     private string leaderName { get; set; }
     private float populanceMood { get; set; }
@@ -26,7 +32,7 @@ public class Kingdom : MonoBehaviour
 
     }
 
-    public Kingdom(KingdomManager.Kingdoms kingdomName, PoliticalState politicalState, List<Territory.Territories> ownedTerritory, string leaderName, float populanceMood, float armyStrength, float populanceMoodToPlayer)
+    public Kingdom(KingdomManager.Kingdoms kingdomName, PoliticalState politicalState, HashSet<Territories> ownedTerritory, string leaderName, float populanceMood, float armyStrength, float populanceMoodToPlayer)
     {
         this.kingdomName = kingdomName;
         this.politicalState = politicalState;
