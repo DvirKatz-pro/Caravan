@@ -18,14 +18,14 @@ public class Kingdom : MonoBehaviour
     }
 
     public KingdomManager.Kingdoms kingdomName { get; set; }
-    private PoliticalState politicalState { get; set; }
-    private HashSet<Territories> ownedTerritory { get; set; }
+    public PoliticalState politicalState { get; set; }
+    public HashSet<Territories> ownedTerritory { get; set; }
 
-    private string leaderName { get; set; }
-    private float populanceMood { get; set; }
-    private float armyStrength { get; set; }
-    private float economicProsperity { get; set; }
-    private float populanceMoodToPlayer { get; set; }
+    public string leaderName { get; set; }
+    public float populanceMood { get; set; }
+    public float armyStrength { get; set; }
+    public float economicProsperity { get; set; }
+    public float populanceMoodToPlayer { get; set; }
 
     public Kingdom() 
     {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml;
 using UnityEngine;
 
 public class KingdomManager : SingletonManager<KingdomManager>
@@ -30,6 +31,7 @@ public class KingdomManager : SingletonManager<KingdomManager>
             Kingdoms kingdomName = kingdomsArr[i];
             Kingdom kingdom = new Kingdom(kingdomName, Kingdom.PoliticalState.Peace,territories,"Peter",500,500,500);
             kingdoms.Add(kingdomName, kingdom);
+            kingdomsList.Add(kingdom);
         }
 
     }
@@ -37,6 +39,17 @@ public class KingdomManager : SingletonManager<KingdomManager>
     public Kingdom GetKingdomByName(Kingdoms kingdom) 
     {
         return kingdoms[kingdom];
+    }
+    public Kingdom GetKingdomByTerritory(Kingdom.Territories territory)
+    {
+        foreach (KeyValuePair<Kingdoms, Kingdom> kingdom in kingdoms)
+        {
+            if (kingdom.Value.ownedTerritory.Contains(territory)) 
+            {
+                return kingdom.Value;
+            }
+        }
+        return null;
     }
 
     public void StartWar(List<Kingdoms> attackingKingdoms, List<Kingdom> defendingKingdoms) 
