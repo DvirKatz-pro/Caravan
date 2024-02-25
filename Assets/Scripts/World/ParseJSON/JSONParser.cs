@@ -7,6 +7,8 @@ using TMPro;
 using UnityEngine;
 using static StoryObject;
 using static StoryObject.SpecialStoryAction;
+using Object = System.Object;
+using Random = UnityEngine.Random;
 
 /// <summary>
 /// A class to parse a JSON into storyObject Tree to be used in Dialouge or Travel Events
@@ -28,19 +30,32 @@ public class JSONParser : SingletonManager<JSONParser>
     /// <summary>
     /// Open given json of NPC that contains the dialouge tree
     /// </summary>
-    public StoryObject OpenJson(string jsonPath)
+    public StoryObject OpenJsonDialougeTree(string jsonPath)
     {
-        StoryObject headEvent = null;
         JObject jsonText = JObject.Parse(File.ReadAllText(jsonPath));
-        if (jsonText.ContainsKey("Dialouge")) 
+        if (jsonText.ContainsKey("Dialouge"))
         {
+            StoryObject headEvent = null;
             JObject dialouge = (JObject)jsonText["Dialouge"];
             if (dialouge != null)
             {
-                headEvent = CreateStoryObjects(dialouge,null);
+                headEvent = CreateStoryObjects(dialouge, null);
+                return headEvent;
             }
         }
-        return headEvent;
+        return null;
+    }
+
+    public Tuple<List<string>, List<string>> OpenJsonLeaderNames(string jsonPath)
+    {
+        JObject jsonText = JObject.Parse(File.ReadAllText(jsonPath));
+        if (jsonText.ContainsKey("LeaderNames"))
+        {
+            JObject leaderNames = (JObject)jsonText["LeaderNames"];
+            Tuple<List<string>,List<string>> nameLists = GenerateLeaderName(leaderNames);
+            return nameLists;
+        }
+        return null;
     }
     /// <summary>
     /// given a head story object, create the story object tree and recursevly traverse the json tree
@@ -112,5 +127,13 @@ public class JSONParser : SingletonManager<JSONParser>
         eventObject.specialStoryAction = specialAction;
         eventObject.stories = events;
         return eventObject;
+    }
+
+    public Tuple<List<string>,List<string>> GenerateLeaderName(JObject names)
+    {
+        List<string> boyNames = (List<string>)names["BoyNames"].ToObject(typeof(List<string>));
+        List<string> girlNames = (List<string>)names["GirlNames"].ToObject(typeof(List<string>));
+
+        return new Tuple<List<string>, List<string>>(boyNames,girlNames);
     }
 }

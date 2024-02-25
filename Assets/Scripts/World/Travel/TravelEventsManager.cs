@@ -51,7 +51,7 @@ public class TravelEventsManager : SingletonManager<TravelEventsManager>
 
         float eventPosX = (roadManager.currentRoad.endPos.position.x +  roadManager.currentRoad.startPos.position.x) / 2.0f;
         float eventPosY = roadManager.currentRoad.startPos.position.y;
-        StoryObject headStory = parser.OpenJson(TRAVEL_EVENT_PATH + jsonName);
+        StoryObject headStory = (StoryObject)parser.OpenJsonDialougeTree(TRAVEL_EVENT_PATH + jsonName);
         TravelEvent travelEvent = new TravelEvent(new Vector2(eventPosX, eventPosY),headStory);
         AddEvent(travelEvent);
     }
