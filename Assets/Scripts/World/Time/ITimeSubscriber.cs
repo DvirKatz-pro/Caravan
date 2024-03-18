@@ -4,5 +4,8 @@ using UnityEngine;
 
 public interface ITimeSubscriber
 {
-    public void NotifyTime();
+    public void NotifyHour();
+    public void NotifyDay();
+    public void NotifySeason();
+    public void NotifyYear();
 }

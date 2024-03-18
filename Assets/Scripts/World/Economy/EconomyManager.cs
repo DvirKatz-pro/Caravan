@@ -24,8 +24,23 @@ public class EconomyManager: SingletonManager<EconomyManager> , ITimeSubscriber
 
     }
 
-    void ITimeSubscriber.NotifyTime()
+    void ITimeSubscriber.NotifyHour()
     {
-        Debug.Log("Notify season!");
+        
+    }
+
+    void ITimeSubscriber.NotifyDay()
+    {
+        
+    }
+
+    void ITimeSubscriber.NotifySeason()
+    {
+        
+    }
+
+    void ITimeSubscriber.NotifyYear()
+    {
+        
     }
 }

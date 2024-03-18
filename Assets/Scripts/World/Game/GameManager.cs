@@ -22,8 +22,23 @@ public class GameManager : SingletonManager<GameManager>, ITimeSubscriber
         return player;
     }
 
-    public void NotifyTime()
+    void ITimeSubscriber.NotifyHour()
     {
-        Debug.Log("Notify season!");
+        
+    }
+
+    void ITimeSubscriber.NotifyDay()
+    {
+        
+    }
+
+    void ITimeSubscriber.NotifySeason()
+    {
+        
+    }
+
+    void ITimeSubscriber.NotifyYear()
+    {
+        
     }
 }

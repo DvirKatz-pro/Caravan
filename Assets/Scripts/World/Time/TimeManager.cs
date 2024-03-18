@@ -76,28 +76,28 @@ public class TimeManager : SingletonManager<TimeManager>
     {
         foreach (ITimeSubscriber subscriber in hourSubscribers)
         {
-            subscriber.NotifyTime();
+            subscriber.NotifyHour();
         }
     }
     public void OnDayChanged()
     {
         foreach (ITimeSubscriber subscriber in daySubscribers)
         {
-            subscriber.NotifyTime();
+            subscriber.NotifyDay();
         }
     }
     public void OnSeasonChanged()
     {
         foreach (ITimeSubscriber subscriber in seasonSubscribers)
         {
-            subscriber.NotifyTime();
+            subscriber.NotifySeason();
         }
     }
     public void OnYearChanged()
     {
         foreach (ITimeSubscriber subscriber in yearSubscribers)
         {
-            subscriber.NotifyTime();
+            subscriber.NotifyYear();
         }
     }
 
