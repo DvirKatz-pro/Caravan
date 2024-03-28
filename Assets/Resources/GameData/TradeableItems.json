@@ -1,12 +1,14 @@
 {
-  "apple": {
-    "basePrice": 10,
-    "rarity": "necessary",
-    "itemType": "food"
-  },
-  "armor": {
-    "basePrice": 25,
-    "rarity": "common",
-    "itemType": "armor"
+  "TradeableItems": {
+    "apple": {
+      "basePrice": 10,
+      "rarity": "necessary",
+      "itemType": "food"
+    },
+    "armor": {
+      "basePrice": 25,
+      "rarity": "common",
+      "itemType": "armor"
+    }
   }
 }

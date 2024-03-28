@@ -1,18 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class ConcreteTerritory : MonoBehaviour
 {
     [SerializeField] private List<GameObject> traders;
-    [SerializeField] private Kingdom.Territories territoryName;
+    [SerializeField] private TerritoryManager.Territories territoryName;
 
     private Territory territoryData;
-    public List<TradeableItem> itemProduction { get; set; }
 
     // Start is called before the first frame update
     void Start()
     {
+        territoryData = TerritoryManager.Instance.GetTerritoryByName(territoryName);
         InitializeStock();
     }
     /// <summary>
@@ -20,30 +21,35 @@ public class ConcreteTerritory : MonoBehaviour
     /// </summary>
     protected void InitializeStock()
     {
-        List<TradeableItem> npcStock = new List<TradeableItem>();
         TradeableItemsManager tradeableItemsManager = TradeableItemsManager.Instance;
-        int amountOfItems = Random.Range(25, 40);
-        //how many "gameplay neccesary" items should be inside this inventory
-        int amountOfNecessaryItems = Random.Range(1, 3);
+        
+        
         foreach (GameObject trader in traders)
         {
-            NPCInventoryBreakdown breakdown = trader.GetComponent<NPCInventoryBreakdown>();
+            ConcreteNPC concreteNPC = trader.GetComponent<ConcreteNPC>();
+            concreteNPC.InitializeNPC();
+            NPC NPC = concreteNPC.npcData;
+            NPCInventoryBreakdown breakdown = NPC.NPCInventoryBreakdown;
+            List<TradeableItem> npcStock = new List<TradeableItem>();
+
             if (breakdown != null)
             {
                 //calculate how many items of a certain type should be added to this inventory
-                Dictionary<TradeItemAttributes.ItemTypes, float> precentages = breakdown.getInventoryBreakdown();
-                if (precentages.ContainsKey(TradeItemAttributes.ItemTypes.food))
+                if (breakdown.foodPercent > 0)
                 {
-                    float percent = precentages[TradeItemAttributes.ItemTypes.food];
-                    int amountOfFood = (int)(percent * amountOfItems);
+                    float percent = breakdown.foodPercent;
+                    int amountOfItems = breakdown.inventorySize;
+                    int amountOfFood = (int)(percent/100f * amountOfItems);
+                    int amountOfNecessaryItems = breakdown.amountOfNecessary;
                     List<TradeableItem> foodItems = tradeableItemsManager.GetFoodItemsAsList();
                     AddItemsToStock(npcStock, foodItems, amountOfFood, amountOfNecessaryItems);
-
                 }
-                if (precentages.ContainsKey(TradeItemAttributes.ItemTypes.armor))
+                if (breakdown.armorPercent > 0)
                 {
-                    float percent = precentages[TradeItemAttributes.ItemTypes.armor];
-                    int amountOfArmor = (int)(percent * amountOfItems);
+                    float percent = breakdown.armorPercent;
+                    int amountOfItems = breakdown.inventorySize;
+                    int amountOfArmor = (int)(percent/100 * amountOfItems);
+                    int amountOfNecessaryItems = breakdown.amountOfNecessary;
                     List<TradeableItem> armorItems = tradeableItemsManager.GetArmorItemsAsList();
                     AddItemsToStock(npcStock, armorItems, amountOfArmor, amountOfNecessaryItems);
                 }
@@ -64,6 +70,7 @@ public class ConcreteTerritory : MonoBehaviour
         List<TradeableItem> necessaryItems = tradeableItemsManager.GetItemsByRarity(items, TradeItemAttributes.Rarity.necessary);
         foreach (TradeableItem item in necessaryItems)
         {
+            item.currentPrice = territoryData.currentPriceDictionary[item.itemName].currentPrice;
             for (int i = 0; i < amountOfNecessaryItems; i++)
             {
                 npcStock.Add(item);
@@ -74,7 +81,9 @@ public class ConcreteTerritory : MonoBehaviour
         for (int i = 0; i < amountTotal; i++)
         {
             int randomItem = Random.Range(0, items.Count - 1);
-            npcStock.Add(items[randomItem]);
+            TradeableItem item = items[randomItem];
+            item.currentPrice = territoryData.currentPriceDictionary[item.itemName].currentPrice;
+            npcStock.Add(item);
             amountTotal--;
         }
     }

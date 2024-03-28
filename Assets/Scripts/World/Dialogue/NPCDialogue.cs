@@ -21,7 +21,10 @@ public class NPCDialogue : MonoBehaviour
 
     private void Awake()
     {
-        headDialouge = (StoryObject)JSONParser.Instance.OpenJsonDialougeTree(DIALOGUE_PATH + jsonName);
+        if (headDialouge == null) {
+            headDialouge = (StoryObject)JSONParser.Instance.OpenJsonDialougeTree(DIALOGUE_PATH + jsonName);
+        }
+        
         player = GameManager.Instance.GetPlayer();
     }
 

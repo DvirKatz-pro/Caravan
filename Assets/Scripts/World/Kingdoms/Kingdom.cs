@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Territory;
 
-public class Kingdom : MonoBehaviour
+public class Kingdom
 {
     public enum PoliticalState
     {
@@ -11,15 +11,9 @@ public class Kingdom : MonoBehaviour
         Peace
     }
 
-    public enum Territories
-    {
-        Nis,
-        None
-    }
-
     public KingdomManager.Kingdoms kingdomName { get; set; }
     public PoliticalState politicalState { get; set; }
-    public HashSet<Territories> ownedTerritory { get; set; }
+    public Dictionary<TerritoryManager.Territories, Territory> ownedTerritory { get; set; }
 
     public string leaderName { get; set; }
     public float populanceMood { get; set; }
@@ -32,7 +26,7 @@ public class Kingdom : MonoBehaviour
 
     }
 
-    public Kingdom(KingdomManager.Kingdoms kingdomName, PoliticalState politicalState, HashSet<Territories> ownedTerritory, string leaderName, float populanceMood, float armyStrength, float populanceMoodToPlayer)
+    public Kingdom(KingdomManager.Kingdoms kingdomName, PoliticalState politicalState, Dictionary<TerritoryManager.Territories,Territory> ownedTerritory, string leaderName, float populanceMood, float armyStrength, float populanceMoodToPlayer)
     {
         this.kingdomName = kingdomName;
         this.politicalState = politicalState;

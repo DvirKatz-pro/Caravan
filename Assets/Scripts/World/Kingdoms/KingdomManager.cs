@@ -9,12 +9,17 @@ using Random = UnityEngine.Random;
 public class KingdomManager : SingletonManager<KingdomManager>
 {
     private Dictionary<Kingdoms, Kingdom> kingdoms = new Dictionary<Kingdoms, Kingdom>();
+    TerritoryManager territoryManager;
     private List<Kingdom> kingdomsList = new List<Kingdom>();
     private List<string> leaderNamesMan = new List<string>();
     private List<string> leaderNamesWoman = new List<string>();
 
-    [SerializeField] private string jsonName = "NameData.json";
-    private const string NAME_PATH = "Assets\\Resources\\GameData\\";
+    [SerializeField] private string nameDataJsonName = "NameData.json";
+    [SerializeField] private string kingdomDataJsonName = "OwnedKingdomTerritory.json";
+    private const string RESOURCE_PATH = "Assets\\Resources\\GameData\\";
+
+    
+
     public enum Kingdoms
     {
         KievRus,
@@ -24,12 +29,9 @@ public class KingdomManager : SingletonManager<KingdomManager>
     private new void Awake()
     {
         base.Awake();
-        HashSet<Kingdom.Territories> territories = new HashSet<Kingdom.Territories>
-        {
-            Kingdom.Territories.Nis
-        };
+        territoryManager = TerritoryManager.Instance;
         Kingdoms[] kingdomsArr = (Kingdoms[])Enum.GetValues(typeof(Kingdoms));
-        Tuple<List<string>,List<string>> nameLists = JSONParser.Instance.OpenJsonLeaderNames(NAME_PATH + jsonName);
+        Tuple<List<string>,List<string>> nameLists = JSONParser.Instance.OpenJsonLeaderNames(RESOURCE_PATH + nameDataJsonName);
         leaderNamesMan = nameLists.Item1;
         leaderNamesWoman = nameLists.Item2;
         string leaderName;
@@ -46,7 +48,15 @@ public class KingdomManager : SingletonManager<KingdomManager>
         {
             
             Kingdoms kingdomName = kingdomsArr[i];
-            Kingdom kingdom = new Kingdom(kingdomName, Kingdom.PoliticalState.Peace,territories, leaderName, 500,500,500);
+            List<TerritoryManager.Territories> owndedTerritories = JSONParser.Instance.OpenJSONOwnedTerritories(RESOURCE_PATH + kingdomDataJsonName, kingdomName);
+            Dictionary<TerritoryManager.Territories, Territory> territoriesDictionary = new Dictionary<TerritoryManager.Territories, Territory>();
+            foreach (TerritoryManager.Territories territoryName in owndedTerritories)
+            {
+                Territory territory = territoryManager.initializeTerritory(territoryName, kingdomName);
+                territoriesDictionary.Add(territoryName,territory);
+            }
+            Kingdom kingdom = new Kingdom(kingdomName, Kingdom.PoliticalState.Peace,territoriesDictionary, leaderName, 500,500,500);
+            
             kingdoms.Add(kingdomName, kingdom);
             kingdomsList.Add(kingdom);
         }
@@ -57,11 +67,11 @@ public class KingdomManager : SingletonManager<KingdomManager>
     {
         return kingdoms[kingdom];
     }
-    public Kingdom GetKingdomByTerritory(Kingdom.Territories territory)
+    public Kingdom GetKingdomByTerritory(TerritoryManager.Territories territory)
     {
         foreach (KeyValuePair<Kingdoms, Kingdom> kingdom in kingdoms)
         {
-            if (kingdom.Value.ownedTerritory.Contains(territory)) 
+            if (kingdom.Value.ownedTerritory.ContainsKey(territory)) 
             {
                 return kingdom.Value;
             }

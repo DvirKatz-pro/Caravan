@@ -11,7 +11,8 @@ using UnityEngine;
 /// </summary>
 public class TradeableItemsManager : SingletonManager<TradeableItemsManager>
 {
-    [SerializeField] private string jsonPath;
+    [SerializeField] private string jsonName = "TradeableItems.json";
+    private const string RESOURCE_PATH = "Assets\\Resources\\GameData\\";
 
     Dictionary<string, TradeableItem> allItems;
     Dictionary<string, TradeableItem> foodItems;
@@ -103,42 +104,20 @@ public class TradeableItemsManager : SingletonManager<TradeableItemsManager>
     /// </summary>
     private void LoadAndSortItems()
     {
-        JObject jsonText = JObject.Parse(File.ReadAllText(jsonPath));
-
-        foreach (JProperty property in jsonText.Properties())
+        List<TradeableItem> tradeAbleItems = JSONParser.Instance.OpenJSONTradeableItems(RESOURCE_PATH + jsonName);
+        foreach (TradeableItem item in tradeAbleItems)
         {
-            JObject itemAsJson = (JObject)property.Value;
-            //Get texture for this item from the resources folder
-            Texture2D texture = Resources.Load<Texture2D>("Sprites/RPG_inventory_icons/" + property.Name);
-            Sprite sprite = Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f), 100.0f);
-            string typeAsString = itemAsJson["itemType"].ToString();
-            //convert string to TradeableItems enums
-            TradeItemAttributes.ItemTypes type;
-            bool isParseSuccessful = Enum.TryParse(typeAsString, out type);
-            if (!isParseSuccessful)
-            {
-                throw new Exception("Item type not found for " + property.Name);
-            }
-            string rarityAsString = itemAsJson["rarity"].ToString();
-            TradeItemAttributes.Rarity rarity;
-            isParseSuccessful = Enum.TryParse(rarityAsString, out rarity);
-            if (!isParseSuccessful)
-            {
-                throw new Exception("Item rarity not found for " + property.Name);
-            }
-
-            TradeableItem item = new TradeableItem(property.Name, float.Parse(itemAsJson["basePrice"].ToString()), type, rarity, sprite);
-
-            allItems.Add(property.Name, item);
+            
+            allItems.Add(item.itemName, item);
             //add the item to the appropriate item dictionary based on its type
-            switch (type)
+            switch (item.itemType)
             {
                 case TradeItemAttributes.ItemTypes.food:
-                    
-                    foodItems.Add(property.Name,item);
+
+                    foodItems.Add(item.itemName, item);
                     break;
                 case TradeItemAttributes.ItemTypes.armor:
-                    armorItems.Add(property.Name,item);
+                    armorItems.Add(item.itemName, item);
                     break;
             }
         }

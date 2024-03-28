@@ -1,0 +1,20 @@
+{
+  "Territories": [
+    {
+      "Nis": [
+        {
+          "id": "1",
+          "NPCname": "Jack",
+          "NPCType": "Trader",
+          "NPCInventoryBreakdown": {
+            "inventorySize": "40",
+            "amountOfNecessary": "10",
+            "foodPercent": "50",
+            "armorPercent": "50"
+          }
+        }
+      ]
+    }
+  ]
+
+}

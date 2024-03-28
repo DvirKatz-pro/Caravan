@@ -2,25 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NPCInventoryBreakdown : MonoBehaviour
+public class NPCInventoryBreakdown
 {
-    [Range(0.01f, 1)]
-    [SerializeField] private float foodPercent;
-    [Range(0.01f, 1)]
-    [SerializeField] private float armorPercent;
+    public int inventorySize { get; set; }
 
-    private Dictionary<TradeItemAttributes.ItemTypes, float> breakdown;
+    public int amountOfNecessary { get; set; }
+
+    public float foodPercent { get; set; }
+
+    public float armorPercent { get; set; }
+
+    public List<TradeableItem> questItems { get; set; }
 
     // Start is called before the first frame update
-    void Awake()
-    {
-        breakdown = new Dictionary<TradeItemAttributes.ItemTypes, float>();
-        breakdown[TradeItemAttributes.ItemTypes.food] = foodPercent;
-        breakdown[TradeItemAttributes.ItemTypes.armor] = armorPercent;
-    }
 
-    public Dictionary<TradeItemAttributes.ItemTypes, float> getInventoryBreakdown()
-    {
-        return breakdown;
+    public NPCInventoryBreakdown(int inventorySize, int amountOfNecessary, float foodPercent, float armorPercent, List<TradeableItem> questItems) {
+        this.inventorySize = inventorySize;
+        this.amountOfNecessary = amountOfNecessary;
+        this.foodPercent = foodPercent;
+        this.armorPercent = armorPercent;
+        this.questItems = questItems;
     }
+   
 }
