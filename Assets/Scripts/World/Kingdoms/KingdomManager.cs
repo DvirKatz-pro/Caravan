@@ -6,6 +6,9 @@ using System.Xml;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+/// <summary>
+/// KingdomManager Keep track of all the kingdoms and the interactions between them
+/// </summary>
 public class KingdomManager : SingletonManager<KingdomManager>
 {
     private Dictionary<Kingdoms, Kingdom> kingdoms = new Dictionary<Kingdoms, Kingdom>();
@@ -30,6 +33,7 @@ public class KingdomManager : SingletonManager<KingdomManager>
     {
         base.Awake();
         territoryManager = TerritoryManager.Instance;
+        //Generate a leader name for the kingdom
         Kingdoms[] kingdomsArr = (Kingdoms[])Enum.GetValues(typeof(Kingdoms));
         Tuple<List<string>,List<string>> nameLists = JSONParser.Instance.OpenJsonLeaderNames(RESOURCE_PATH + nameDataJsonName);
         leaderNamesMan = nameLists.Item1;
@@ -46,7 +50,7 @@ public class KingdomManager : SingletonManager<KingdomManager>
         }
         for (int i = 0; i < Enum.GetValues(typeof(Kingdoms)).Length - 1; i++) 
         {
-            
+            //Generate all the territories belonging to a kingdom
             Kingdoms kingdomName = kingdomsArr[i];
             List<TerritoryManager.Territories> owndedTerritories = JSONParser.Instance.OpenJSONOwnedTerritories(RESOURCE_PATH + kingdomDataJsonName, kingdomName);
             Dictionary<TerritoryManager.Territories, Territory> territoriesDictionary = new Dictionary<TerritoryManager.Territories, Territory>();

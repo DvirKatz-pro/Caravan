@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+
+/// <summary>
+/// A Territory Object, keep a track of Territory data
+/// </summary>
 public class EconomyManager: SingletonManager<EconomyManager> , ITimeSubscriber
 {
     private TradeableItemsManager itemManager;
@@ -21,13 +25,17 @@ public class EconomyManager: SingletonManager<EconomyManager> , ITimeSubscriber
         
     }
 
+    /// <summary>
+    /// Calculate the buying and selling price of all items for all territories
+    /// </summary>
     private void AdvanceMarketConditions() 
     {
         List<Kingdom> kingdoms = kingdomManager.GetKingdoms();
-
-        
     }
 
+    /// <summary>
+    /// Generate the buying and selling prices for a certain Territory
+    /// </summary>
     public Dictionary<string,TradeableItem> GenerateItemPriceDictionaryForTerritory(Territory territory)
     {
         Dictionary<string,TradeableItem> itemPriceAsDictionary = new Dictionary<string,TradeableItem>();

@@ -47,6 +47,9 @@ public class JSONParser : SingletonManager<JSONParser>
         return null;
     }
 
+    /// <summary>
+    /// Open given json of names, Generate a name
+    /// </summary>
     public Tuple<List<string>, List<string>> OpenJsonLeaderNames(string jsonPath)
     {
         JObject jsonText = JObject.Parse(File.ReadAllText(jsonPath));
@@ -59,6 +62,9 @@ public class JSONParser : SingletonManager<JSONParser>
         return null;
     }
 
+    /// <summary>
+    /// Open given json of Territories to see the territories belonging to a kingdom
+    /// </summary>
     public List<TerritoryManager.Territories> OpenJSONOwnedTerritories(string jsonPath,KingdomManager.Kingdoms kingdomName) 
     {
         JObject jsonText = JObject.Parse(File.ReadAllText(jsonPath));
@@ -72,6 +78,9 @@ public class JSONParser : SingletonManager<JSONParser>
         return null;
     }
 
+    /// <summary>
+    /// Open given json of NPCs beloning to a certain territory
+    /// </summary>
     public List<NPC> OpenJSONNPCsInTerritory(string jsonPath, TerritoryManager.Territories territoryName) 
     {
         JObject jsonText = JObject.Parse(File.ReadAllText(jsonPath));
@@ -87,6 +96,7 @@ public class JSONParser : SingletonManager<JSONParser>
                 JObject territory = (JObject)territories[i];
                 if (territory[territoryName.ToString()] != null)
                 {
+                    //Create the npcs for this territory
                     List<NPC> NPCs = CreateNPCs((JArray)territory[territoryName.ToString()]);
                     return NPCs;
                 }
@@ -96,6 +106,9 @@ public class JSONParser : SingletonManager<JSONParser>
         return null;
     }
 
+    /// <summary>
+    /// Open given json of Tradeable items and parse Tradeable Items
+    /// </summary>
     public List<TradeableItem> OpenJSONTradeableItems(string jsonPath)
     {
         JObject jsonText = JObject.Parse(File.ReadAllText(jsonPath));
@@ -179,6 +192,9 @@ public class JSONParser : SingletonManager<JSONParser>
         return eventObject;
     }
 
+    /// <summary>
+    /// Generate a leader name and return all the names seperated by girl and boy names
+    /// </summary>
     private Tuple<List<string>,List<string>> GenerateLeaderName(JObject names)
     {
         List<string> boyNames = (List<string>)names["BoyNames"].ToObject(typeof(List<string>));
@@ -187,6 +203,10 @@ public class JSONParser : SingletonManager<JSONParser>
         return new Tuple<List<string>, List<string>>(boyNames,girlNames);
     }
 
+
+    /// <summary>
+    /// Generate the list of owned territories belonging to a Kingdom
+    /// </summary>
     private List<TerritoryManager.Territories> GetKingdomOwnedTerritory(JObject ownedTerritory)
     {
         List<string> territoryNames = (List<string>)ownedTerritory["OwnedTerritory"].ToObject(typeof(List<string>));
@@ -198,7 +218,9 @@ public class JSONParser : SingletonManager<JSONParser>
         }
         return ownedTerritories;
     }
-
+    /// <summary>
+    /// Parse A Tradealbe item from a json and return the list of all items
+    /// </summary>
     private List<TradeableItem> CreateTradeableItems(JObject tradeableItems)
     {
         List<TradeableItem> items = new List<TradeableItem>();
@@ -230,6 +252,9 @@ public class JSONParser : SingletonManager<JSONParser>
         return items;
     }
 
+    /// <summary>
+    /// Parse a list of NPCs into NPC objects
+    /// </summary>
     private List<NPC> CreateNPCs(JArray npcsArray)
     {
 
@@ -249,6 +274,7 @@ public class JSONParser : SingletonManager<JSONParser>
                     throw new Exception("NPC type not found for " + typeAsString);
                 }
                 NPCInventoryBreakdown nPCInventoryBreakdown = null;
+                //If the NPC is a trader, get the Inventory breakdown
                 if (type == NPC.NPCType.Trader)
                 {
                     JObject breakdown = (JObject)npcObj["NPCInventoryBreakdown"];

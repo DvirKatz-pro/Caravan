@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Territory;
 
+/// <summary>
+/// A Kingdom Object, Keep track of data of a certain kingdom 
+/// </summary>
 public class Kingdom
 {
     public enum PoliticalState

@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// An NPC data Object used to keep track of an NPC 
+/// </summary>
 public class NPC
 {
     public enum NPCType

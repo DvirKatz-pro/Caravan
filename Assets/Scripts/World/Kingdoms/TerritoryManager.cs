@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Territory Manager Keep track of all the territories
+/// </summary>
 public class TerritoryManager : SingletonManager<TerritoryManager>
 {
     EconomyManager economyManager;
@@ -33,6 +36,9 @@ public class TerritoryManager : SingletonManager<TerritoryManager>
         return territoryDictionary[territoryName];
     }
 
+    /// <summary>
+    /// Create A Territory, Initialize it and return it
+    /// </summary>
     public Territory initializeTerritory(TerritoryManager.Territories territoryName, KingdomManager.Kingdoms kingdomName)
     {
         List<NPC> npcList = NPCManager.Instance.InitializeNPCsForTerritory(territoryName);

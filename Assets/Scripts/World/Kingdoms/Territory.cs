@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// A Territory Object, keep a track of Territory data 
+/// </summary>
 public class Territory
 {
 

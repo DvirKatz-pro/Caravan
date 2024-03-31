@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEditor.Progress;
 
+
+/// <summary>
+/// The represntation of a Territory Object that exists in the scene
+/// </summary>
 public class ConcreteTerritory : MonoBehaviour
 {
     [SerializeField] private List<GameObject> traders;

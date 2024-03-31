@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// NPC Manager Keep track of all the NPCs
+/// </summary>
 public class NPCManager : SingletonManager<NPCManager>
 {
     Dictionary<int, NPC> NPCsById = new Dictionary<int, NPC>();
